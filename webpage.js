@@ -5,6 +5,7 @@ const vueinst = new Vue ({
             { title:'Home', url:'#' },
             { title:'About', url:'#' },
             { title:'Clubs', url:'#' },
+            { title:'Help', url:'#' },
             { title:'Login', url:'#' },
         ],
     }
