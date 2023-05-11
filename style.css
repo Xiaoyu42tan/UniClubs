@@ -1,0 +1,56 @@
+/* Bordered form */
+form {
+    border: 3px solid #f1f1f1;
+  }
+
+  /* Full-width inputs */
+.signup_inputs {
+    width: 75%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  .login_inputs {
+    width: 40%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  .login_and_signup_container {
+    border: 1px solid black;
+    width: 75%;
+    text-align: center;
+    margin: auto;
+  }
+
+  .login_container {
+    padding: 0px;
+  }
+
+  .bottom-div {
+    border: 1px solid black;
+    margin: 1rem;
+    padding: 2rem 2rem;
+    text-align: center;
+  }
+
+  .signup_container {
+    display: inline-block;
+    width:45%;
+    vertical-align: middle;
+  }
+
+  h1 {
+    font-family: arial, sans-serif;
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    }

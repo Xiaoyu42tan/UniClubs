@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <title>
+            Home
+        </title>
+        <link rel="stylesheet" href="style.css">
+
+    </head>
+<body>
+  <h1>Log In</h1>
+        <div class="login_and_signup_container">
+          <div class = "login_container">
+            <label for="username"><b>Username</b></label>
+            <br>
+            <input class = "login_inputs" type="text" placeholder="Enter Username" name="username" required>
+            <br>
+            <label for="password"><b>Password</b></label>
+            <br>
+            <input class = "login_inputs" type="password" placeholder="Enter Password" name="password" required>
+            <br>
+            <button type="submit">Login</button>
+            <label>
+              <br>
+              <input type="checkbox" checked="checked" name="remember"> Remember me
+            </label>
+            <br>
+            <span class="password">Forgot <a href="#">password?</a></span>
+          </div>
+          <div class = "bottom_div">
+            <h2>Sign up</h2>
+            <div class = "signup_container">
+              <label for="firstname"><b>First Name:</b></label>
+              <br>
+              <input class = "signup_inputs" type="text" placeholder="Enter first name" name="firstname" required>
+              <br>
+              <label for="lastname"><b>Last Name:</b></label>
+              <br>
+              <input class = "signup_inputs" type="text" placeholder="Enter last name" name="lastname" required>
+              <br>
+              <label for="phonenumber"><b>Phone Number:</b></label>
+              <br>
+              <input class = "signup_inputs" type="number" placeholder="Enter phone number" name="phonenumber" required>
+              <br>
+              <label for="user_type"><b>Type of user:</b></label>
+              <br>
+              <input type="radio" id="user" name="user_type" value="user">
+              <label for="user">User</label><br>
+              <input type="radio" id="club_manager" name="user_type" value="club_manager">
+              <label for="club_manager">Club manager</label><br>
+              <input type="radio" id="system_admin" name="user_type" value="system_admin">
+              <label for="system_admin">System Admin</label>
+            </div>
+            <div class = "signup_container">
+              <label for="username"><b>Username</b></label>
+              <br>
+              <input class = "signup_inputs" type="text" placeholder="Enter Username" name="username" required>
+              <br>
+              <label for="email"><b>Email</b></label>
+              <br>
+              <input class = "signup_inputs" type="email" placeholder="Enter Email" name="email" required>
+              <br>
+              <label for="password"><b>Password</b></label>
+              <br>
+              <input class = "signup_inputs" type="password" placeholder="Enter Password" name="password" required>
+              <br>
+              <label for="repeat_password"><b>Repeat Password</b></label>
+              <br>
+              <input class = "signup_inputs" type="password" placeholder="Enter Password" name="Repeat_password" required>
+              <br>
+              <button type="submit">Signup</button>
+            </div>
+          </div>
+        </div>
+</body>
+</html>
