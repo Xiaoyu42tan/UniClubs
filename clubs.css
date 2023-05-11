@@ -1,0 +1,60 @@
+#club-title {
+    background-color: rgb(17, 17, 17);
+    color: white;
+    margin: 0;
+    padding: 20px;
+    border-bottom: 0.1px solid white;
+}
+
+#outer-register {
+    background-color: rgb(17, 17, 17);
+    border-bottom: 0.1px solid white;
+}
+
+#register {
+    background-color: rgb(17, 17, 17);
+    padding: 30px;
+    color: white;
+}
+
+#description {
+    padding: 10px;
+}
+
+#register-button-div {
+    padding: 10px;
+}
+
+#register-button {
+    background-color: blue;
+    padding: 6px 18px;
+    border-radius: 5px;
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+/* Club content */
+#clubs-content {
+    padding: 20px 10px;
+}
+
+#clubs-img {
+    padding: 30px;
+}
+
+#upcoming-club-events {
+    padding: 30px;
+    display: flex;
+    align-items: center; /* Align vertically in the middle */
+    justify-content: center; /* Align horizontally in the middle */
+}
+
+#clubs-inner {
+    padding: 10px 10px;
+    border: 0.1px solid black;
+    border-radius: 5px;
+
+    overflow-y: auto;
+}
+

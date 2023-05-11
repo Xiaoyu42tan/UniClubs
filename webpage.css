@@ -2,8 +2,10 @@ body {
     background-color: white;
 }
 
-#outer-header{
+/* Header */
+#outer-header {
     background-color:black;
+    border-bottom: 0.1px solid white;
 }
 
 .navbar-nav .nav-link {
@@ -24,7 +26,114 @@ button {
     color:white;
 }
 
-#content{
-    background-color: white;
-    box-shadow: 0 2px 4px lightgray;
+/* Advertisement/Information */
+#outer-advertisement {
+    background-color:rgb(17, 17, 17);
+    border-bottom: 0.1px solid white;
+}
+
+#information-advertisement {
+    box-sizing: border-box;
+    padding: 20px 10px;
+    background-color:rgb(17, 17, 17);
+    color: white;
+    display: flex;
+}
+
+#img-div {
+    text-align: center;
+}
+
+#news-img {
+    padding: 20px
+}
+
+#news-div {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+}
+
+#news-content {
+    margin: 0 auto;
+}
+
+#news-title-logo {
+    text-align: left;
+}
+
+#learn-button {
+    background-color: blue;
+    padding: 6px 18px;
+    border-radius: 5px;
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+/* Updates */
+#outer-updates {
+    border-bottom: 0.1px solid rgb(17, 17, 17);
+}
+
+#updates {
+    padding: 20px 10px;
+}
+
+#upcoming-events {
+    padding: 10px;
+}
+
+#recent-updates {
+    padding: 10px;
+}
+
+.inner {
+    padding: 10px 0px;
+    border: 0.1px solid black;
+    border-radius: 5px;
+    height: 400px;
+
+    overflow-y: auto;
+}
+
+/* Form */
+#outer-form {
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    border-bottom: 0.1px solid white;
+
+}
+
+#form {
+    border-radius: 8px;
+    border: 0.1px solid black;
+    background-color: lightgray;
+    padding: 30px 30px 20px 30px;
+    width: 800px;
+}
+
+#signin-div {
+    text-align: center;
+}
+
+#login-heading {
+    padding: 0px 0px 20px 10px;
+}
+
+/* Footer */
+#footer {
+    background-color:rgb(17, 17, 17);
+    padding: 30px 0px;
+}
+
+#footer-logo {
+    height: 50px;
+}
+
+#footer-text {
+    padding: 30px 0px 0px 0px;
+    color: white;
+    font-size: small;
 }
