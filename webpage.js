@@ -55,6 +55,32 @@ const search = new Vue ({
     }
 });
 
+// Application Seach Query
+const appsearch = new Vue ({
+    el: "#club-app-search",
+    data: {
+        search: "",
+        clubsapp: [
+            { name: 'Example Application 1', url: '/clubapplication1.html' }
+        ]
+    },
+    computed: {
+        filteredClubsApps() {
+            return this.clubsapp.filter(clubs => clubs.name.toLowerCase().includes(this.search.toLowerCase()));
+        }
+    }
+});
+
+// show/hide table
+function revealElement() {
+    var x = document.getElementById("users-table");
+    if (x.style.display == "none"){
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
 const clubEvens = new Vue ({
     el: "#upcoming-club-events",
     data: {
