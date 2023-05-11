@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Clubs (System Admin)</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, intial-scale=1.0">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="sysadmin.css">
+        <link rel="stylesheet" href="clubs-application.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+        <script src="webpage.js" defer></script>
+    </head>
+    <body>
+
+        <div id="outer-header">
+            <nav id="nav" class="navbar navbar-expand-sm container">
+                <a href="#"><img class="logo" src="University-of-Adelaide-white-logo.png" alt="logo"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-expanded="false">
+                    Menu
+                </button>
+                <div class="collapse navbar-collapse"  id="navbar">
+                    <ul class="navbar-nav ms-auto">
+                        <li v-for="link in top_menu" class="nav-item">
+                            <a :href="link.url" class="nav-link">{{ link.title }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Administrator Dashboard Heading -->
+        <h2 id="sysadmin-title" class="text-center">Administrator Dashboard</h2>
+        <div id="sysadmin-info-outer">
+            <div id="sysadmin-info" class="container">
+                <p>Welcome to the Administrator Dashboard. Here you can:</p>
+                <ul>
+                    <li>View, approve or deny Club requests</li>
+                    <li>View site Users' details</li>
+                    <li>Manage Clubs</li>
+                    <li>Sign up other System Administrators</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Approve Clubs -->
+        <div id="approve-clubs-title" class="container">
+            <h2 id="bold"><strong>Club Application Requests</h2>
+            <small>Approve or deny any club application requests here</small>
+        </div>
+
+        <!-- Search through club add requests -->
+        <!-- Using vue.js to implement a search query (same as club.html) -->
+        <div id="application-search" class="container">
+            <h2 id="application-search-title" class="text-center">Search application requests</h2>
+            <div id="search-section">
+                <input type="text" class="form-control" placeholder="Search..." v-model="search"/>
+            </div>
+            <div id="filtered-section">
+                <ul class="list-unstyled row justify-content-evenly">
+                    <li id="styled-li" class="col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center" v-for="clubs in filteredClubsApps">
+                        <a id="styled-a" :href="clubs.url">{{ clubs.name }}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Manage Users -->
+        <div id="manage-users" class="container">
+            <div id="manage-users-title" class="container">
+                <h2>Manage Users</h2>
+                <small>View and manage all Users' details here</small>
+            </div>
+            
+            <button onclick="revealElement()">Reveal Users</button>
+            <div id="users-table" class="container">
+                <table id="users-table">
+                    <tr>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>Birthday</th>
+                      <th>E-mail Address</th>
+                      <th>Clubs Joined</th>
+                    </tr>
+                    <tr>
+                      <td>User</td>
+                      <td>1</td>
+                      <td>9/9/1999</td>
+                      <td>user1@example.com</td>
+                      <!-- Can use JS/VUE to import clubs for each user-->
+                      <td>Club1, Club2, Club3, Club4</td>
+                  </tr>
+                  </table>
+            </div>            
+        </div>
+
+
+        <!-- Manage Clubs-->
+        <div id="manage-clubs" class="container">
+            <div id="manage-clubs-title" class="container">
+                <h2>Manage Clubs</h2>
+                <small>View and manage all Clubs here</small>
+            </div>
+            <!-- Search for Clubs on Website (directly taken from club.html) -->
+            <!-- Using vue.js to implement a search query -->
+            <div id="club-search" class="container">
+                <div id="search-section">
+                    <input type="text" class="form-control" placeholder="Search..." v-model="search"/>
+                </div>
+                <div id="filtered-section">
+                    <ul class="list-unstyled row justify-content-evenly">
+                        <li id="styled-li" class="col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center" v-for="club in filteredClubs">
+                            <a id="styled-a" :href="club.url">{{ club.name }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>            
+        </div>
+
+
+        <!-- Signup new Admins-->
+        <div id="signup-new-admins" class="container">
+            <div id="signup-new-admins-title" class="container">
+                <h2>Sign up new Administrators</h2>
+                <small>Sign up new Administrators here</small>
+            </div>
+            <div id="admin-signup" class="container">
+                <form>
+                    <input type="text" placeholder="First Name" required class="input-box">
+                    <input type="text" placeholder="Last Name" required class="input-box">
+                    <input type="text" placeholder="Username" required class="input-box">
+                    <input type="text" placeholder="E-mail Address" required class="input-box">
+                    <input type="text" placeholder="Password" required class="input-box">
+                    <button type="submit">SIGN UP <span>&#x27f6;</span></button>
+                </form>
+            </div>
+           
+        </div>
+
+
+        <!-- Footer -->
+        <div id="footer" class="text-center">
+            <img id="footer-logo" class="img-fluid" src="University-of-Adelaide-white-logo.png" alt="footer-logo"/>
+            <p id="footer-text">
+                Web Project for Web & Database Computing
+            </p>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    </body>
+</html>
