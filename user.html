@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>User Landing Page</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, intial-scale=1.0">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="user.css">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="club_home.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+        <script src="webpage.js" defer></script>
+    </head>
+    <body>
+
+        <div id="outer-header">
+            <nav id="nav" class="navbar navbar-expand-sm container">
+                <a href="#"><img class="logo" src="University-of-Adelaide-white-logo.png" alt="logo"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-expanded="false">
+                    Menu
+                </button>
+                <div class="collapse navbar-collapse"  id="navbar">
+                    <ul class="navbar-nav ms-auto">
+                        <li v-for="link in top_menu" class="nav-item">
+                            <a :href="link.url" class="nav-link">{{ link.title }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Administrator Dashboard Heading -->
+        <h2 id="sysadmin-title" class="text-center">User Dashboard</h2>
+        <div id="sysadmin-info-outer">
+            <div id="sysadmin-info" class="container">
+                <p>Welcome to the User Dashboard. Here you can:</p>
+                <ul>
+                    <li>Manage your personal information</li>
+                    <li>View club updates</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Manage Personal Info -->
+        <div id="personal-info" class="container">
+            <div id="personal-info-title" class="container">
+                <h2><strong>Manage Personal Information</strong></h2>
+                <small>View and manage your personal information here!</small>
+            </div>
+            
+            <div class="container">
+                <table id="personal-data">
+                    <tr>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>Birthday</th>
+                      <th>E-mail Address</th>
+                      <th>Clubs Joined</th>
+                    </tr>
+                    <tr>
+                        <!-- contenteditable is temporary, will move to a more permanent solution later-->
+                      <td contenteditable="true">User</td>
+                      <td contenteditable="true">1</td>
+                      <td contenteditable="true">9/9/1999</td>
+                      <td contenteditable="true">user1@example.com</td>
+                      <!-- Can use JS/VUE to import clubs for each user-->
+                      <td>Club1, Club2, Club3, Club4</td>
+                  </tr>
+                  </table>
+            </div>            
+        </div>
+
+
+        <!-- Manage Clubs-->
+        <div id="manage-clubs" class="container">
+            <div id="manage-clubs-title" class="container">
+                <h2><strong>Manage Clubs</strong></h2>
+                <small>View all of your joined Clubs here</small>
+            </div>
+            <!-- Search for Clubs on Website (directly taken from club.html) -->
+            <!-- Using vue.js to implement a search query -->
+            <div id="club-search" class="container">
+                <div id="search-section">
+                    <input type="text" class="form-control" placeholder="Search..." v-model="search"/>
+                </div>
+                <div id="filtered-section">
+                    <ul class="list-unstyled row justify-content-evenly">
+                        <li id="styled-li" class="col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center" v-for="club in filteredClubs">
+                            <a id="styled-a" :href="club.url">{{ club.name }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="link-main-clubs" class="container">
+                <p>Want to see more? Visit the Clubs page below!</p>
+                <button onclick="window.location.href = 'club.html';">CLUBS</button>
+                <br>
+            </div>            
+        </div>
+
+
+        <!-- Footer -->
+        <div id="footer" class="text-center">
+            <img id="footer-logo" class="img-fluid" src="University-of-Adelaide-white-logo.png" alt="footer-logo"/>
+            <p id="footer-text">
+                Web Project for Web & Database Computing
+            </p>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    </body>
+</html>

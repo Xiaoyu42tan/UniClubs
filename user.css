@@ -1,0 +1,123 @@
+body {
+    background-color: white;
+}
+
+/* Header */
+#outer-header {
+    background-color:black;
+    border-bottom: 0.1px solid white;
+}
+
+.navbar-nav .nav-link {
+    color:white;
+}
+
+.navbar-nav .nav-link:hover {
+    color:antiquewhite;
+}
+
+.logo {
+    display: block;
+    width: 150px;
+    padding: 20px;
+}
+
+button {
+    color:white;
+}
+
+/* Systems Admin */
+
+#sysadmin-title {
+    background-color: rgb(17, 17, 17);
+    color: white;
+    margin: 0;
+    padding: 20px;
+    border-bottom: 0.1px solid white;
+}
+
+#sysadmin-info-outer {
+    background-color:rgb(17, 17, 17);
+    border-bottom: 0.1px solid white;
+}
+
+#sysadmin-info {
+    box-sizing: border-box;
+    padding: 20px 10px;
+    background-color:rgb(17, 17, 17);
+    color: white;
+}
+
+/* Personal Info */
+#personal-info{
+    padding: 0px;
+}
+
+#personal-info-title{
+    text-decoration: none;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: .1px white;
+    color: white;
+    text-align: center;
+    background-color:rgb(17, 17, 17);
+}
+#personal-data{
+    text-decoration: none;
+    padding:0;
+    width:100%;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+th, td{
+    text-align: center;
+    padding: 8px;
+}
+tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+th {
+    background-color:rgb(17, 17, 17);
+    color: white;
+}
+
+/* Manage Clubs*/
+#manage-clubs{
+    padding: 0px;
+}
+#manage-clubs-title{
+    text-decoration: none;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: .1px white;
+    color: white;
+    text-align: center;
+    background-color:rgb(17, 17, 17);
+}
+
+#link-main-clubs{
+    text-decoration: none;
+    padding-top:5px;
+    padding-bottom:20px;
+}
+
+/* Footer */
+#footer {
+    background-color:rgb(17, 17, 17);
+    padding: 30px 0px;
+}
+
+#footer-logo {
+    height: 50px;
+}
+
+#footer-text {
+    padding: 30px 0px 0px 0px;
+    color: white;
+    font-size: small;
+}
