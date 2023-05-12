@@ -55,7 +55,7 @@ const search = new Vue ({
     }
 });
 
-const clubEvens = new Vue ({
+const clubEvents = new Vue ({
     el: "#upcoming-club-events",
     data: {
         events: [
