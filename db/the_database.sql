@@ -52,6 +52,8 @@ CREATE TABLE event_enrolments (
 CREATE TABLE club_enrolments (
     user_id INT,
     club_id INT,
+    notify_updates BOOLEAN,
+    notify_events BOOLEAN,
     PRIMARY KEY (user_id,club_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (club_id) REFERENCES clubs(club_id) ON DELETE CASCADE
