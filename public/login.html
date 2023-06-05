@@ -4,7 +4,9 @@
         <title>
             Home
         </title>
-        <link rel="stylesheet" href="/stylesheets/style.css">
+        <link rel="stylesheet" href="/stylesheets/styleforlogin.css">
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+        <script src="javascripts/login.js"></script>
 
     </head>
 <body>
@@ -13,13 +15,13 @@
           <div class = "login_container">
             <label for="username"><b>Username</b></label>
             <br>
-            <input class = "login_inputs" type="text" placeholder="Enter Username" name="username" required>
+            <input class = "login_inputs" type="text" placeholder="Enter Username" id="username" required>
             <br>
             <label for="password"><b>Password</b></label>
             <br>
-            <input class = "login_inputs" type="password" placeholder="Enter Password" name="password" required>
+            <input class = "login_inputs" type="password" placeholder="Enter Password" id="password" required>
             <br>
-            <button type="submit">Login</button>
+            <button type="submit" onclick="logIn();">Login</button>
             <label>
               <br>
               <input type="checkbox" checked="checked" name="remember"> Remember me
@@ -27,20 +29,52 @@
             <br>
             <span class="password">Forgot <a href="#">password?</a></span>
           </div>
+          <!--<div id="g_id_onload"
+            data-client_id="521244062266-prh5adjbtjmgk7vga4g1t8j515u0kt9l.apps.googleusercontent.com"
+            data-context="signin"
+            data-ux_mode="popup"
+            data-callback="google_login"
+            data-auto_prompt="false">
+        </div>
+
+        <div class="g_id_signin"
+            data-type="standard"
+            data-shape="pill"
+            data-theme="filled_black"
+            data-text="continue_with"
+            data-size="large"
+            data-logo_alignment="left">
+        </div>-->
+        <div id="g_id_onload"
+          data-client_id="521244062266-prh5adjbtjmgk7vga4g1t8j515u0kt9l.apps.googleusercontent.com"
+          data-context="signin"
+          data-ux_mode="popup"
+          data-login_uri="http://localhost:8080/google_login"
+          data-auto_prompt="false">
+      </div>
+
+      <div class="g_id_signin"
+          data-type="standard"
+          data-shape="pill"
+          data-theme="filled_black"
+          data-text="continue_with"
+          data-size="large"
+          data-logo_alignment="left">
+      </div>
           <div class = "bottom_div">
             <h2>Sign up</h2>
             <div class = "signup_container">
               <label for="firstname"><b>First Name:</b></label>
               <br>
-              <input class = "signup_inputs" type="text" placeholder="Enter first name" name="firstname" required>
+              <input class = "signup_inputs" type="text" placeholder="Enter first name" id="firstname" required>
               <br>
               <label for="lastname"><b>Last Name:</b></label>
               <br>
-              <input class = "signup_inputs" type="text" placeholder="Enter last name" name="lastname" required>
+              <input class = "signup_inputs" type="text" placeholder="Enter last name" id="lastname" required>
               <br>
               <label for="phonenumber"><b>Phone Number:</b></label>
               <br>
-              <input class = "signup_inputs" type="number" placeholder="Enter phone number" name="phonenumber" required>
+              <input class = "signup_inputs" type="number" placeholder="Enter phone number" id="phonenumber" required>
               <br>
               <label for="user_type"><b>Type of user:</b></label>
               <br>
@@ -54,21 +88,21 @@
             <div class = "signup_container">
               <label for="username"><b>Username</b></label>
               <br>
-              <input class = "signup_inputs" type="text" placeholder="Enter Username" name="username" required>
+              <input class = "signup_inputs" type="text" placeholder="Enter Username" id="new-username" required>
               <br>
               <label for="email"><b>Email</b></label>
               <br>
-              <input class = "signup_inputs" type="email" placeholder="Enter Email" name="email" required>
+              <input class = "signup_inputs" type="email" placeholder="Enter Email" id="email" required>
               <br>
               <label for="password"><b>Password</b></label>
               <br>
-              <input class = "signup_inputs" type="password" placeholder="Enter Password" name="password" required>
+              <input class = "signup_inputs" type="password" placeholder="Enter Password" id="new-password" required>
               <br>
               <label for="repeat_password"><b>Repeat Password</b></label>
               <br>
-              <input class = "signup_inputs" type="password" placeholder="Enter Password" name="Repeat_password" required>
+              <input class = "signup_inputs" type="password" placeholder="Enter Password" id="repeat-password" required>
               <br>
-              <button type="submit">Signup</button>
+              <button type="submit" onclick="signUp();">Signup</button>
             </div>
           </div>
         </div>
