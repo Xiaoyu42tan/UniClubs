@@ -12,13 +12,13 @@ CREATE TABLE users (
     PRIMARY KEY (user_id)
 );
 CREATE TABLE clubs (
-    club_id INT,
+    club_id INT NOT NULL AUTO_INCREMENT,
     club_name VARCHAR(30),
     PRIMARY KEY (club_id)
 );
 
 CREATE TABLE events (
-    event_id INT,
+    event_id INT NOT NULL AUTO_INCREMENT,
     event_name VARCHAR(30),
     club_id INT,
     event_description VARCHAR(1000),
@@ -28,7 +28,7 @@ CREATE TABLE events (
     FOREIGN KEY (club_id) REFERENCES clubs(club_id) ON DELETE CASCADE
 );
 CREATE TABLE updates (
-    update_id INT,
+    update_id INT NOT NULL AUTO_INCREMENT,
     club_id INT,
     update_title VARCHAR(30),
     update_description VARCHAR(1000),
