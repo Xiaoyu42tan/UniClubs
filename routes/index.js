@@ -21,22 +21,22 @@ router.post('/login', async function(req, res, next){
   if('client_id' in req.body){
     const ticket = await client.verifyIdToken({
         idToken: req.body.credential,
-        audience: CLIENT_ID,// Specify the CLIENT_ID of the app that accesses the backend
+        audience: CLIENT_ID// Specify the CLIENT_ID of the app that accesses the backend
         // Or, if multiple clients access the backend:
-        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });
     const payload = ticket.getPayload();
     console.log(payload['email']);
-    res.send();
+    //res.send();
     // If request specified a G Suite domain:
     // const domain = payload['hd'];
   }else if(req.body.username in users && req.body.password === users[req.body.username].password){
     req.session.username = req.body.username;
     res.end();
   }else{
+    console.log("wrong username or password");
     res.sendStatus(401);
   }
-  req.session.username = req.body.username;
+  //req.session.username = req.body.username;
   console.log(JSON.stringify(req.body));
   res.end();
 });
@@ -50,14 +50,14 @@ router.post('/signup', function(req, res, next){
     users[req.body.username] = {password: req.body.password};
     res.end();
   }
-  req.session.username = req.body.username;
-  console.log(JSON.stringify(req.body));
-  res.end();
+  //req.session.username = req.body.username;
+  //console.log(JSON.stringify(req.body));
+  //res.end();
 });
 
 //log out
 router.post('/logout', function(req, res, next){
-  if(username in req.session){
+  if('username' in req.session){
     delete req.session.username;
     res.end();
   }else if(req.readyState == 4 && req.status == 403){
