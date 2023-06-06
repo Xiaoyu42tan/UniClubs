@@ -13,6 +13,8 @@ function logIn(){
             alert('Successful log in');
             console.log('your details are: ' + req.responseText); // debug
             // redirect user to webpage
+            // ADITYA - TAKE USER TO USER DASHBOARD AFTER LOGIN
+            window.location.href = 'user.html';
 
         } else if(req.readyState == 4 && req.status == 401){
             alert('Unsuccessful log in');
