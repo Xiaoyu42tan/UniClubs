@@ -2,7 +2,7 @@ CREATE DATABASE the_database;
 USE the_database;
 
 CREATE TABLE users (
-    user_id INT AUTO_INCREMENT,
+    user_id INT NOT NULL AUTO_INCREMENT,
     user_type VARCHAR(20),
     user_name VARCHAR(30),
     first_name VARCHAR(30),
