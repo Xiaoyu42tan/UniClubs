@@ -62,3 +62,50 @@ function submitEvent() {
     console.log(JSON.stringify(createevent));
     req.send(JSON.stringify(createevent));
 }
+
+// ADITYA - ADDED FUNCTIONALITY TO OBTAIN USER TYPE (ADMIN, CLUB MANAGER, GENERAL USER)
+
+function getUserRole() {
+  const userIdInput = document.getElementById('user_type');
+
+  const userId = userTypeInput.value;
+
+  fetch(`/api/checkUserRole?user_id=${userTpye}`)
+    .then(response => response.json())
+    .then(data => {
+      const userRole = data.role;
+      // Perform actions based on user role
+      if (userRole === 'club-manager') {
+        // Show elements specific to club managers
+        showClubManagerElements();
+      } else {
+        // Hide club manager specific elements
+        hideNonClubManagerElements();
+      }
+    })
+    // error message incase something messes up
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+function showClubManagerElements() {
+  // Show the desired elements specific to club managers
+  const createEventDiv = document.getElementById('createEvent');
+  createEventDiv.style.display = 'block';
+
+  const postUpdateDiv = document.getElementById('postUpdate');
+  postUpdateDiv.style.display = 'block';
+}
+
+function hideNonClubManagerElements() {
+  // Hide or disable elements not applicable to club managers
+  const createEventDiv = document.getElementById('createEvent');
+  createEventDiv.style.display = 'none';
+
+  const postUpdateDiv = document.getElementById('postUpdate');
+  postUpdateDiv.style.display = 'none';
+}
+
+// function getUserRole called automatically when the page is loaded
+window.addEventListener('DOMContentLoaded', getUserRole);
