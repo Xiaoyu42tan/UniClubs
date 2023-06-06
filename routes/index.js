@@ -16,7 +16,9 @@ router.get('/', function(req, res, next) {
     user2: {password: 'password2'}
   };
 
-//login
+// login
+// XIAOYU: may need to change this to a get request idk
+// cos i thought post requests only for changing data in the database
 router.post('/login', async function(req, res, next){
   if('client_id' in req.body){
     const ticket = await client.verifyIdToken({
@@ -26,33 +28,133 @@ router.post('/login', async function(req, res, next){
     });
     const payload = ticket.getPayload();
     console.log(payload['email']);
-    //res.send();
     // If request specified a G Suite domain:
     // const domain = payload['hd'];
-  }else if(req.body.username in users && req.body.password === users[req.body.username].password){
-    req.session.username = req.body.username;
-    res.end();
+    req.pool.getConnection(function(err, connection){
+      if(err){
+        console.log("err");
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      }
+      let query = "SELECT user_id, user_type, user_name, first_name, last_name, email FROM users WHERE email = ?";
+      connection.query(query, payload['email'], function(qerr, rows, fields) {
+        connection.release();
+        if(qerr){
+          console.log("qerr:");
+          console.log(qerr);
+          res.sendStatus(500);
+          return;
+        }
+        console.log(JSON.stringify(rows));
+        if (rows.length > 0){
+          // user is present
+          [req.session.user] = rows;
+          res.json(req.session.user);
+        }else{
+          // no user
+          res.sendStatus(401);
+        }
+      });
+    });
+  }else if('username' in req.body && 'password' in req.body){
+    console.log("username and password are in the body");
+
+    req.pool.getConnection(function(err, connection){
+      // if serverside error
+      if(err){
+        console.log("err"); // debug
+        console.log(err); // debug
+
+        res.sendStatus(500);
+        return;
+      }
+
+      let query = "SELECT user_id, user_type, user_name, first_name, last_name, email FROM users WHERE user_name = ? AND password = ?";
+      connection.query(query, [req.body.username, req.body.password], function(qerr, rows, fields) {
+        connection.release();
+        // if serverside error
+        if(qerr){
+          console.log("qerr:");
+          console.log(qerr);
+          res.sendStatus(500);
+          return;
+        }
+
+        console.log(JSON.stringify(rows)); // debug
+
+        if (rows.length === 1){
+          // user is present
+          res.json(rows);
+        } else if (rows.length === 0) {
+          // no user
+          res.sendStatus(401);
+        } else {
+          // somehow, usernames are not unique
+          console.log("somehow, usernames are not unique");
+          res.sendStatus(401);
+        }
+      });
+    });
+
   }else{
     console.log("wrong username or password");
     res.sendStatus(401);
   }
-  //req.session.username = req.body.username;
-  console.log(JSON.stringify(req.body));
-  res.end();
 });
 
-//signup
+
+
+// signup
+// DONE - XIAOYU
 router.post('/signup', function(req, res, next){
-  if(req.body.username in users){
-    res.sendStatus(401);
-  }else{
-    req.session.username = req.body.username;
-    users[req.body.username] = {password: req.body.password};
-    res.end();
-  }
-  //req.session.username = req.body.username;
-  //console.log(JSON.stringify(req.body));
-  //res.end();
+  // Xiaoyu, Tuesday night, implementing signup
+  console.log(req.body);
+
+  req.pool.getConnection(function(err, connection){
+    if(err){
+      console.log("err");
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    let query = `Insert INTO users(
+                      user_type,
+                      user_name,
+                      first_name,
+                      last_name,
+                      email,
+                      password,
+                      phone_number
+                  ) VALUES(
+                      'user',
+                      ?,
+                      ?,
+                      ?,
+                      ?,
+                      ?,
+                      ?
+                  );`;
+    connection.query(query,
+      [req.body.username, req.body.firstname,req.body.lastname,
+        req.body.email,req.body.password,req.body.phonenumber],
+      function(qerr, rows, fields) {
+      connection.release();
+      // if serverside error
+      if(qerr){
+        console.log("qerr:");
+        console.log(qerr);
+        res.sendStatus(500);
+        return;
+      }
+
+      console.log(JSON.stringify(rows));
+
+      // should work, and no need to send back anything to the client
+      res.end();
+    });
+  });
+
 });
 
 //log out
@@ -75,6 +177,7 @@ router.post('/google_login', async function (req, res, next) {
   const payload = ticket.getPayload();
   //console.log(payload['sub']);
   console.log(payload['email']);
+  console.log("hello!");
   // If request specified a G Suite domain:
   // const domain = payload['hd'];
 

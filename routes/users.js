@@ -55,7 +55,7 @@ router.post('/createEvent', function (req, res, next) {
                       return;
                   }
                   res.end();
-              });
+            });
       });
   }
 });

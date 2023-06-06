@@ -9,6 +9,7 @@ CREATE TABLE users (
     last_name VARCHAR(30),
     email VARCHAR(80),
     password VARCHAR(30),
+    phone_number VARCHAR(20),
     PRIMARY KEY (user_id)
 );
 CREATE TABLE clubs (

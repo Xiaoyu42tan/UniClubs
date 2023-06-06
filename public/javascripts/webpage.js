@@ -5,7 +5,7 @@ const nav = new Vue ({
             { title: 'Home', url: '/index.html' },
             { title: 'Clubs', url: '/club.html' },
             { title: 'Account', url: '/user.html' },
-            { title: 'Login', url: '#' }
+            { title: 'Login', url: '/login.html' }
         ]
     }
 });

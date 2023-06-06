@@ -4,14 +4,16 @@ Insert INTO users(
     first_name,
     last_name,
     email,
-    password
+    password,
+    phone_number
 ) VALUES(
     'user',
     'user1',
     'Didier',
     'Drogba',
     'thegoat@gmail.com',
-    'championsleague'
+    'championsleague',
+    '01230somethingidk'
 );
 
 Insert INTO users(
@@ -20,12 +22,15 @@ Insert INTO users(
     first_name,
     last_name,
     email,
-    password
+    password,
+    phone_number
 ) VALUES(
     'user',
     'user2',
     'Christian',
     'Ronaldo',
     'christian@gmail.com',
-    'christ'
+    'christ',
+    '01230somethingidk'
 );
+

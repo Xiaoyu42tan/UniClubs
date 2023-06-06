@@ -11,8 +11,9 @@ function logIn(){
     req.onreadystatechange = function(){
         if(req.readyState == 4 && req.status == 200){
             alert('Successful log in');
-            console.log('logged in as: ' + document.getElementById("username").value);
-            //redirect user to webpage
+            console.log('your details are: ' + req.responseText); // debug
+            // redirect user to webpage
+
         } else if(req.readyState == 4 && req.status == 401){
             alert('Unsuccessful log in');
         }
@@ -26,10 +27,16 @@ function logIn(){
 
 function signUp(){
     console.log("signup running");
-    //console.log(document.getElementById("username").value);
+    // console.log(document.getElementById("username").value);
+
+    // XIAOYU CHANGES- added all register details to the request body
     let loginData = {
         username: document.getElementById("new-username").value,
-        password: document.getElementById("new-password").value
+        firstname: document.getElementById("firstname").value,
+        lastname: document.getElementById("lastname").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("new-password").value,
+        phonenumber: document.getElementById("phonenumber").value
     };
 
     if(document.getElementById('new-password').value !== document.getElementById('repeat-password').value){
@@ -41,7 +48,8 @@ function signUp(){
     req.onreadystatechange = function(){
         if(req.readyState == 4 && req.status == 200){
             alert('Successful sign up');
-            //redirect user to webpage
+            console.log('your details are: ' + req.responseText); // debug
+            // redirect user to webpage
         } else if(req.readyState == 4 && req.status == 401){
             alert('Unsuccessful signup');
         }
