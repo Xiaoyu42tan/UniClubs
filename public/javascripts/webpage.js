@@ -4,7 +4,7 @@ const nav = new Vue ({
         top_menu: [
             { title: 'Home', url: '/index.html' },
             { title: 'Clubs', url: '/club.html' },
-            { title: 'Help', url: '#' },
+            { title: 'Account', url: '/user.html' },
             { title: 'Login', url: '#' }
         ]
     }
