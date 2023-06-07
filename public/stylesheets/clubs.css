@@ -77,3 +77,8 @@
 .formHeading {
     padding: 0px 0px 10px;
 }
+
+#updateEvent {
+    padding: 30px;
+    border-top: solid black;
+}

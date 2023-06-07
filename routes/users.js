@@ -69,7 +69,7 @@ router.get('/getUpdates', function (req, res, next) {
           res.sendStatus(500);
           return;
       }
-      let query = `SELECT update_title, update_description FROM updates
+      let query = `SELECT * FROM updates
                   WHERE club_id = ?
                   ORDER BY update_id DESC;`;
       connection.query(query, [req.query.club_id], function (qerr, rows, fields) {
@@ -91,7 +91,7 @@ router.get('/getEvents', function (req, res, next) {
           res.sendStatus(500);
           return;
       }
-      let query = `SELECT event_name, event_description, event_date, event_time FROM events
+      let query = `SELECT * FROM events
                   WHERE club_id = ?
                   ORDER BY event_id DESC;`;
       connection.query(query, [req.query.club_id], function (qerr, rows, fields) {
@@ -105,6 +105,43 @@ router.get('/getEvents', function (req, res, next) {
       });
   });
 });
+
+// Update Events
+router.post('/updateEvent', function (req, res, next) {
+  if ('event_id' in req.body && 'name' in req.body && 'club_id' in req.body && 'description' in req.body && 'date' in req.body && 'time' in req.body) {
+
+      req.pool.getConnection(function (cerr, connection) {
+          if (cerr) {
+              res.sendStatus(500);
+              return;
+          }
+          let query = `UPDATE events
+                      SET event_name = ?,
+                          club_id = ?,
+                          event_description = ?,
+                          event_date = ?,
+                          event_time = ?
+                      WHERE event_id = ?`;
+          connection.query(
+              query,
+              [req.body.name,
+              req.body.club_id,
+              req.body.description,
+              req.body.date,
+              req.body.time,
+              req.body.event_id],
+              function (qerr, rows, fields) {
+                  connection.release();
+                  if (qerr) {
+                      res.sendStatus(500);
+                      return;
+                  }
+                  res.end();
+            });
+      });
+  }
+});
+
 
 // Sends the array in JSON format
 router.get('/getFirstName', function (req, res, next) {

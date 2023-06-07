@@ -98,6 +98,64 @@ function getUpdates() {
 
 // KIAN - GET EVENTS
 
+// UPDATE EVENTS
+
+var updateEventData = new Vue({
+    el: "#updateEvent",
+    data: {
+        events: [],
+        selectedEvent: null,
+        eventId: null,
+        clubId: null
+    },
+    methods: {
+        updateSelectedEvent() {
+            if (this.selectedEvent) {
+                this.eventId = this.selectedEvent.event_id;
+                this.clubId = this.selectedEvent.club_id;
+                console.log("Selected Event ID:", this.eventId);
+                console.log("Selected Club ID:", this.clubId);
+            }
+        },
+
+        updateEvent() {
+            let name = document.getElementById('form2Example7').value;
+            let description = document.getElementById('form2Example8').value;
+            let date = document.getElementById('form2Example9').value;
+            let time = document.getElementById('form2Example10').value;
+
+            // Check if any of the required fields are empty
+            if (name === '' || description === '' || date === '' || time === '') {
+                alert('Please fill in all the required fields');
+                return; // Stop further execution
+            }
+
+            let updateevent = {
+                event_id: this.eventId,
+                name: name,
+                club_id: this.clubId,
+                description: description,
+                date: date,
+                time: time
+            };
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function(){
+                if(req.readyState == 4 && req.status == 200){
+                    alert('Updated successfully');
+                } else if(req.readyState == 4 && req.status == 403){
+                    alert('Not logged in');
+                }
+            };
+
+            req.open('POST','/users/updateEvent');
+            req.setRequestHeader('Content-Type','application/json');
+            console.log(JSON.stringify(updateevent));
+            req.send(JSON.stringify(updateevent));
+        }
+    }
+});
+
 var eventsData = new Vue({
     el: "#events",
     data: {
@@ -115,6 +173,7 @@ function getEvents() {
         if (req.readyState === 4 && req.status === 200) {
         let events = JSON.parse(req.responseText);
         eventsData.events = events;
+        updateEventData.events = events;
         }
     };
     req.open('GET', `/users/getEvents?club_id=${club_id}`);
