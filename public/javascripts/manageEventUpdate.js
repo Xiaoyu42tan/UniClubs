@@ -2,6 +2,9 @@ function postUpdate() {
     let title = document.getElementById('form2Example5').value;
     let description = document.getElementById('form2Example5').value;
 
+    let clubIdInput = document.getElementById("club-id");
+    let club_id = clubIdInput.value;
+
     // Check if any of the required fields are empty
     if (title === '' || description === '') {
         alert('Please fill in all the required fields');
@@ -9,6 +12,7 @@ function postUpdate() {
     }
 
     let postupdate = {
+        club_id: club_id,
         title: title,
         description: description
     };
@@ -35,6 +39,9 @@ function submitEvent() {
     let date = document.getElementById('form2Example3').value;
     let time = document.getElementById('form2Example4').value;
 
+    let clubIdInput = document.getElementById("club-id");
+    let club_id = clubIdInput.value;
+
     // Check if any of the required fields are empty
     if (name === '' || description === '' || date === '' || time === '') {
         alert('Please fill in all the required fields');
@@ -43,6 +50,7 @@ function submitEvent() {
 
     let createevent = {
         name: name,
+        club_id: club_id,
         description: description,
         date: date,
         time: time
@@ -73,6 +81,10 @@ var updatesData = new Vue({
 });
 
 function getUpdates() {
+
+    let clubIdInput = document.getElementById("club-id");
+    let club_id = clubIdInput.value;
+
     let req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
@@ -80,11 +92,11 @@ function getUpdates() {
         updatesData.updates = updates;
         }
     };
-    req.open('GET', '/users/getUpdates');
+    req.open('GET', `/users/getUpdates?club_id=${club_id}`);
     req.send();
 }
 
-// KIAN - GET Events
+// KIAN - GET EVENTS
 
 var eventsData = new Vue({
     el: "#events",
@@ -94,6 +106,10 @@ var eventsData = new Vue({
 });
 
 function getEvents() {
+
+    let clubIdInput = document.getElementById("club-id");
+    let club_id = clubIdInput.value;
+
     let req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
@@ -101,10 +117,9 @@ function getEvents() {
         eventsData.events = events;
         }
     };
-    req.open('GET', '/users/getEvents');
+    req.open('GET', `/users/getEvents?club_id=${club_id}`);
     req.send();
 }
-
 
 // ADITYA - ADDED FUNCTIONALITY TO OBTAIN USER TYPE (ADMIN, CLUB MANAGER, GENERAL USER)
 

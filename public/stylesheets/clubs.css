@@ -61,3 +61,19 @@
 .eventsUpdates{
     padding: 30px;
 }
+
+/* Create Event Form */
+#createEvent {
+    padding: 30px;
+    border-top: solid black;
+}
+
+/* Post Update Form */
+#postUpdate {
+    padding: 30px;
+    border-top: solid black;
+}
+
+.formHeading {
+    padding: 0px 0px 10px;
+}

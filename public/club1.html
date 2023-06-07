@@ -16,7 +16,7 @@
         <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
     <body onload="getUpdates(); getEvents()">
-
+        <input type="hidden" id="club-id" value="1">
         <!-- Header -->
         <div id="outer-header">
             <nav id="nav" class="navbar navbar-expand-sm container">
@@ -57,7 +57,7 @@
         </div>
 
         <!-- Updates Events -->
-        <div id="outer-updates">
+        <div>
             <div class="container">
                 <div class="row eventsUpdates">
                     <div class="col-sm-12 col-md-12 col-lg-6">
@@ -89,6 +89,56 @@
                 </div>
             </div>
         </div>
+
+        <!-- KIAN, CREATE EVENT, POST UPDATE, working for SQL, does not validate user -->
+
+        <div id="createEvent" class="container">
+            <h5 class="formHeading" id="createEventHeading">
+                Create Event
+            </h5>
+            <form>
+                <div class="form-outline mb-4">
+                <input type="text" id="form2Example1" class="form-control" placeholder="Event Name" required/>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <textarea type="text" id="form2Example2" class="form-control" placeholder="Description" rows=3 required></textarea>
+                    </div>
+
+                <div class="form-outline mb-4">
+                <input type="date" id="form2Example3" class="form-control" placeholder="Date" required/>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <input type="time" id="form2Example4" class="form-control" placeholder="Time" required/>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-block mb-4" onclick="submitEvent()">Submit</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="postUpdate" class="container">
+            <h5 class="formHeading" id="postUpdateHeading">
+                Post Update
+            </h5>
+            <form>
+                <div class="form-outline mb-4">
+                <input type="text" id="form2Example5" class="form-control" placeholder="Title" required/>
+                </div>
+
+                <div class="form-outline mb-4">
+                <textarea type="text" id="form2Example6" class="form-control" placeholder="Description" rows=3 required></textarea>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-block mb-4" onclick="postUpdate()">Submit</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- END OF KIAN EVENT AND UPDATE -->
 
         <!-- Footer -->
         <div id="footer" class="text-center">

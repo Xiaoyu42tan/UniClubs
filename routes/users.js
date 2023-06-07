@@ -7,18 +7,19 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/postUpdate', function (req, res, next) {
-  if ('title' in req.body && 'description' in req.body) {
+  if ('club_id' in req.body && 'title' in req.body && 'description' in req.body) {
 
       req.pool.getConnection(function (cerr, connection) {
           if (cerr) {
               res.sendStatus(500);
               return;
           }
-          let query = `INSERT INTO updates (update_title, update_description)
-                      VALUES (?, ?);`;
+          let query = `INSERT INTO updates (club_id, update_title, update_description)
+                      VALUES (?, ?, ?);`;
           connection.query(
               query,
-              [req.body.title,
+              [req.body.club_id,
+              req.body.title,
               req.body.description],
               function (qerr, rows, fields) {
                   connection.release();
@@ -33,18 +34,19 @@ router.post('/postUpdate', function (req, res, next) {
 });
 
 router.post('/createEvent', function (req, res, next) {
-  if ('name' in req.body && 'description' in req.body && 'date' in req.body && 'time' in req.body) {
+  if ('name' in req.body && 'club_id' in req.body && 'description' in req.body && 'date' in req.body && 'time' in req.body) {
 
       req.pool.getConnection(function (cerr, connection) {
           if (cerr) {
               res.sendStatus(500);
               return;
           }
-          let query = `INSERT INTO events (event_name, event_description, event_date, event_time)
-                      VALUES (?, ?, ?, ?);`;
+          let query = `INSERT INTO events (event_name, club_id, event_description, event_date, event_time)
+                      VALUES (?, ?, ?, ?, ?);`;
           connection.query(
               query,
               [req.body.name,
+              req.body.club_id,
               req.body.description,
               req.body.date,
               req.body.time],
@@ -68,8 +70,9 @@ router.get('/getUpdates', function (req, res, next) {
           return;
       }
       let query = `SELECT update_title, update_description FROM updates
+                  WHERE club_id = ?
                   ORDER BY update_id DESC;`;
-      connection.query(query, function (qerr, rows, fields) {
+      connection.query(query, [req.query.club_id], function (qerr, rows, fields) {
           connection.release();
           if (qerr) {
               res.sendStatus(500);
@@ -89,8 +92,9 @@ router.get('/getEvents', function (req, res, next) {
           return;
       }
       let query = `SELECT event_name, event_description, event_date, event_time FROM events
+                  WHERE club_id = ?
                   ORDER BY event_id DESC;`;
-      connection.query(query, function (qerr, rows, fields) {
+      connection.query(query, [req.query.club_id], function (qerr, rows, fields) {
           connection.release();
           if (qerr) {
               res.sendStatus(500);
