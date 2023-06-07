@@ -60,5 +60,46 @@ router.post('/createEvent', function (req, res, next) {
   }
 });
 
+// Sends the array in JSON format
+router.get('/getUpdates', function (req, res, next) {
+  req.pool.getConnection(function (cerr, connection) {
+      if (cerr) {
+          res.sendStatus(500);
+          return;
+      }
+      let query = `SELECT update_title, update_description FROM updates
+                  ORDER BY update_id DESC;`;
+      connection.query(query, function (qerr, rows, fields) {
+          connection.release();
+          if (qerr) {
+              res.sendStatus(500);
+              return;
+          }
+          console.log(JSON.stringify(rows));
+          res.json(rows);
+      });
+  });
+});
+
+// Sends the array in JSON format
+router.get('/getEvents', function (req, res, next) {
+  req.pool.getConnection(function (cerr, connection) {
+      if (cerr) {
+          res.sendStatus(500);
+          return;
+      }
+      let query = `SELECT event_name, event_description, event_date, event_time FROM events
+                  ORDER BY event_id DESC;`;
+      connection.query(query, function (qerr, rows, fields) {
+          connection.release();
+          if (qerr) {
+              res.sendStatus(500);
+              return;
+          }
+          console.log(JSON.stringify(rows));
+          res.json(rows);
+      });
+  });
+});
 
 module.exports = router;

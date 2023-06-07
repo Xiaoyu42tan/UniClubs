@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-AU">
     <head>
-        <title>Webpage</title>
+        <title>Club 1</title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, intial-scale=1.0">
@@ -13,8 +13,9 @@
 
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
         <script src="/javascripts/webpage.js" defer></script>
+        <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
-    <body>
+    <body onload="getUpdates(); getEvents()">
 
         <!-- Header -->
         <div id="outer-header">
@@ -58,27 +59,29 @@
         <!-- Updates Events -->
         <div id="outer-updates">
             <div class="container">
-                <div id="updates" class="row">
-                    <div id="upcoming-events-one" class="col-sm-12 col-md-12 col-lg-6">
+                <div class="row eventsUpdates">
+                    <div class="col-sm-12 col-md-12 col-lg-6">
                         <h2 class="text-center">
                             Upcoming Events
                         </h2>
-                        <div class="inner">
+                        <div class="inner" id="events">
                             <ul>
-                                <li>
-
+                                <li v-for="event in events">
+                                    <h3> {{ event.event_name }} </h3>
+                                    <p> {{ event.event_description }} - {{ event.event_date }} - {{ event.event_time }} </p>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div id="recent-updates-one" class="col-sm-12 col-md-12 col-lg-6">
+                    <div class="col-sm-12 col-md-12 col-lg-6">
                         <h2 class="text-center">
                             Recent Updates
                         </h2>
-                        <div class="inner">
+                        <div class="inner" id="updates">
                             <ul>
-                                <li>
-
+                                <li v-for="update in updates">
+                                    <h3> {{ update.update_title }} </h3>
+                                    <p> {{ update.update_description }} </p>
                                 </li>
                             </ul>
                         </div>

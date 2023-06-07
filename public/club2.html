@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en-AU">
     <head>
-        <title>Webpage</title>
+        <title>Club 2</title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, intial-scale=1.0">
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" href="webpage.css">
-        <link rel="stylesheet" href="clubs.css">
+        <link rel="stylesheet" href="/stylesheets/webpage.css">
+        <link rel="stylesheet" href="/stylesheets/clubs.css">
 
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-        <script src="webpage.js" defer></script>
+        <script src="/javascripts/webpage.js" defer></script>
+        <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
-    <body>
+    <body onload="getUpdates(); getEvents()">
 
         <!-- Header -->
         <div id="outer-header">
             <nav id="nav" class="navbar navbar-expand-sm container">
                 <a href="/index.html">
-                    <img class="logo" src="University-of-Adelaide-white-logo.png" alt="logo"/>
+                    <img class="logo" src="/images/University-of-Adelaide-white-logo.png" alt="logo"/>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-expanded="false">
                     Menu
@@ -55,31 +56,34 @@
             </div>
         </div>
 
-        <!-- Club Content -->
-        <div id="outer-content">
-            <div id="clubs-content" class="container">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                        <!-- Placeholder Image -->
-                        <div id="clubs-img-div">
-                            <img id="clubs-img" class="img-fluid" src="outdoor event.jpeg" alt="photo"/>
+        <!-- Updates Events -->
+        <div id="outer-updates">
+            <div class="container">
+                <div class="row eventsUpdates">
+                    <div class="col-sm-12 col-md-12 col-lg-6">
+                        <h2 class="text-center">
+                            Upcoming Events
+                        </h2>
+                        <div class="inner" id="events">
+                            <ul>
+                                <li v-for="event in events">
+                                    <h3> {{ event.event_name }} </h3>
+                                    <p> {{ event.event_description }} - {{ event.event_date }} - {{ event.event_time }} </p>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div id="upcoming-club-events" class="col-sm-12 col-md-6 col-lg-6">
-                        <div>
-                            <h2 class="text-center">
-                                Upcoming Events
-                            </h2>
-                            <p class="text-center">
-                                Here are some of the upcoming events in this club.
-                            </p>
-                            <div id="clubs-inner">
-                                <ul>
-                                    <li v-for="items in events">
-                                        <span>{{ items.content }}</span>
-                                    </li>
-                                </ul>
-                            </div>
+                    <div class="col-sm-12 col-md-12 col-lg-6">
+                        <h2 class="text-center">
+                            Recent Updates
+                        </h2>
+                        <div class="inner" id="updates">
+                            <ul>
+                                <li v-for="update in updates">
+                                    <h3> {{ update.update_title }} </h3>
+                                    <p> {{ update.update_description }} </p>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

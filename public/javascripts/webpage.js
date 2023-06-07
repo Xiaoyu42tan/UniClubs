@@ -37,15 +37,7 @@ const search = new Vue ({
         search: "",
         clubs: [
             { name: 'Club 1', url: '/club1.html' },
-            { name: 'Club 2', url: '/club2.html' },
-            { name: 'Club 3', url: '/club3.html' },
-            { name: 'Club 4', url: '/club4.html' },
-            { name: 'Club 5', url: '/club5.html' },
-            { name: 'Club 6', url: '/club6.html' },
-            { name: 'Club 7', url: '/club7.html' },
-            { name: 'Club 8', url: '/club8.html' },
-            { name: 'Club 9', url: '/club9.html' },
-            { name: 'Club 10', url: '/club10.html' }
+            { name: 'Club 2', url: '/club2.html' }
         ]
     },
     computed: {

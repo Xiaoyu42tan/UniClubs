@@ -63,6 +63,49 @@ function submitEvent() {
     req.send(JSON.stringify(createevent));
 }
 
+// KIAN - GET UPDATES
+
+var updatesData = new Vue({
+    el: "#updates",
+    data: {
+        updates: []
+    }
+});
+
+function getUpdates() {
+    let req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+        let updates = JSON.parse(req.responseText);
+        updatesData.updates = updates;
+        }
+    };
+    req.open('GET', '/users/getUpdates');
+    req.send();
+}
+
+// KIAN - GET Events
+
+var eventsData = new Vue({
+    el: "#events",
+    data: {
+        events: []
+    }
+});
+
+function getEvents() {
+    let req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+        let events = JSON.parse(req.responseText);
+        eventsData.events = events;
+        }
+    };
+    req.open('GET', '/users/getEvents');
+    req.send();
+}
+
+
 // ADITYA - ADDED FUNCTIONALITY TO OBTAIN USER TYPE (ADMIN, CLUB MANAGER, GENERAL USER)
 
 function getUserRole() {
@@ -70,7 +113,7 @@ function getUserRole() {
 
   const userId = userTypeInput.value;
 
-  fetch(`/api/checkUserRole?user_id=${userTpye}`)
+  fetch(`/api/checkUserRole?user_id=${userType}`)
     .then(response => response.json())
     .then(data => {
       const userRole = data.role;
