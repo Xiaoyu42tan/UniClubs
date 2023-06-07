@@ -20,6 +20,7 @@ router.get('/', function(req, res, next) {
 // XIAOYU: may need to change this to a get request idk
 // cos i thought post requests only for changing data in the database
 router.post('/login', async function(req, res, next){
+  req.session.username = req.body.username;
   if('client_id' in req.body){
     const ticket = await client.verifyIdToken({
         idToken: req.body.credential,

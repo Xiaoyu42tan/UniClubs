@@ -13,9 +13,10 @@
 
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
         <script src="/javascripts/webpage.js" defer></script>
+        <script src="/javascripts/account.js" defer></script>
         <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
-    <body>
+    <body onload="getFirstName()">
 
         <div id="outer-header">
             <nav id="nav" class="navbar navbar-expand-sm container">
@@ -34,7 +35,9 @@
         </div>
 
         <!-- Administrator Dashboard Heading -->
-        <h2 id="sysadmin-title" class="text-center">User Dashboard</h2>
+        <div id = "firstname">
+            <h2 id="sysadmin-title" class="text-center">Welcome back, {{ firstname }}</h2>
+        </div>
         <div id="sysadmin-info-outer">
             <div id="sysadmin-info" class="container">
                 <p>Welcome to the User Dashboard. Here you can:</p>
@@ -97,7 +100,7 @@
             </div>
             <div id="link-main-clubs" class="container">
                 <p>Want to see more? Visit the Clubs page below!</p>
-                <button onclick="window.location.href = 'club.html';">CLUBS</button>
+                <button type="button" onclick="window.location.href = 'club.html';">CLUBS</button>
                 <br>
             </div>
         </div>

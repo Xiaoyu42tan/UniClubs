@@ -106,4 +106,29 @@ router.get('/getEvents', function (req, res, next) {
   });
 });
 
+// Sends the array in JSON format
+router.get('/getFirstName', function (req, res, next) {
+    req.pool.getConnection(function (cerr, connection) {
+        if (cerr) {
+            res.sendStatus(500);
+            return;
+        }
+        let query = `SELECT first_name FROM users WHERE user_name = ?`;
+        console.log("got to server side for getFirstName");
+        console.log(req.session.username);
+        connection.query(query, [req.session.username], function (qerr, rows, fields) {
+            connection.release();
+            if (qerr) {
+                res.sendStatus(500);
+                console.log(qerr);
+                return;
+            }
+            const first_name = rows[0].first_name; //destructor ruins it
+            console.log(first_name); // "Didier"
+            res.json(first_name);
+        });
+    });
+  });
+
+
 module.exports = router;

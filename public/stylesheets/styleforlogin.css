@@ -1,3 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+
+*
+{
+font-family: 'Space Mono';
+}
+
+body{
+
+  background: black;
+  color: white;
+}
 /* Bordered form */
 form {
     border: 3px solid #f1f1f1;
@@ -47,7 +59,6 @@ form {
   }
 
   h1 {
-    font-family: arial, sans-serif;
     text-align: center;
     font-size: 50px;
     font-weight: bold;
