@@ -17,7 +17,7 @@
         <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
 
-    <body onload="getFirstName(); checkIfLoggedIn(); displayInfo()">
+    <body onload="getFirstName(); checkIfLoggedIn(); displayInfo(); checkifAdmin();">
 
         <div id="outer-header">
             <nav id="nav" class="navbar navbar-expand-sm container">
@@ -162,6 +162,25 @@
                 <button type="button" onclick="window.location.href = 'club.html';">CLUBS</button>
                 <br>
             </div>
+        </div>
+
+        <!-- ADITYA - added this section for managing users from the website, only visible for admins (adapted from Kian code) -->
+        <div id="siteUsers" class="container divManageUsers">
+            <h5 class="formHeading">
+                Manage Site Users
+            </h5>
+            <form>
+                <div class="form-outline mb-4">
+                    <select class="form-select" v-model="selectedUser" @change="updateSelectedUser">
+                        <option value="" disabled>Select a user</option>
+                        <option v-for="user in users" :value="user">{{ user.user_name }} - {{ user.first_name }} {{ user.last_name }}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-block mb-4" @click="removeSiteUsers">Remove User</button>
+                </div>
+            </form>
         </div>
 
         <!-- Footer -->

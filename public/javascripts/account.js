@@ -162,3 +162,112 @@ function hideChangeInfoPopup(){
     changes_popup.style.display = 'none';
     overlay.style.display = 'none';
 }
+
+// ADITYA - added functionality to remove users from the website (modfified from Kian)
+// ** only available to site admins
+var clubMembers = new Vue({
+  el: "#clubMembers",
+  data: {
+    users: [],
+    selectedUser: null,
+    userId: null,
+  },
+  methods: {
+    updateSelectedUser() {
+      if (this.selectedUser) {
+        this.userId = this.selectedUser.user_id;
+        console.log("Selected User ID:", this.userId);
+      }
+    },
+
+    removeClubMembers() {
+        if (this.userId === null) {
+          alert('Please select a user');
+          return; // Stop further execution
+        }
+
+        let removeMember = {
+          user_id: this.userId,
+        };
+
+        fetch('/admin/removeUser', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(removeMember),
+        })
+        .then(response => {
+          if (response.ok) {
+            alert('User removed successfully');
+          } else if (response.status === 401) {
+            alert('Not logged in');
+          } else if (response.status === 403) {
+            alert('Not authorized');
+          } else if (response.status === 500) {
+            alert('Server-side error');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error.message);
+        });
+      },
+    },
+  });
+
+  function showClubManagerElements() {
+    // Show the desired elements specific to club managers
+    const postUpdateDiv = document.getElementById('postUpdate');
+    postUpdateDiv.style.display = 'block';
+
+    const deleteUpdateDiv = document.getElementById('deleteUpdate');
+    deleteUpdateDiv.style.display = 'block';
+
+    const createEventDiv = document.getElementById('createEvent');
+    createEventDiv.style.display = 'block';
+
+    const updateEventDiv = document.getElementById('updateEvent');
+    updateEventDiv.style.display = 'block';
+
+    const deleteEventDiv = document.getElementById('deleteEvent');
+    deleteEventDiv.style.display = 'block';
+
+    const membersAttendingDiv = document.getElementById('membersAttending');
+    membersAttendingDiv.style.display = 'block';
+
+    const clubMembersDiv = document.getElementById('clubMembers');
+    clubMembersDiv.style.display = 'block';
+
+}
+
+function showAdminElements() {
+    // Hide or disable elements not applicable to club managers
+    const siteUsersDiv = document.getElementById('siteUsers');
+    siteUsersDiv.style.display = 'none';
+}
+
+function hideAdminElements() {
+    // Hide or disable elements not applicable to club managers
+    const siteUsersDiv = document.getElementById('siteUsers');
+    siteUsersDiv.style.display = 'block';
+}
+
+  function checkifAdmin() {
+
+    let req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            showAdminElements();
+        } else if (req.readyState === 4 && req.status === 403) {
+            hideAdminElements();
+        } else if (req.readyState === 4 && req.status === 500) {
+            alert("serverside error");
+        }
+    };
+
+
+    req.open('POST','/checkIfAdmin');
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(JSON.stringify(clubInfo));
+}
+// end ADITYA update - please verify this work with the added div on user.html
