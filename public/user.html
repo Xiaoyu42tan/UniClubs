@@ -35,7 +35,7 @@
         </div>
 
         <!-- Administrator Dashboard Heading -->
-        <div id = "firstname">
+        <div class = "firstname">
             <h2 id="sysadmin-title" class="text-center">Welcome back, {{ firstname }}</h2>
         </div>
         <div id="sysadmin-info-outer">
@@ -66,12 +66,13 @@
                     </tr>
                     <tr>
                         <!-- contenteditable is temporary, will move to a more permanent solution later-->
-                      <td contenteditable="true">User</td>
-                      <td contenteditable="true">1</td>
-                      <td contenteditable="true">9/9/1999</td>
-                      <td contenteditable="true">user1@example.com</td>
-                      <!-- Can use JS/VUE to import clubs for each user-->
-                      <td>Club1, Club2, Club3, Club4</td>
+
+                            <td contenteditable="true"><div class = "firstname">{{ firstname }}</div></td>
+                            <td contenteditable="true">1</td>
+                            <td contenteditable="true">9/9/1999</td>
+                            <td contenteditable="true">user1@example.com</td>
+                            <!-- Can use JS/VUE to import clubs for each user-->
+                            <td>Club1, Club2, Club3, Club4</td>
                   </tr>
                   </table>
             </div>

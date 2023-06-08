@@ -1,11 +1,12 @@
 // Dimos - GET first name
 
 var firstnameShow = new Vue({
-    el: "#firstname",
+    el: ".firstname",
     data: {
         firstname: ""
     }
 });
+
 function getFirstName() {
     let req = new XMLHttpRequest();
     req.onreadystatechange = function () {
@@ -21,6 +22,26 @@ function getFirstName() {
 }
 
 // Dimos - GET last name
+var lastnameShow = new Vue({
+    el: "#lastname",
+    data: {
+        firstname: ""
+    }
+});
+
+function getLastName() {
+    let req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            console.log("we back");
+            console.log(JSON.parse(req.responseText));
+            let lastname = JSON.parse(req.responseText);
+            lastnameShow.lastname = lastname;
+        }
+    };
+    req.open('GET', '/users/getLastName');
+    req.send();
+}
 
 var usernameShow = new Vue({
     el: "#lastname",
