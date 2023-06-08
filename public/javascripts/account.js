@@ -113,9 +113,9 @@ function changeDetails(){
 
     req.onreadystatechange = function(){
         if(req.readyState == 4 && req.status == 200){
-            alert('Changes succesful');
+            alert('Changes succesful: You will now be logged out');
             console.log('your details are: ' + req.responseText); // debug
-            //location.reload();
+            window.location.href = 'login.html';
             // redirect user to webpage
         } else if(req.readyState == 4 && req.status == 401){
             alert('Changes unsuccessful');
