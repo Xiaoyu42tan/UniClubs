@@ -156,6 +156,98 @@ var updateEventData = new Vue({
     }
 });
 
+// EVENT RSVP
+
+var eventRSVP = new Vue ({
+    el: "#rsvp",
+    data: {
+        events: [],
+        selectedEvent: null,
+        eventId: null,
+        clubId: null
+    },
+    methods: {
+        updateSelectedEvent() {
+            if (this.selectedEvent) {
+                this.eventId = this.selectedEvent.event_id;
+                this.clubId = this.selectedEvent.club_id;
+                console.log("Selected Event ID:", this.eventId);
+                console.log("Selected Club ID:", this.clubId);
+            }
+        },
+
+        joinEvent() {
+            if (this.selectedEvent == null ) {
+                alert('Please select an event');
+                return;
+            }
+
+            let selectedevent = {
+                event_id: this.eventId,
+                club_id: this.clubId
+            };
+
+            // ajax request
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function () {
+
+                // if logged in, then add user to the club
+                if (req.readyState === 4 && req.status === 200) {
+                    alert("RSVP Success!");
+                } else if (req.readyState === 4 && req.status === 401) {
+                    alert("Not logged in!");
+                } else if (req.readyState === 4 && req.status === 403) {
+                    alert("Not a member of club!");
+                } else if (req.readyState === 4 && req.status === 409) {
+                    alert("Already enrolled!");
+                } else if (req.readyState === 4 && req.status === 500) {
+                    alert("Serverside Error!");
+                }
+            };
+
+            req.open('POST', '/users/joinEvent');
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(selectedevent));
+        },
+
+        leaveEvent() {
+            if (this.selectedEvent == null ) {
+                alert('Please select an event');
+                return;
+            }
+
+            let selectedevent = {
+                event_id: this.eventId,
+                club_id: this.clubId
+            };
+
+            // ajax request
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function () {
+
+                // if logged in, then add user to the club
+                if (req.readyState === 4 && req.status === 200) {
+                    alert("RSVP Cancel!");
+                } else if (req.readyState === 4 && req.status === 401) {
+                    alert("Not logged in!");
+                } else if (req.readyState === 4 && req.status === 403) {
+                    alert("Not a member of club!");
+                } else if (req.readyState === 4 && req.status === 409) {
+                    alert("Not Enrolled!");
+                } else if (req.readyState === 4 && req.status === 500) {
+                    alert("Serverside Error!");
+                }
+            };
+
+            req.open('POST', '/users/leaveEvent');
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(selectedevent));
+        }
+    }
+});
+
 var eventsData = new Vue({
     el: "#events",
     data: {
@@ -174,11 +266,13 @@ function getEvents() {
         let events = JSON.parse(req.responseText);
         eventsData.events = events;
         updateEventData.events = events;
+        eventRSVP.events = events;
         }
     };
     req.open('GET', `/users/getEvents?club_id=${club_id}`);
     req.send();
 }
+
 
 // ADITYA - ADDED FUNCTIONALITY TO OBTAIN USER TYPE (ADMIN, CLUB MANAGER, GENERAL USER)
 

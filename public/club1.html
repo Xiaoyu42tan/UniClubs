@@ -15,7 +15,7 @@
         <script src="/javascripts/webpage.js" defer></script>
         <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
-    <body onload="getUpdates(); getEvents()">
+    <body onload="getUpdates(); getEvents(); checkIfLoggedIn()">
         <input type="hidden" id="club-id" value="1">
         <!-- Header -->
         <div id="outer-header">
@@ -99,7 +99,25 @@
 
         <!-- KIAN, CREATE EVENT, POST UPDATE, UPDATE EVENT,working for SQL, does not validate user -->
 
-        <div id="createEvent" class="container">
+        <div id="rsvp" class="container divEventUpdate">
+            <h5 class="formHeading" id="rsvpEventHeading">
+                RSVP to Event
+            </h5>
+            <form>
+                <div class="form-outline mb-4">
+                    <select class="form-select" v-model="selectedEvent" @change="updateSelectedEvent">
+                        <option value="" disabled>Select an event</option>
+                        <option v-for="event in events" :value="event">{{ event.event_name }}</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary mx-2" @click="joinEvent">Join Event</button>
+                    <button type="button" class="btn btn-primary mx-2" @click="leaveEvent">Leave Event</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="createEvent" class="container divEventUpdate">
             <h5 class="formHeading" id="createEventHeading">
                 Create Event
             </h5>
@@ -126,7 +144,7 @@
             </form>
         </div>
 
-        <div id="postUpdate" class="container">
+        <div id="postUpdate" class="container divEventUpdate">
             <h5 class="formHeading" id="postUpdateHeading">
                 Post Update
             </h5>
@@ -145,7 +163,7 @@
             </form>
         </div>
 
-        <div id="updateEvent" class="container">
+        <div id="updateEvent" class="container divEventUpdate">
             <h5 class="formHeading" id="updateEventHeading">
                 Update Event
             </h5>
