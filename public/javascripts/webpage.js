@@ -3,9 +3,7 @@ const nav = new Vue ({
     data: {
         top_menu: [
             { title: 'Home', url: '/index.html' },
-            { title: 'Clubs', url: '/club.html' },
-            { title: 'Account', url: '/user.html' },
-            { title: 'Login', url: '/login.html' }
+            { title: 'Clubs', url: '/club.html' }
         ]
     }
 });
@@ -62,6 +60,62 @@ const appsearch = new Vue ({
         }
     }
 });
+
+// XIAOYU - THURSDAY MORNING
+function checkIfLoggedIn() {
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            // Logged in
+            nav.top_menu = [
+                { title: 'Home', url: '/index.html' },
+                { title: 'Clubs', url: '/club.html' },
+                { title: 'Account', url: '/user.html' }
+            ];
+
+            // hide the quick login for index.html
+            let quick_login = document.getElementById("outer-form");
+            if (quick_login !== null) {
+                quick_login.style.display = "none";
+            }
+
+
+        } else if (req.readyState === 4 && req.status === 401) {
+            // Not logged in
+            nav.top_menu = [
+                { title: 'Home', url: '/index.html' },
+                { title: 'Clubs', url: '/club.html' },
+                { title: 'Login', url: '/login.html' }
+            ];
+
+            // show the quick login for index.html
+            let quick_login = document.getElementById("outer-form");
+            if (quick_login !== null) {
+                quick_login.style.display = "flex";
+            }
+
+
+        }
+    };
+
+    req.open('GET', '/users/getUser');
+    req.send();
+}
+
+// XIAOYU THURSDAY MORNING
+function logout() {
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 401) {
+            alert("Not logged in!");
+        }
+    };
+
+    req.open('GET', '/logout');
+    req.send();
+}
 
 // show/hide table
 function revealElement() {

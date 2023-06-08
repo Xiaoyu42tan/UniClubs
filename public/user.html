@@ -16,7 +16,8 @@
         <script src="/javascripts/account.js" defer></script>
         <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
-    <body onload="displayInfo()">
+
+    <body onload="getFirstName(); checkIfLoggedIn(); displayInfo()">
 
         <div id="outer-header">
             <nav id="nav" class="navbar navbar-expand-sm container">
@@ -44,6 +45,7 @@
                 <ul>
                     <li>Manage your personal information</li>
                     <li>View club updates</li>
+                    <li><a href="index.html" onclick="logout()">Logout</a></li> <!-- XIAOYU THURSDAY MORNING  -->
                 </ul>
             </div>
         </div>

@@ -142,6 +142,166 @@ router.post('/updateEvent', function (req, res, next) {
   }
 });
 
+router.post('/joinEvent', function(req, res, next){
+    console.log(JSON.stringify(req.session));
+
+    // Check if User is Logged in
+    if (req.session.user === undefined) {
+      res.sendStatus(401);
+      return;
+    }
+
+    // First Connection - Check if user is part of club
+    req.pool.getConnection(function(cerr, connection){
+      if (cerr) {
+        res.sendStatus(500);
+        return;
+      }
+      let query = `SELECT * FROM club_enrolments WHERE user_id = ? AND club_id = ?;`;
+      connection.query(
+        query,
+        [req.session.user.user_id, req.body.club_id],
+        function(qerr, rows, fields) {
+        connection.release();
+        if (qerr) {
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows.length !== 1) {
+          // User is not part of club
+          res.sendStatus(403);
+        } else {
+
+          // Second Connection - Check if user is already enrolled in event
+          req.pool.getConnection(function(cerr2, connection2){
+            if (cerr2) {
+              res.sendStatus(500);
+              return;
+            }
+            let query2 = `SELECT * FROM event_enrolments WHERE user_id = ? AND event_id = ?`;
+            connection2.query(
+              query2,
+              [req.session.user.user_id, req.body.event_id],
+              function(qerr2, rows2, fields2) {
+              connection2.release();
+              if (qerr2) {
+                res.sendStatus(500);
+                return;
+              }
+
+              if (rows2.length === 1) {
+                res.sendStatus(409);
+              } else {
+
+                // Third Connection - Enrol user into event
+                req.pool.getConnection(function(cerr3, connection3){
+                  if (cerr3) {
+                    res.sendStatus(500);
+                    return;
+                  }
+                  let query3 = `INSERT INTO event_enrolments (user_id, event_id) VALUES (?, ?)`;
+                  connection3.query(
+                    query3,
+                    [req.session.user.user_id, req.body.event_id],
+                    function(qerr3, rows3, fields3) {
+                    connection3.release();
+                    if (qerr3) {
+                      res.sendStatus(500);
+                      return;
+                    }
+
+                    res.end();
+                  });
+                });
+              }
+            });
+          });
+        }
+      });
+    });
+  });
+
+  router.post('/leaveEvent', function(req, res, next){
+    console.log(JSON.stringify(req.session));
+
+    // Check if User is Logged in
+    if (req.session.user === undefined) {
+      res.sendStatus(401);
+      return;
+    }
+
+    // First Connection - Check if user is part of club
+    req.pool.getConnection(function(cerr, connection){
+      if (cerr) {
+        res.sendStatus(500);
+        return;
+      }
+      let query = `SELECT * FROM club_enrolments WHERE user_id = ? AND club_id = ?;`;
+      connection.query(
+        query,
+        [req.session.user.user_id, req.body.club_id],
+        function(qerr, rows, fields) {
+        connection.release();
+        if (qerr) {
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows.length !== 1) {
+          // User is not part of club
+          res.sendStatus(403);
+        } else {
+
+          // Second Connection - Check if user is already enrolled in event
+          req.pool.getConnection(function(cerr2, connection2){
+            if (cerr2) {
+              res.sendStatus(500);
+              return;
+            }
+            let query2 = `SELECT * FROM event_enrolments WHERE user_id = ? AND event_id = ?`;
+            connection2.query(
+              query2,
+              [req.session.user.user_id, req.body.event_id],
+              function(qerr2, rows2, fields2) {
+              connection2.release();
+              if (qerr2) {
+                res.sendStatus(500);
+                return;
+              }
+
+              if (rows2.length === 0) {
+                res.sendStatus(409);
+              } else {
+
+                // Third Connection - Cancel RSVP
+                req.pool.getConnection(function(cerr3, connection3){
+                  if (cerr3) {
+                    res.sendStatus(500);
+                    return;
+                  }
+                  let query3 = `DELETE FROM event_enrolments WHERE user_id = ? AND event_id = ?`;
+                  connection3.query(
+                    query3,
+                    [req.session.user.user_id, req.body.event_id],
+                    function(qerr3, rows3, fields3) {
+                    connection3.release();
+                    if (qerr3) {
+                      res.sendStatus(500);
+                      return;
+                    }
+
+                    res.end();
+                  });
+                });
+              }
+            });
+          });
+        }
+      });
+    });
+  });
+
 
 // Sends the array in JSON format
 // XIAOYU WEDNESDAY NIGHT : simplified session data retrieval

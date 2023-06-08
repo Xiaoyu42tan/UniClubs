@@ -91,7 +91,7 @@ body {
 /* Form */
 #outer-form {
     padding: 30px;
-    display: flex;
+    display: none; /* XIAOYU THURSDAY MORNING  */
     align-items: center;
     border-bottom: 0.1px solid white;
 

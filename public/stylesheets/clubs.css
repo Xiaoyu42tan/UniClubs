@@ -70,23 +70,13 @@
     padding: 30px;
 }
 
-/* Create Event Form */
-#createEvent {
-    padding: 30px;
-    border-top: solid black;
-}
-
-/* Post Update Form */
-#postUpdate {
-    padding: 30px;
-    border-top: solid black;
-}
+/* Event Update Form */
 
 .formHeading {
     padding: 0px 0px 10px;
 }
 
-#updateEvent {
+.divEventUpdate {
     padding: 30px;
     border-top: solid black;
 }
