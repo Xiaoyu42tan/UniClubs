@@ -115,7 +115,7 @@ function changeDetails(){
         if(req.readyState == 4 && req.status == 200){
             alert('Changes succesful');
             console.log('your details are: ' + req.responseText); // debug
-            location.reload();
+            //location.reload();
             // redirect user to webpage
         } else if(req.readyState == 4 && req.status == 401){
             alert('Changes unsuccessful');
