@@ -100,7 +100,7 @@
         <!-- KIAN, CREATE EVENT, POST UPDATE, UPDATE EVENT,working for SQL, does not validate user -->
 
         <div id="rsvp" class="container divEventUpdate">
-            <h5 class="formHeading" id="rsvpEventHeading">
+            <h5 class="formHeading">
                 RSVP to Event
             </h5>
             <form>
@@ -117,8 +117,45 @@
             </form>
         </div>
 
+        <div id="postUpdate" class="container divEventUpdate">
+            <h5 class="formHeading">
+                Post Update
+            </h5>
+            <form>
+                <div class="form-outline mb-4">
+                <input type="text" id="form2Example5" class="form-control" placeholder="Title" required/>
+                </div>
+
+                <div class="form-outline mb-4">
+                <textarea type="text" id="form2Example6" class="form-control" placeholder="Description" rows=3 required></textarea>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-block mb-4" onclick="postUpdate()">Submit</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="deleteUpdate" class="container divEventUpdate">
+            <h5 class="formHeading">
+                Delete Update
+            </h5>
+            <form>
+                <div class="form-outline mb-4">
+                    <select class="form-select" v-model="selectedUpdate" @change="updateSelectedUpdate">
+                        <option value="" disabled>Select an update</option>
+                        <option v-for="update in updates" :value="update">{{ update.update_title }}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-block mb-4" @click="deleteUpdate">Delete Update</button>
+                </div>
+            </form>
+        </div>
+
         <div id="createEvent" class="container divEventUpdate">
-            <h5 class="formHeading" id="createEventHeading">
+            <h5 class="formHeading">
                 Create Event
             </h5>
             <form>
@@ -144,27 +181,8 @@
             </form>
         </div>
 
-        <div id="postUpdate" class="container divEventUpdate">
-            <h5 class="formHeading" id="postUpdateHeading">
-                Post Update
-            </h5>
-            <form>
-                <div class="form-outline mb-4">
-                <input type="text" id="form2Example5" class="form-control" placeholder="Title" required/>
-                </div>
-
-                <div class="form-outline mb-4">
-                <textarea type="text" id="form2Example6" class="form-control" placeholder="Description" rows=3 required></textarea>
-                </div>
-
-                <div>
-                    <button type="button" class="btn btn-primary btn-block mb-4" onclick="postUpdate()">Submit</button>
-                </div>
-            </form>
-        </div>
-
         <div id="updateEvent" class="container divEventUpdate">
-            <h5 class="formHeading" id="updateEventHeading">
+            <h5 class="formHeading">
                 Update Event
             </h5>
             <form>
@@ -192,7 +210,25 @@
                 </div>
 
                 <div>
-                    <button type="button" class="btn btn-primary btn-block mb-4" @click="updateEvent">Submit</button>
+                    <button type="button" class="btn btn-primary btn-block mb-4" @click="updateEvent">Update</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="deleteEvent" class="container divEventUpdate">
+            <h5 class="formHeading">
+                Delete Event
+            </h5>
+            <form>
+                <div class="form-outline mb-4">
+                    <select class="form-select" v-model="selectedEvent" @change="updateSelectedEvent">
+                        <option value="" disabled>Select an event</option>
+                        <option v-for="event in events" :value="event">{{ event.event_name }}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-block mb-4" @click="deleteEvent">Delete Event</button>
                 </div>
             </form>
         </div>

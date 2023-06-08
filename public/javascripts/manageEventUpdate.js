@@ -71,6 +71,50 @@ function submitEvent() {
     req.send(JSON.stringify(createevent));
 }
 
+// Delete Updates
+
+var deleteUpdate = new Vue({
+    el: "#deleteUpdate",
+    data: {
+        updates: [],
+        selectedUpdate: null,
+        updateId: null
+    },
+    methods: {
+        updateSelectedUpdate() {
+            if (this.selectedUpdate) {
+                this.updateId = this.selectedUpdate.club_id;
+                console.log("Selected Update ID:", this.updateId);
+            }
+        },
+
+        deleteUpdate() {
+            if (this.updateId === null) {
+                alert('Please fill in all the required fields');
+                return; // Stop further execution
+            }
+
+            let deleteupdate = {
+                update_id: this.updateId
+            };
+
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function(){
+                if(req.readyState == 4 && req.status == 200){
+                    alert('Deleted successfully');
+                } else if(req.readyState == 4 && req.status == 403){
+                    alert('Not logged in');
+                }
+            };
+
+            req.open('POST','/users/deleteUpdate');
+            req.setRequestHeader('Content-Type','application/json');
+            req.send(JSON.stringify(deleteupdate));
+        }
+    }
+});
+
 // KIAN - GET UPDATES
 
 var updatesData = new Vue({
@@ -90,6 +134,7 @@ function getUpdates() {
         if (req.readyState === 4 && req.status === 200) {
         let updates = JSON.parse(req.responseText);
         updatesData.updates = updates;
+        deleteUpdate.updates = updates;
         }
     };
     req.open('GET', `/users/getUpdates?club_id=${club_id}`);
@@ -100,7 +145,7 @@ function getUpdates() {
 
 // UPDATE EVENTS
 
-var updateEventData = new Vue({
+var updateEvent= new Vue({
     el: "#updateEvent",
     data: {
         events: [],
@@ -152,6 +197,48 @@ var updateEventData = new Vue({
             req.setRequestHeader('Content-Type','application/json');
             console.log(JSON.stringify(updateevent));
             req.send(JSON.stringify(updateevent));
+        }
+    }
+});
+
+var deleteEvent= new Vue({
+    el: "#deleteEvent",
+    data: {
+        events: [],
+        selectedEvent: null,
+        eventId: null
+    },
+    methods: {
+        updateSelectedEvent() {
+            if (this.selectedEvent) {
+                this.eventId = this.selectedEvent.event_id;
+                console.log("Selected Event ID:", this.eventId);
+            }
+        },
+
+        deleteEvent() {
+            if (this.eventId === null) {
+                alert('Please fill in all the required fields');
+                return; // Stop further execution
+            }
+
+            let deleteevent = {
+                event_id: this.eventId
+            };
+
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function(){
+                if(req.readyState == 4 && req.status == 200){
+                    alert('Deleted successfully');
+                } else if(req.readyState == 4 && req.status == 403){
+                    alert('Not logged in');
+                }
+            };
+
+            req.open('POST','/users/deleteEvent');
+            req.setRequestHeader('Content-Type','application/json');
+            req.send(JSON.stringify(deleteevent));
         }
     }
 });
@@ -265,7 +352,8 @@ function getEvents() {
         if (req.readyState === 4 && req.status === 200) {
         let events = JSON.parse(req.responseText);
         eventsData.events = events;
-        updateEventData.events = events;
+        updateEvent.events = events;
+        deleteEvent.events = events;
         eventRSVP.events = events;
         }
     };

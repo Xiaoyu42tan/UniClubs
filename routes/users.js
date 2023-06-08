@@ -142,6 +142,58 @@ router.post('/updateEvent', function (req, res, next) {
   }
 });
 
+// Delete Event
+
+router.post('/deleteEvent', function (req, res, next) {
+  if ('event_id' in req.body) {
+
+      req.pool.getConnection(function (cerr, connection) {
+          if (cerr) {
+              res.sendStatus(500);
+              return;
+          }
+          let query = `DELETE FROM events WHERE event_id = ?`;
+          connection.query(
+              query,
+              [req.body.event_id],
+              function (qerr, rows, fields) {
+                  connection.release();
+                  if (qerr) {
+                      res.sendStatus(500);
+                      return;
+                  }
+                  res.end();
+            });
+      });
+  }
+});
+
+// Delete Update
+
+router.post('/deleteUpdate', function (req, res, next) {
+  if ('update_id' in req.body) {
+
+      req.pool.getConnection(function (cerr, connection) {
+          if (cerr) {
+              res.sendStatus(500);
+              return;
+          }
+          let query = `DELETE FROM updates WHERE update_id = ?`;
+          connection.query(
+              query,
+              [req.body.update_id],
+              function (qerr, rows, fields) {
+                  connection.release();
+                  if (qerr) {
+                      res.sendStatus(500);
+                      return;
+                  }
+                  res.end();
+            });
+      });
+  }
+});
+
 router.post('/joinEvent', function(req, res, next){
     console.log(JSON.stringify(req.session));
 
