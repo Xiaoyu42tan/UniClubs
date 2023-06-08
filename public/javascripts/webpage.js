@@ -80,6 +80,11 @@ function checkIfLoggedIn() {
                 quick_login.style.display = "none";
             }
 
+            // show the RSVP to event div for club1.html
+            let RSVPdiv = document.getElementById("rsvp");
+            if (RSVPdiv !== null) {
+                RSVPdiv.style.display = "block";
+            }
 
         } else if (req.readyState === 4 && req.status === 401) {
             // Not logged in
@@ -95,7 +100,11 @@ function checkIfLoggedIn() {
                 quick_login.style.display = "flex";
             }
 
-
+            // hide the RSVP to event div for club1.html
+            let RSVPdiv = document.getElementById("rsvp");
+            if (RSVPdiv !== null) {
+                RSVPdiv.style.display = "none";
+            }
         }
     };
 

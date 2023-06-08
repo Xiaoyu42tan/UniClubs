@@ -6,44 +6,144 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+
+// XIAOYU - edited Thursday night
 router.post('/postUpdate', function (req, res, next) {
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
   if ('club_id' in req.body && 'title' in req.body && 'description' in req.body) {
 
-      req.pool.getConnection(function (cerr, connection) {
-          if (cerr) {
+
+    // XIAOYU - check if manager of this club
+    req.pool.getConnection(function(err3, connection3){
+      if(err3){
+        console.log("err");
+        console.log(err3);
+        res.sendStatus(500);
+        return;
+      }
+      let query3 = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+      connection3.query(
+        query3,
+        [req.session.user.user_id, req.body.club_id],
+        function(qerr3, rows3, fields3) {
+        connection3.release();
+        // if serverside error
+        if(qerr3){
+          console.log("qerrFIRST:");
+          console.log(qerr3);
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows3.length === 0){
+          // user is not authorised
+          res.sendStatus(403);
+        } else if (rows3.length !== 1) {
+          // something went wrong
+          console.log("wtf");
+          res.sendStatus(500);
+        } else {
+
+
+          // user is manager
+          req.pool.getConnection(function (cerr2, connection2) {
+            if (cerr2) {
               res.sendStatus(500);
               return;
-          }
-          let query = `INSERT INTO updates (club_id, update_title, update_description)
-                      VALUES (?, ?, ?);`;
-          connection.query(
-              query,
+            }
+            let query2 = `INSERT INTO updates (club_id, update_title, update_description, private_update)
+                        VALUES (?, ?, ?, ?);`;
+            connection2.query(
+              query2,
               [req.body.club_id,
               req.body.title,
-              req.body.description],
-              function (qerr, rows, fields) {
-                  connection.release();
-                  if (qerr) {
-                      res.sendStatus(500);
-                      return;
-                  }
-                  res.end();
-              });
-      });
+              req.body.description,
+              req.body.private_update],
+              function (qerr2, rows2, fields2) {
+                connection2.release();
+                if (qerr2) {
+                  console.log("qerr2:");
+                  console.log(qerr2);
+                  res.sendStatus(500);
+                  return;
+                }
+                res.end();
+              }
+              );
+          });
+
+
+
+        }
+      }
+      );
+    });
+
+
+
+  } else {
+    res.sendStatus(500);
   }
+
+
 });
 
+// XIAOYU - edited Thursday night
 router.post('/createEvent', function (req, res, next) {
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
   if ('name' in req.body && 'club_id' in req.body && 'description' in req.body && 'date' in req.body && 'time' in req.body) {
 
-      req.pool.getConnection(function (cerr, connection) {
-          if (cerr) {
+    // XIAOYU - check if manager of this club
+    req.pool.getConnection(function(err3, connection3){
+      if(err3){
+        console.log("err");
+        console.log(err3);
+        res.sendStatus(500);
+        return;
+      }
+      let query3 = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+      connection3.query(
+        query3,
+        [req.session.user.user_id, req.body.club_id],
+        function(qerr3, rows3, fields3) {
+        connection3.release();
+        // if serverside error
+        if(qerr3){
+          console.log("qerrFIRST:");
+          console.log(qerr3);
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows3.length === 0){
+          // user is not authorised
+          res.sendStatus(403);
+        } else if (rows3.length !== 1) {
+          // something went wrong
+          console.log("wtf");
+          res.sendStatus(500);
+        } else {
+
+
+          // user is manager
+          req.pool.getConnection(function (cerr, connection) {
+            if (cerr) {
               res.sendStatus(500);
               return;
-          }
-          let query = `INSERT INTO events (event_name, club_id, event_description, event_date, event_time)
-                      VALUES (?, ?, ?, ?, ?);`;
-          connection.query(
+            }
+            let query = `INSERT INTO events (event_name, club_id, event_description, event_date, event_time)
+                        VALUES (?, ?, ?, ?, ?);`;
+            connection.query(
               query,
               [req.body.name,
               req.body.club_id,
@@ -51,26 +151,42 @@ router.post('/createEvent', function (req, res, next) {
               req.body.date,
               req.body.time],
               function (qerr, rows, fields) {
-                  connection.release();
-                  if (qerr) {
-                      res.sendStatus(500);
-                      return;
-                  }
-                  res.end();
-            });
-      });
+                connection.release();
+                if (qerr) {
+                  res.sendStatus(500);
+                  return;
+                }
+                res.end();
+              }
+              );
+          });
+
+
+
+        }
+      }
+      );
+    });
+
+
+  } else {
+    res.sendStatus(500);
   }
 });
 
 // Sends the array in JSON format
 router.get('/getUpdates', function (req, res, next) {
-  req.pool.getConnection(function (cerr, connection) {
+
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    // user is not logged in
+    req.pool.getConnection(function (cerr, connection) {
       if (cerr) {
           res.sendStatus(500);
           return;
       }
       let query = `SELECT * FROM updates
-                  WHERE club_id = ?
+                  WHERE club_id = ? AND private_update = FALSE
                   ORDER BY update_id DESC;`;
       connection.query(query, [req.query.club_id], function (qerr, rows, fields) {
           connection.release();
@@ -81,7 +197,92 @@ router.get('/getUpdates', function (req, res, next) {
           console.log(JSON.stringify(rows));
           res.json(rows);
       });
+    });
+
+    return;
+  }
+
+
+  // XIAOYU - check if member of this club
+  req.pool.getConnection(function(err3, connection3){
+    if(err3){
+      console.log("err");
+      console.log(err3);
+      res.sendStatus(500);
+      return;
+    }
+    let query3 = `SELECT * FROM club_enrolments WHERE user_id = ? AND club_id = ?;`;
+    connection3.query(
+      query3,
+      [req.session.user.user_id, req.query.club_id],
+      function(qerr3, rows3, fields3) {
+      connection3.release();
+      // if serverside error
+      if(qerr3){
+        console.log("qerrFIRST:");
+        console.log(qerr3);
+        res.sendStatus(500);
+        return;
+      }
+
+      if (rows3.length === 0){
+
+
+        // user is not member
+        req.pool.getConnection(function (cerr, connection) {
+          if (cerr) {
+              res.sendStatus(500);
+              return;
+          }
+          let query = `SELECT * FROM updates
+                      WHERE club_id = ? AND private_update = FALSE
+                      ORDER BY update_id DESC;`;
+          connection.query(query, [req.query.club_id], function (qerr, rows, fields) {
+              connection.release();
+              if (qerr) {
+                  res.sendStatus(500);
+                  return;
+              }
+              console.log(JSON.stringify(rows));
+              res.json(rows);
+          });
+        });
+
+
+      } else if (rows3.length !== 1) {
+        // something went wrong
+        console.log("wtf");
+        res.sendStatus(500);
+      } else {
+
+        // user is club member
+        req.pool.getConnection(function (cerr, connection) {
+          if (cerr) {
+              res.sendStatus(500);
+              return;
+          }
+          let query = `SELECT * FROM updates
+                      WHERE club_id = ?
+                      ORDER BY update_id DESC;`;
+          connection.query(query, [req.query.club_id], function (qerr, rows, fields) {
+              connection.release();
+              if (qerr) {
+                  res.sendStatus(500);
+                  return;
+              }
+              console.log(JSON.stringify(rows));
+              res.json(rows);
+          });
+        });
+
+
+
+      }
+    }
+    );
   });
+
+
 });
 
 // Sends the array in JSON format
@@ -107,90 +308,245 @@ router.get('/getEvents', function (req, res, next) {
 });
 
 // Update Events
+// XIAOYU - edited Thursday night
 router.post('/updateEvent', function (req, res, next) {
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
   if ('event_id' in req.body && 'name' in req.body && 'club_id' in req.body && 'description' in req.body && 'date' in req.body && 'time' in req.body) {
 
-      req.pool.getConnection(function (cerr, connection) {
-          if (cerr) {
-              res.sendStatus(500);
-              return;
-          }
-          let query = `UPDATE events
-                      SET event_name = ?,
-                          club_id = ?,
-                          event_description = ?,
-                          event_date = ?,
-                          event_time = ?
-                      WHERE event_id = ?`;
-          connection.query(
-              query,
-              [req.body.name,
-              req.body.club_id,
-              req.body.description,
-              req.body.date,
-              req.body.time,
-              req.body.event_id],
-              function (qerr, rows, fields) {
-                  connection.release();
-                  if (qerr) {
-                      res.sendStatus(500);
-                      return;
-                  }
-                  res.end();
-            });
-      });
+    // check if manager
+    req.pool.getConnection(function(err3, connection3){
+      if(err3){
+        console.log("err");
+        console.log(err3);
+        res.sendStatus(500);
+        return;
+      }
+      let query3 = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+      connection3.query(
+        query3,
+        [req.session.user.user_id, req.body.club_id],
+        function(qerr3, rows3, fields3) {
+        connection3.release();
+        // if serverside error
+        if(qerr3){
+          console.log("qerrFIRST:");
+          console.log(qerr3);
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows3.length === 0){
+          // user is not authorised
+          res.sendStatus(403);
+        } else if (rows3.length !== 1) {
+          // something went wrong
+          console.log("wtf");
+          res.sendStatus(500);
+        } else {
+
+
+          // user is manager
+          req.pool.getConnection(function (cerr, connection) {
+            if (cerr) {
+                res.sendStatus(500);
+                return;
+            }
+            let query = `UPDATE events
+                        SET event_name = ?,
+                            club_id = ?,
+                            event_description = ?,
+                            event_date = ?,
+                            event_time = ?
+                        WHERE event_id = ?`;
+            connection.query(
+                query,
+                [req.body.name,
+                req.body.club_id,
+                req.body.description,
+                req.body.date,
+                req.body.time,
+                req.body.event_id],
+                function (qerr, rows, fields) {
+                    connection.release();
+                    if (qerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    res.end();
+              }
+              );
+          });
+
+
+
+        }
+      }
+      );
+    });
+
+
+  } else {
+    res.sendStatus(500);
   }
 });
 
 // Delete Event
-
+// XIAOYU - edited Thursday night
 router.post('/deleteEvent', function (req, res, next) {
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+
   if ('event_id' in req.body) {
 
-      req.pool.getConnection(function (cerr, connection) {
-          if (cerr) {
-              res.sendStatus(500);
-              return;
-          }
-          let query = `DELETE FROM events WHERE event_id = ?`;
-          connection.query(
-              query,
-              [req.body.event_id],
-              function (qerr, rows, fields) {
-                  connection.release();
-                  if (qerr) {
-                      res.sendStatus(500);
-                      return;
-                  }
-                  res.end();
-            });
-      });
+    // check if manager
+    req.pool.getConnection(function(err3, connection3){
+      if(err3){
+        console.log("err");
+        console.log(err3);
+        res.sendStatus(500);
+        return;
+      }
+      let query3 = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+      connection3.query(
+        query3,
+        [req.session.user.user_id, req.body.club_id],
+        function(qerr3, rows3, fields3) {
+        connection3.release();
+        // if serverside error
+        if(qerr3){
+          console.log("qerrFIRST:");
+          console.log(qerr3);
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows3.length === 0){
+          // user is not authorised
+          res.sendStatus(403);
+        } else if (rows3.length !== 1) {
+          // something went wrong
+          console.log("wtf");
+          res.sendStatus(500);
+        } else {
+
+
+
+          // user is manager
+          req.pool.getConnection(function (cerr, connection) {
+            if (cerr) {
+                res.sendStatus(500);
+                return;
+            }
+            let query = `DELETE FROM events WHERE event_id = ?`;
+            connection.query(
+                query,
+                [req.body.event_id],
+                function (qerr, rows, fields) {
+                    connection.release();
+                    if (qerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    res.end();
+              });
+          });
+
+
+
+        }
+      }
+      );
+    });
+
+
+  } else {
+    res.sendStatus(500);
   }
 });
 
 // Delete Update
-
+// XIAOYU - edited Thursday night
 router.post('/deleteUpdate', function (req, res, next) {
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+
+
   if ('update_id' in req.body) {
 
-      req.pool.getConnection(function (cerr, connection) {
-          if (cerr) {
-              res.sendStatus(500);
-              return;
-          }
-          let query = `DELETE FROM updates WHERE update_id = ?`;
-          connection.query(
-              query,
-              [req.body.update_id],
-              function (qerr, rows, fields) {
-                  connection.release();
-                  if (qerr) {
-                      res.sendStatus(500);
-                      return;
-                  }
-                  res.end();
-            });
-      });
+    // check if manager
+    req.pool.getConnection(function(err3, connection3){
+      if(err3){
+        console.log("err");
+        console.log(err3);
+        res.sendStatus(500);
+        return;
+      }
+      let query3 = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+      connection3.query(
+        query3,
+        [req.session.user.user_id, req.body.club_id],
+        function(qerr3, rows3, fields3) {
+        connection3.release();
+        // if serverside error
+        if(qerr3){
+          console.log("qerrFIRST:");
+          console.log(qerr3);
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows3.length === 0){
+          // user is not authorised
+          res.sendStatus(403);
+        } else if (rows3.length !== 1) {
+          // something went wrong
+          console.log("wtf");
+          res.sendStatus(500);
+        } else {
+
+
+          // user is manager
+          req.pool.getConnection(function (cerr, connection) {
+            if (cerr) {
+                res.sendStatus(500);
+                return;
+            }
+            let query = `DELETE FROM updates WHERE update_id = ?`;
+            connection.query(
+                query,
+                [req.body.update_id],
+                function (qerr, rows, fields) {
+                    connection.release();
+                    if (qerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    res.end();
+              });
+          });
+
+
+        }
+      }
+      );
+    });
+
+
+  } else {
+    res.sendStatus(500);
   }
 });
 
@@ -354,49 +710,149 @@ router.post('/leaveEvent', function(req, res, next){
   });
 });
 
+
+// XIAOYU - edited Thursday night
 router.get('/getEventUsers', function (req, res, next) {
-  req.pool.getConnection(function (cerr, connection) {
-      if (cerr) {
-          res.sendStatus(500);
-          return;
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+  // check if manager
+  req.pool.getConnection(function(err3, connection3){
+    if(err3){
+      console.log("err");
+      console.log(err3);
+      res.sendStatus(500);
+      return;
+    }
+    let query3 = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+    connection3.query(
+      query3,
+      [req.session.user.user_id, req.query.club_id],
+      function(qerr3, rows3, fields3) {
+      connection3.release();
+      // if serverside error
+      if(qerr3){
+        console.log("qerrFIRST:");
+        console.log(qerr3);
+        res.sendStatus(500);
+        return;
       }
-      let query = `SELECT event_enrolments.user_id, users.user_name, users.first_name, users.last_name FROM event_enrolments INNER JOIN users
-      WHERE users.user_id = event_enrolments.user_id
-      AND event_id = ?;`;
-      connection.query(query, [req.query.event_id], function (qerr, rows, fields) {
-          connection.release();
-          if (qerr) {
-              res.sendStatus(500);
-              return;
-          }
-          console.log(JSON.stringify(rows));
-          res.json(rows);
-      });
-  });
-});
 
-router.post('/removeEventUsers', function (req, res, next) {
-  if ('user_id' in req.body && 'event_id' in req.body) {
+      if (rows3.length === 0){
+        // user is not authorised
+        res.sendStatus(403);
+      } else if (rows3.length !== 1) {
+        // something went wrong
+        console.log("wtf");
+        res.sendStatus(500);
+      } else {
 
-      req.pool.getConnection(function (cerr, connection) {
+
+        // user is manager
+        req.pool.getConnection(function (cerr, connection) {
           if (cerr) {
               res.sendStatus(500);
               return;
           }
-          let query = `DELETE FROM event_enrolments WHERE user_id = ? AND event_id = ?;`;
-          connection.query(
-              query,
-              [req.body.user_id,
-              req.body.event_id],
-              function (qerr, rows, fields) {
-                  connection.release();
-                  if (qerr) {
-                      res.sendStatus(500);
-                      return;
-                  }
-                  res.end();
-            });
-      });
+          let query = `SELECT event_enrolments.user_id, users.user_name, users.first_name, users.last_name FROM event_enrolments INNER JOIN users
+          WHERE users.user_id = event_enrolments.user_id
+          AND event_id = ?;`;
+          connection.query(query, [req.query.event_id], function (qerr, rows, fields) {
+              connection.release();
+              if (qerr) {
+                  res.sendStatus(500);
+                  return;
+              }
+              console.log(JSON.stringify(rows));
+              res.json(rows);
+          });
+        });
+
+
+      }
+    }
+    );
+  });
+
+
+});
+
+
+// XIAOYU - edited Thursday night
+router.post('/removeEventUsers', function (req, res, next) {
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+  if ('user_id' in req.body && 'event_id' in req.body) {
+
+    // check if manager
+    req.pool.getConnection(function(err3, connection3){
+      if(err3){
+        console.log("err");
+        console.log(err3);
+        res.sendStatus(500);
+        return;
+      }
+      let query3 = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+      connection3.query(
+        query3,
+        [req.session.user.user_id, req.body.club_id],
+        function(qerr3, rows3, fields3) {
+        connection3.release();
+        // if serverside error
+        if(qerr3){
+          console.log("qerrFIRST:");
+          console.log(qerr3);
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows3.length === 0){
+          // user is not authorised
+          res.sendStatus(403);
+        } else if (rows3.length !== 1) {
+          // something went wrong
+          console.log("wtf");
+          res.sendStatus(500);
+        } else {
+
+
+          // user is manager
+          req.pool.getConnection(function (cerr, connection) {
+            if (cerr) {
+                res.sendStatus(500);
+                return;
+            }
+            let query = `DELETE FROM event_enrolments WHERE user_id = ? AND event_id = ?;`;
+            connection.query(
+                query,
+                [req.body.user_id,
+                req.body.event_id],
+                function (qerr, rows, fields) {
+                    connection.release();
+                    if (qerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    res.end();
+              });
+          });
+
+
+        }
+      }
+      );
+    });
+
+
+  } else {
+    res.sendStatus(500);
   }
 });
 
@@ -412,6 +868,8 @@ router.get('/getClubMembers', function (req, res, next) {
       connection.query(query, [req.query.club_id], function (qerr, rows, fields) {
           connection.release();
           if (qerr) {
+              console.log("qerr");
+              console.log(qerr);
               res.sendStatus(500);
               return;
           }
@@ -422,28 +880,81 @@ router.get('/getClubMembers', function (req, res, next) {
 });
 
 router.post('/removeClubMembers', function (req, res, next) {
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+
   if ('user_id' in req.body) {
 
-      req.pool.getConnection(function (cerr, connection) {
-          if (cerr) {
-              res.sendStatus(500);
-              return;
-          }
-          let query = `DELETE FROM club_enrolments WHERE user_id = ?;`;
-          connection.query(
-              query,
-              [req.body.user_id],
-              function (qerr, rows, fields) {
-                  connection.release();
-                  if (qerr) {
-                      res.sendStatus(500);
-                      return;
-                  }
-                  res.end();
-            });
-      });
+    // check if manager
+    req.pool.getConnection(function(err3, connection3){
+      if(err3){
+        console.log("err");
+        console.log(err3);
+        res.sendStatus(500);
+        return;
+      }
+      let query3 = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+      connection3.query(
+        query3,
+        [req.session.user.user_id, req.body.club_id],
+        function(qerr3, rows3, fields3) {
+        connection3.release();
+        // if serverside error
+        if(qerr3){
+          console.log("qerrFIRST:");
+          console.log(qerr3);
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows3.length === 0){
+          // user is not authorised
+          res.sendStatus(403);
+        } else if (rows3.length !== 1) {
+          // something went wrong
+          console.log("wtf");
+          res.sendStatus(500);
+        } else {
+
+
+
+          // user is manager
+          req.pool.getConnection(function (cerr, connection) {
+            if (cerr) {
+                res.sendStatus(500);
+                return;
+            }
+            let query = `DELETE FROM club_enrolments WHERE user_id = ? AND club_id = ?;`;
+            connection.query(
+                query,
+                [req.body.user_id,req.body.club_id],
+                function (qerr, rows, fields) {
+                    connection.release();
+                    if (qerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    res.end();
+              });
+          });
+
+
+
+        }
+      }
+      );
+    });
+
+
+  } else {
+    res.sendStatus(500);
   }
 });
+
 
 // Sends the array in JSON format
 // XIAOYU WEDNESDAY NIGHT : simplified session data retrieval

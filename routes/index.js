@@ -310,4 +310,50 @@ router.post('/changeDetails', function(req, res, next){
   res.sendStatus(200);
 });
 
+router.post('/checkIfManager', function(req, res, next){
+  // check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+  // check if manager of club
+  req.pool.getConnection(function(err, connection){
+    if(err){
+      console.log("err");
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    let query = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+    connection.query(
+      query,
+      [req.session.user.user_id, req.body.club_id],
+      function(qerr, rows, fields) {
+      connection.release();
+      // if serverside error
+      if(qerr){
+        console.log("qerrFIRST:");
+        console.log(qerr);
+        res.sendStatus(500);
+        return;
+      }
+
+      if (rows.length === 1){
+        // user is manager
+        res.end();
+      } else if (rows.length === 0) {
+        // user isnt manager
+        res.sendStatus(403);
+      } else {
+        // serverside error
+        console.log("wtf");
+        res.sendStatus(500);
+      }
+    }
+    );
+  });
+
+});
+
 module.exports = router;

@@ -79,6 +79,7 @@
 .divEventUpdate {
     padding: 30px;
     border-top: solid black;
+    display: none;
 }
 
 /*context image */

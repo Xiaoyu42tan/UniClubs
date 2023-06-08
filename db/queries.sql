@@ -12,7 +12,7 @@ Insert INTO users(
     'Didier',
     'Drogba',
     'thegoat@gmail.com',
-    'championsleague',
+    'user1',
     '01230somethingidk'
 );
 
@@ -30,7 +30,7 @@ Insert INTO users(
     'Christian',
     'Ronaldo',
     'christian@gmail.com',
-    'christ',
+    'user2',
     '01230somethingidk'
 );
 
@@ -43,6 +43,16 @@ Insert INTO clubs(
     'epic club number 1'
 );
 
+Insert INTO club_managers(
+    user_id,
+    club_id
+) VALUES (
+    2,
+    1
+);
+
+/*
 SELECT event_enrolments.user_id, users.user_name, users.first_name, users.last_name FROM event_enrolments INNER JOIN users
 WHERE users.user_id = event_enrolments.user_id
 AND event_id = ?;
+*/

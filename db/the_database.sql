@@ -32,6 +32,7 @@ CREATE TABLE events (
 CREATE TABLE updates (
     update_id INT NOT NULL AUTO_INCREMENT,
     club_id INT,
+    private_update BOOLEAN,
     update_title VARCHAR(30),
     update_description VARCHAR(1000),
     PRIMARY KEY (update_id),

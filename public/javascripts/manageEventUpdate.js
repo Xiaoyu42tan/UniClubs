@@ -1,6 +1,11 @@
 function postUpdate() {
     let title = document.getElementById('form2Example5').value;
     let description = document.getElementById('form2Example6').value;
+    let privateUpdateText = document.getElementById('privateUpdateButton').value;
+    let privateUpdate = false;
+    if (privateUpdateText === 'on') {
+        privateUpdate = true;
+    }
 
     let clubIdInput = document.getElementById("club-id");
     let club_id = clubIdInput.value;
@@ -14,16 +19,22 @@ function postUpdate() {
     let postupdate = {
         club_id: club_id,
         title: title,
-        description: description
+        description: description,
+        private_update: privateUpdate
     };
+
 
     let req = new XMLHttpRequest();
 
     req.onreadystatechange = function(){
-        if(req.readyState == 4 && req.status == 200){
+        if(req.readyState === 4 && req.status === 200){
             alert('Posted successfully');
-        } else if(req.readyState == 4 && req.status == 403){
+        } else if(req.readyState === 4 && req.status === 401){
             alert('Not logged in');
+        } else if(req.readyState === 4 && req.status === 403){
+            alert('Not authorised');
+        } else if(req.readyState === 4 && req.status === 500){
+            alert('serverside error');
         }
     };
 
@@ -58,10 +69,14 @@ function submitEvent() {
     let req = new XMLHttpRequest();
 
     req.onreadystatechange = function(){
-        if(req.readyState == 4 && req.status == 200){
+        if(req.readyState === 4 && req.status === 200){
             alert('Posted successfully');
-        } else if(req.readyState == 4 && req.status == 403){
+        } else if(req.readyState === 4 && req.status === 401){
             alert('Not logged in');
+        } else if(req.readyState === 4 && req.status === 403){
+            alert('Not authorised');
+        } else if(req.readyState === 4 && req.status === 500){
+            alert('serverside error');
         }
     };
 
@@ -101,10 +116,14 @@ var deleteUpdate = new Vue({
             let req = new XMLHttpRequest();
 
             req.onreadystatechange = function(){
-                if(req.readyState == 4 && req.status == 200){
-                    alert('Deleted successfully');
-                } else if(req.readyState == 4 && req.status == 403){
+                if(req.readyState === 4 && req.status === 200){
+                    alert('Posted successfully');
+                } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not authorised');
+                } else if(req.readyState === 4 && req.status === 500){
+                    alert('serverside error');
                 }
             };
 
@@ -186,10 +205,14 @@ var updateEvent= new Vue({
             let req = new XMLHttpRequest();
 
             req.onreadystatechange = function(){
-                if(req.readyState == 4 && req.status == 200){
-                    alert('Updated successfully');
-                } else if(req.readyState == 4 && req.status == 403){
+                if(req.readyState === 4 && req.status === 200){
+                    alert('Posted successfully');
+                } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not authorised');
+                } else if(req.readyState === 4 && req.status === 500){
+                    alert('serverside error');
                 }
             };
 
@@ -223,16 +246,21 @@ var deleteEvent= new Vue({
             }
 
             let deleteevent = {
-                event_id: this.eventId
+                event_id: this.eventId,
+                club_id: document.getElementById("club-id").value
             };
 
             let req = new XMLHttpRequest();
 
             req.onreadystatechange = function(){
-                if(req.readyState == 4 && req.status == 200){
-                    alert('Deleted successfully');
-                } else if(req.readyState == 4 && req.status == 403){
+                if(req.readyState === 4 && req.status === 200){
+                    alert('Posted successfully');
+                } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not authorised');
+                } else if(req.readyState === 4 && req.status === 500){
+                    alert('serverside error');
                 }
             };
 
@@ -371,10 +399,16 @@ var membersAttending = new Vue({
                 if(req.readyState === 4 && req.status === 200){
                     let users = JSON.parse(req.responseText);
                     membersAttending.users = users;
+                } else if(req.readyState === 4 && req.status === 401){
+                    alert('Not logged in');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not authorised');
+                } else if(req.readyState === 4 && req.status === 500){
+                    alert('serverside error');
                 }
             };
 
-            req.open('GET',`/users/getEventUsers?event_id=${event_id}`);
+            req.open('GET',`/users/getEventUsers?event_id=${event_id}&club_id=${document.getElementById("club-id").value}`);
             req.send();
         },
 
@@ -386,16 +420,21 @@ var membersAttending = new Vue({
 
             let removeuser = {
                 user_id: this.userId,
-                event_id: this.eventId
+                event_id: this.eventId,
+                club_id: document.getElementById("club-id").value
             };
 
             let req = new XMLHttpRequest();
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Removed successfully');
-                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Deleted successfully');
+                } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not authorised');
+                } else if(req.readyState === 4 && req.status === 500){
+                    alert('serverside error');
                 }
             };
 
@@ -406,8 +445,7 @@ var membersAttending = new Vue({
     }
 });
 
-// Members Attending Event
-
+// KIAN - added functionality to remove club users
 var clubMembers = new Vue({
     el: "#clubMembers",
     data: {
@@ -430,16 +468,21 @@ var clubMembers = new Vue({
             }
 
             let removemember = {
-                user_id: this.userId
+                user_id: this.userId,
+                club_id: document.getElementById("club-id").value
             };
 
             let req = new XMLHttpRequest();
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Removed successfully');
-                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Deleted successfully');
+                } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not authorised');
+                } else if(req.readyState === 4 && req.status === 500){
+                    alert('serverside error');
                 }
             };
 
@@ -496,7 +539,58 @@ function getEvents() {
 
 // ADITYA - ADDED FUNCTIONALITY TO OBTAIN USER TYPE (ADMIN, CLUB MANAGER, GENERAL USER)
 
-function getUserRole() {
+function showClubManagerElements() {
+    // Show the desired elements specific to club managers
+    const postUpdateDiv = document.getElementById('postUpdate');
+    postUpdateDiv.style.display = 'block';
+
+    const deleteUpdateDiv = document.getElementById('deleteUpdate');
+    deleteUpdateDiv.style.display = 'block';
+
+    const createEventDiv = document.getElementById('createEvent');
+    createEventDiv.style.display = 'block';
+
+    const updateEventDiv = document.getElementById('updateEvent');
+    updateEventDiv.style.display = 'block';
+
+    const deleteEventDiv = document.getElementById('deleteEvent');
+    deleteEventDiv.style.display = 'block';
+
+    const membersAttendingDiv = document.getElementById('membersAttending');
+    membersAttendingDiv.style.display = 'block';
+
+    const clubMembersDiv = document.getElementById('clubMembers');
+    clubMembersDiv.style.display = 'block';
+
+}
+
+function hideClubManagerElements() {
+    // Hide or disable elements not applicable to club managers
+    const postUpdateDiv = document.getElementById('postUpdate');
+    postUpdateDiv.style.display = 'none';
+
+    const deleteUpdateDiv = document.getElementById('deleteUpdate');
+    deleteUpdateDiv.style.display = 'none';
+
+    const createEventDiv = document.getElementById('createEvent');
+    createEventDiv.style.display = 'none';
+
+    const updateEventDiv = document.getElementById('updateEvent');
+    updateEventDiv.style.display = 'none';
+
+    const deleteEventDiv = document.getElementById('deleteEvent');
+    deleteEventDiv.style.display = 'none';
+
+    const membersAttendingDiv = document.getElementById('membersAttending');
+    membersAttendingDiv.style.display = 'none';
+
+    const clubMembersDiv = document.getElementById('clubMembers');
+    clubMembersDiv.style.display = 'none';
+}
+
+function checkIfManager() {
+    // XIAOYU - Commented out adityas code
+    /*
   const userIdInput = document.getElementById('user_type');
 
   const userId = userTypeInput.value;
@@ -518,25 +612,28 @@ function getUserRole() {
     .catch(error => {
       console.error('Error:', error);
     });
-}
+    */
+    let clubInfo = { club_id: document.getElementById("club-id").value };
 
-function showClubManagerElements() {
-  // Show the desired elements specific to club managers
-  const createEventDiv = document.getElementById('createEvent');
-  createEventDiv.style.display = 'block';
+    let req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            showClubManagerElements();
+        } else if (req.readyState === 4 && req.status === 403) {
+            hideClubManagerElements();
+        } else if (req.readyState === 4 && req.status === 500) {
+            alert("serverside error");
+        }
+    };
 
-  const postUpdateDiv = document.getElementById('postUpdate');
-  postUpdateDiv.style.display = 'block';
-}
 
-function hideNonClubManagerElements() {
-  // Hide or disable elements not applicable to club managers
-  const createEventDiv = document.getElementById('createEvent');
-  createEventDiv.style.display = 'none';
-
-  const postUpdateDiv = document.getElementById('postUpdate');
-  postUpdateDiv.style.display = 'none';
+    req.open('POST','/checkIfManager');
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(JSON.stringify(clubInfo));
 }
 
 // function getUserRole called automatically when the page is loaded
-window.addEventListener('DOMContentLoaded', getUserRole);
+// window.addEventListener('DOMContentLoaded', checkIfManager);
+
+// XIAOYU - I commented this out cos i just call the function onload
+// although this is probably better way to do it, im scared cos idk how to use it

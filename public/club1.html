@@ -15,7 +15,7 @@
         <script src="/javascripts/webpage.js" defer></script>
         <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
-    <body onload="getUpdates(); getEvents(); getClubMembers(); checkIfLoggedIn()">
+    <body onload="getUpdates(); getEvents(); getClubMembers(); checkIfLoggedIn(); checkIfManager()">
         <input type="hidden" id="club-id" value="1">
         <!-- Header -->
         <div id="outer-header">
@@ -128,6 +128,10 @@
 
                 <div class="form-outline mb-4">
                 <textarea type="text" id="form2Example6" class="form-control" placeholder="Description" rows=3 required></textarea>
+                </div>
+
+                <div class="form-outline mb-4">
+                <input type="checkbox" id="privateUpdateButton">  Make update private to club members
                 </div>
 
                 <div>
