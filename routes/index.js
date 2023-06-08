@@ -246,14 +246,14 @@ router.post('/enrolClub', function(req, res, next){
 
 });
 
-
-// log out
-router.post('/logout', function(req, res, next){
-  if('username' in req.session){
+// XIAOYU THURSDAY MORNING LOGOUT
+router.get('/logout', function(req, res, next){
+  if (req.session.user) {
+    delete req.session.user;
     delete req.session.username;
     res.end();
-  }else if(req.readyState == 4 && req.status == 403){
-    alert('Not logged in');
+  } else {
+    res.sendStatus(401);
   }
 });
 

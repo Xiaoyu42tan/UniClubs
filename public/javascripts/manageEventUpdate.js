@@ -1,6 +1,6 @@
 function postUpdate() {
     let title = document.getElementById('form2Example5').value;
-    let description = document.getElementById('form2Example5').value;
+    let description = document.getElementById('form2Example6').value;
 
     let clubIdInput = document.getElementById("club-id");
     let club_id = clubIdInput.value;
