@@ -15,7 +15,7 @@
         <script src="/javascripts/webpage.js" defer></script>
         <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
-    <body onload="getUpdates(); getEvents(); checkIfLoggedIn()">
+    <body onload="getUpdates(); getEvents(); getClubMembers(); checkIfLoggedIn()">
         <input type="hidden" id="club-id" value="1">
         <!-- Header -->
         <div id="outer-header">
@@ -254,6 +254,24 @@
 
                 <div>
                     <button type="button" class="btn btn-primary btn-block mb-4" @click="removeEventUsers">Remove Member from Event</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="clubMembers" class="container divEventUpdate">
+            <h5 class="formHeading">
+                Members in Club
+            </h5>
+            <form>
+                <div class="form-outline mb-4">
+                    <select class="form-select" v-model="selectedUser" @change="updateSelectedUser">
+                        <option value="" disabled>Select a user</option>
+                        <option v-for="user in users" :value="user">{{ user.user_name }} - {{ user.first_name }} {{ user.last_name }}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-block mb-4" @click="removeClubMembers">Remove Member from Club</button>
                 </div>
             </form>
         </div>

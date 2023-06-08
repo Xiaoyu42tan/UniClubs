@@ -400,6 +400,50 @@ router.post('/removeEventUsers', function (req, res, next) {
   }
 });
 
+router.get('/getClubMembers', function (req, res, next) {
+  req.pool.getConnection(function (cerr, connection) {
+      if (cerr) {
+          res.sendStatus(500);
+          return;
+      }
+      let query = `SELECT club_enrolments.user_id, users.user_name, users.first_name, users.last_name FROM club_enrolments INNER JOIN users
+      WHERE users.user_id = club_enrolments.user_id
+      AND club_id = ?;`;
+      connection.query(query, [req.query.club_id], function (qerr, rows, fields) {
+          connection.release();
+          if (qerr) {
+              res.sendStatus(500);
+              return;
+          }
+          console.log(JSON.stringify(rows));
+          res.json(rows);
+      });
+  });
+});
+
+router.post('/removeClubMembers', function (req, res, next) {
+  if ('user_id' in req.body) {
+
+      req.pool.getConnection(function (cerr, connection) {
+          if (cerr) {
+              res.sendStatus(500);
+              return;
+          }
+          let query = `DELETE FROM club_enrolments WHERE user_id = ?;`;
+          connection.query(
+              query,
+              [req.body.user_id],
+              function (qerr, rows, fields) {
+                  connection.release();
+                  if (qerr) {
+                      res.sendStatus(500);
+                      return;
+                  }
+                  res.end();
+            });
+      });
+  }
+});
 
 // Sends the array in JSON format
 // XIAOYU WEDNESDAY NIGHT : simplified session data retrieval

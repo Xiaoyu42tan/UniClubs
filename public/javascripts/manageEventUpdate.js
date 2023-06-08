@@ -393,7 +393,7 @@ var membersAttending = new Vue({
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Deleted successfully');
+                    alert('Removed successfully');
                 } else if(req.readyState === 4 && req.status === 403){
                     alert('Not logged in');
                 }
@@ -405,6 +405,67 @@ var membersAttending = new Vue({
         }
     }
 });
+
+// Members Attending Event
+
+var clubMembers = new Vue({
+    el: "#clubMembers",
+    data: {
+        users: [],
+        selectedUser: null,
+        userId: null,
+    },
+    methods: {
+        updateSelectedUser() {
+            if (this.selectedUser) {
+                this.userId = this.selectedUser.user_id;
+                console.log("Selected User ID:", this.userId);
+            }
+        },
+
+        removeClubMembers() {
+            if (this.userId === null) {
+                alert('Please fill in all the required fields');
+                return; // Stop further execution
+            }
+
+            let removemember = {
+                user_id: this.userId
+            };
+
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function(){
+                if(req.readyState === 4 && req.status === 200){
+                    alert('Removed successfully');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not logged in');
+                }
+            };
+
+            req.open('POST','/users/removeClubMembers');
+            req.setRequestHeader('Content-Type','application/json');
+            req.send(JSON.stringify(removemember));
+        }
+    }
+});
+
+function getClubMembers() {
+    let clubIdInput = document.getElementById("club-id");
+    let club_id = clubIdInput.value;
+
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = function(){
+        if(req.readyState === 4 && req.status === 200){
+            let users = JSON.parse(req.responseText);
+            clubMembers.users = users;
+        }
+    };
+
+    req.open('GET',`/users/getClubMembers?club_id=${club_id}`);
+    req.send();
+}
 
 var eventsData = new Vue({
     el: "#events",
