@@ -169,6 +169,7 @@ router.post('/enrolClub', function(req, res, next){
     return;
   }
 
+  // first connection: check if user is already enrolled
   req.pool.getConnection(function(err, connection){
     if(err){
       console.log("err");
@@ -198,7 +199,9 @@ router.post('/enrolClub', function(req, res, next){
         console.log("wtf");
         res.sendStatus(500);
       } else {
-        // enrol new user
+
+
+        // second connection: enrol new user
         req.pool.getConnection(function(err2, connection2){
           if(err2){
             console.log("err2");
