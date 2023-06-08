@@ -86,6 +86,7 @@ router.post('/login', async function(req, res, next){
 
         if (rows.length === 1){
           // user is present
+          [req.session.user] = rows;
           res.json(rows);
         } else if (rows.length === 0) {
           // no user
@@ -158,7 +159,92 @@ router.post('/signup', function(req, res, next){
 
 });
 
-//log out
+// XIAOYU - THURSDAY MORNING club enrolment
+router.post('/enrolClub', function(req, res, next){
+  console.log(JSON.stringify(req.session)); // debug
+
+  // check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+  req.pool.getConnection(function(err, connection){
+    if(err){
+      console.log("err");
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    let query = `SELECT * FROM club_enrolments WHERE user_id = ? AND club_id = ?;`;
+    connection.query(
+      query,
+      [req.session.user.user_id, req.body.club_id],
+      function(qerr, rows, fields) {
+      connection.release();
+      // if serverside error
+      if(qerr){
+        console.log("qerrFIRST:");
+        console.log(qerr);
+        res.sendStatus(500);
+        return;
+      }
+
+      if (rows.length === 1){
+        // user is already present
+        res.sendStatus(409);
+      } else if (rows.length !== 0) {
+        // something went wrong
+        console.log("wtf");
+        res.sendStatus(500);
+      } else {
+        // enrol new user
+        req.pool.getConnection(function(err2, connection2){
+          if(err2){
+            console.log("err2");
+            console.log(err2);
+            res.sendStatus(500);
+            return;
+          }
+          let query2 = `Insert INTO club_enrolments(
+                            user_id,
+                            club_id,
+                            notify_updates,
+                            notify_events
+                        ) VALUES(
+                            ?,
+                            ?,
+                            FALSE,
+                            FALSE
+                        );`;
+          connection2.query(
+            query2,
+            [req.session.user.user_id, req.body.club_id],
+            function(qerr2, rows2, fields2) {
+            connection2.release();
+            // if serverside error
+            if(qerr2){
+              console.log("qerrSECOND:");
+              console.log(qerr2);
+              res.sendStatus(500);
+              return;
+            }
+
+            // should work, and no need to send back anything to the client
+            res.end();
+
+          }
+          );
+        });
+      }
+    }
+    );
+  });
+
+});
+
+
+// log out
 router.post('/logout', function(req, res, next){
   if('username' in req.session){
     delete req.session.username;

@@ -73,6 +73,34 @@ function revealElement() {
     }
 }
 
+// XIAOYU WEDNESDAY NIGHT  - ENROL INTO CLUB
+function enrolClub() {
+
+    let clubInfo = { club_id: document.getElementById("club-id").value };
+
+    // ajax request
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = function () {
+
+        // if logged in, then add user to the club
+        if (req.readyState === 4 && req.status === 200) {
+            alert("Success!");
+        } else if (req.readyState === 4 && req.status === 401) {
+            alert("Not logged in!");
+        } else if (req.readyState === 4 && req.status === 409) {
+            alert("Already enrolled!");
+        } else if (req.readyState === 4 && req.status === 500) {
+            alert("Oops serverside error!");
+        }
+
+    };
+
+    req.open('POST', '/enrolClub');
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(JSON.stringify(clubInfo));
+}
+
 const clubEvents = new Vue ({
     el: "#upcoming-club-events",
     data: {
