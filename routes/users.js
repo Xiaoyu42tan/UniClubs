@@ -144,7 +144,9 @@ router.post('/updateEvent', function (req, res, next) {
 
 
 // Sends the array in JSON format
+// XIAOYU WEDNESDAY NIGHT : simplified session data retrieval
 router.get('/getFirstName', function (req, res, next) {
+    /*
     req.pool.getConnection(function (cerr, connection) {
         if (cerr) {
             res.sendStatus(500);
@@ -165,7 +167,26 @@ router.get('/getFirstName', function (req, res, next) {
             res.json(first_name);
         });
     });
-  });
+    */
+    if (req.session.user) {
+        res.json(req.session.user.first_name);
+    } else {
+        res.sendStatus(500);
+    }
+});
+
+// XIAOYU WEDNESDAY NIGHT : getUser will return the entire user object,
+// which holds information about:
+// user_id, user_type, user_name, first_name, last_name, email
+// in the front-end javascript you can do: let user = JSON.parse(req.responseText)
+// and access information with: user.user_id, user.user_type, etc...
+router.get('/getUser', function (req, res, next) {
+    if (req.session.user) {
+        res.json(req.session.user);
+    } else {
+        res.sendStatus(401);
+    }
+});
 
 
 module.exports = router;

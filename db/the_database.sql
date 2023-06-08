@@ -4,7 +4,7 @@ USE the_database;
 CREATE TABLE users (
     user_id INT NOT NULL AUTO_INCREMENT,
     user_type VARCHAR(20),
-    user_name VARCHAR(30),
+    user_name VARCHAR(30) UNIQUE,
     first_name VARCHAR(30),
     last_name VARCHAR(30),
     email VARCHAR(80),
@@ -15,6 +15,7 @@ CREATE TABLE users (
 CREATE TABLE clubs (
     club_id INT NOT NULL AUTO_INCREMENT,
     club_name VARCHAR(30),
+    club_description VARCHAR(1000),
     PRIMARY KEY (club_id)
 );
 

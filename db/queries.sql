@@ -34,3 +34,11 @@ Insert INTO users(
     '01230somethingidk'
 );
 
+
+Insert INTO clubs(
+    club_name,
+    club_description
+) VALUES (
+    'CLUB111',
+    'epic club number 1'
+);
