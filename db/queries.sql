@@ -42,3 +42,7 @@ Insert INTO clubs(
     'CLUB111',
     'epic club number 1'
 );
+
+SELECT event_enrolments.user_id, users.user_name, users.first_name, users.last_name FROM event_enrolments INNER JOIN users
+WHERE users.user_id = event_enrolments.user_id
+AND event_id = ?;

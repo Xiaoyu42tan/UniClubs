@@ -145,7 +145,7 @@
             <form>
                 <div class="form-outline mb-4">
                     <select class="form-select" v-model="selectedUpdate" @change="updateSelectedUpdate">
-                        <option value="" disabled>Select an update</option>
+                        <option value="" disabled>Select a update</option>
                         <option v-for="update in updates" :value="update">{{ update.update_title }}</option>
                     </select>
                 </div>
@@ -231,6 +231,31 @@
 
                 <div>
                     <button type="button" class="btn btn-primary btn-block mb-4" @click="deleteEvent">Delete Event</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="membersAttending" class="container divEventUpdate">
+            <h5 class="formHeading">
+                Members Attending Event
+            </h5>
+            <form>
+                <div class="form-outline mb-4">
+                    <select class="form-select" v-model="selectedEvent" @change="updateSelectedEvent(); getEventUsers()">
+                        <option value="" disabled>Select an event</option>
+                        <option v-for="event in events" :value="event">{{ event.event_name }}</option>
+                    </select>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <select class="form-select" v-model="selectedUser" @change="updateSelectedUser">
+                        <option value="" disabled>Select a user</option>
+                        <option v-for="user in users" :value="user">{{ user.user_name }} - {{ user.first_name }} {{ user.last_name }}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-block mb-4" @click="removeEventUsers">Remove Member from Event</button>
                 </div>
             </form>
         </div>

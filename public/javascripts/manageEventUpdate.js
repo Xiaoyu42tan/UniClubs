@@ -335,6 +335,77 @@ var eventRSVP = new Vue ({
     }
 });
 
+// Members Attending Event
+
+var membersAttending = new Vue({
+    el: "#membersAttending",
+    data: {
+        users: [],
+        selectedUser: null,
+        userId: null,
+        events: [],
+        selectedEvent: null,
+        eventId: null
+    },
+    methods: {
+        updateSelectedEvent() {
+            if (this.selectedEvent) {
+                this.eventId = this.selectedEvent.event_id;
+                console.log("Selected Event ID:", this.eventId);
+            }
+        },
+
+        updateSelectedUser() {
+            if (this.selectedUser) {
+                this.userId = this.selectedUser.user_id;
+                console.log("Selected User ID:", this.userId);
+            }
+        },
+
+        getEventUsers() {
+            let event_id = this.eventId;
+
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function(){
+                if(req.readyState === 4 && req.status === 200){
+                    let users = JSON.parse(req.responseText);
+                    membersAttending.users = users;
+                }
+            };
+
+            req.open('GET',`/users/getEventUsers?event_id=${event_id}`);
+            req.send();
+        },
+
+        removeEventUsers() {
+            if (this.userId === null) {
+                alert('Please fill in all the required fields');
+                return; // Stop further execution
+            }
+
+            let removeuser = {
+                user_id: this.userId,
+                event_id: this.eventId
+            };
+
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function(){
+                if(req.readyState === 4 && req.status === 200){
+                    alert('Deleted successfully');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not logged in');
+                }
+            };
+
+            req.open('POST','/users/removeEventUsers');
+            req.setRequestHeader('Content-Type','application/json');
+            req.send(JSON.stringify(removeuser));
+        }
+    }
+});
+
 var eventsData = new Vue({
     el: "#events",
     data: {
@@ -355,12 +426,12 @@ function getEvents() {
         updateEvent.events = events;
         deleteEvent.events = events;
         eventRSVP.events = events;
+        membersAttending.events = events;
         }
     };
     req.open('GET', `/users/getEvents?club_id=${club_id}`);
     req.send();
 }
-
 
 // ADITYA - ADDED FUNCTIONALITY TO OBTAIN USER TYPE (ADMIN, CLUB MANAGER, GENERAL USER)
 

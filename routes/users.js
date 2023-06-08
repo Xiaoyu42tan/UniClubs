@@ -274,85 +274,131 @@ router.post('/joinEvent', function(req, res, next){
     });
   });
 
-  router.post('/leaveEvent', function(req, res, next){
-    console.log(JSON.stringify(req.session));
+router.post('/leaveEvent', function(req, res, next){
+  console.log(JSON.stringify(req.session));
 
-    // Check if User is Logged in
-    if (req.session.user === undefined) {
-      res.sendStatus(401);
+  // Check if User is Logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+  // First Connection - Check if user is part of club
+  req.pool.getConnection(function(cerr, connection){
+    if (cerr) {
+      res.sendStatus(500);
       return;
     }
-
-    // First Connection - Check if user is part of club
-    req.pool.getConnection(function(cerr, connection){
-      if (cerr) {
+    let query = `SELECT * FROM club_enrolments WHERE user_id = ? AND club_id = ?;`;
+    connection.query(
+      query,
+      [req.session.user.user_id, req.body.club_id],
+      function(qerr, rows, fields) {
+      connection.release();
+      if (qerr) {
         res.sendStatus(500);
         return;
       }
-      let query = `SELECT * FROM club_enrolments WHERE user_id = ? AND club_id = ?;`;
-      connection.query(
-        query,
-        [req.session.user.user_id, req.body.club_id],
-        function(qerr, rows, fields) {
-        connection.release();
-        if (qerr) {
-          res.sendStatus(500);
-          return;
-        }
 
-        if (rows.length !== 1) {
-          // User is not part of club
-          res.sendStatus(403);
-        } else {
+      if (rows.length !== 1) {
+        // User is not part of club
+        res.sendStatus(403);
+      } else {
 
-          // Second Connection - Check if user is already enrolled in event
-          req.pool.getConnection(function(cerr2, connection2){
-            if (cerr2) {
+        // Second Connection - Check if user is already enrolled in event
+        req.pool.getConnection(function(cerr2, connection2){
+          if (cerr2) {
+            res.sendStatus(500);
+            return;
+          }
+          let query2 = `SELECT * FROM event_enrolments WHERE user_id = ? AND event_id = ?`;
+          connection2.query(
+            query2,
+            [req.session.user.user_id, req.body.event_id],
+            function(qerr2, rows2, fields2) {
+            connection2.release();
+            if (qerr2) {
               res.sendStatus(500);
               return;
             }
-            let query2 = `SELECT * FROM event_enrolments WHERE user_id = ? AND event_id = ?`;
-            connection2.query(
-              query2,
-              [req.session.user.user_id, req.body.event_id],
-              function(qerr2, rows2, fields2) {
-              connection2.release();
-              if (qerr2) {
-                res.sendStatus(500);
-                return;
-              }
 
-              if (rows2.length === 0) {
-                res.sendStatus(409);
-              } else {
+            if (rows2.length === 0) {
+              res.sendStatus(409);
+            } else {
 
-                // Third Connection - Cancel RSVP
-                req.pool.getConnection(function(cerr3, connection3){
-                  if (cerr3) {
+              // Third Connection - Cancel RSVP
+              req.pool.getConnection(function(cerr3, connection3){
+                if (cerr3) {
+                  res.sendStatus(500);
+                  return;
+                }
+                let query3 = `DELETE FROM event_enrolments WHERE user_id = ? AND event_id = ?`;
+                connection3.query(
+                  query3,
+                  [req.session.user.user_id, req.body.event_id],
+                  function(qerr3, rows3, fields3) {
+                  connection3.release();
+                  if (qerr3) {
                     res.sendStatus(500);
                     return;
                   }
-                  let query3 = `DELETE FROM event_enrolments WHERE user_id = ? AND event_id = ?`;
-                  connection3.query(
-                    query3,
-                    [req.session.user.user_id, req.body.event_id],
-                    function(qerr3, rows3, fields3) {
-                    connection3.release();
-                    if (qerr3) {
-                      res.sendStatus(500);
-                      return;
-                    }
 
-                    res.end();
-                  });
+                  res.end();
                 });
-              }
-            });
+              });
+            }
           });
-        }
-      });
+        });
+      }
     });
   });
+});
+
+router.get('/getEventUsers', function (req, res, next) {
+  req.pool.getConnection(function (cerr, connection) {
+      if (cerr) {
+          res.sendStatus(500);
+          return;
+      }
+      let query = `SELECT event_enrolments.user_id, users.user_name, users.first_name, users.last_name FROM event_enrolments INNER JOIN users
+      WHERE users.user_id = event_enrolments.user_id
+      AND event_id = ?;`;
+      connection.query(query, [req.query.event_id], function (qerr, rows, fields) {
+          connection.release();
+          if (qerr) {
+              res.sendStatus(500);
+              return;
+          }
+          console.log(JSON.stringify(rows));
+          res.json(rows);
+      });
+  });
+});
+
+router.post('/removeEventUsers', function (req, res, next) {
+  if ('user_id' in req.body && 'event_id' in req.body) {
+
+      req.pool.getConnection(function (cerr, connection) {
+          if (cerr) {
+              res.sendStatus(500);
+              return;
+          }
+          let query = `DELETE FROM event_enrolments WHERE user_id = ? AND event_id = ?;`;
+          connection.query(
+              query,
+              [req.body.user_id,
+              req.body.event_id],
+              function (qerr, rows, fields) {
+                  connection.release();
+                  if (qerr) {
+                      res.sendStatus(500);
+                      return;
+                  }
+                  res.end();
+            });
+      });
+  }
+});
 
 
 // Sends the array in JSON format
