@@ -53,6 +53,11 @@ button {
     padding: 0px;
 }
 
+/* Personal Info */
+#personal-info-update{
+    padding: 0px;
+}
+
 #personal-info-title{
     text-decoration: none;
     align-items: center;

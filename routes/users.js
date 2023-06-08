@@ -169,7 +169,33 @@ router.get('/getFirstName', function (req, res, next) {
     });
     */
     if (req.session.user) {
+        console.log(req.session.user);
         res.json(req.session.user.first_name);
+    } else {
+        res.sendStatus(500);
+    }
+});
+
+//Dimi - making gets for everything so that we can display and modify uder information
+router.get('/getLastName', function (req, res, next) {
+    if (req.session.user) {
+        res.json(req.session.user.last_name);
+    } else {
+        res.sendStatus(500);
+    }
+});
+
+router.get('/getUserName', function (req, res, next) {
+    if (req.session.user) {
+        res.json(req.session.user.user_name);
+    } else {
+        res.sendStatus(500);
+    }
+});
+
+router.get('/getEmail', function (req, res, next) {
+    if (req.session.user) {
+        res.json(req.session.user.email);
     } else {
         res.sendStatus(500);
     }

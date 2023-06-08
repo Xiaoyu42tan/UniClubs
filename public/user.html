@@ -16,7 +16,7 @@
         <script src="/javascripts/account.js" defer></script>
         <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
-    <body onload="getFirstName()">
+    <body onload="displayInfo()">
 
         <div id="outer-header">
             <nav id="nav" class="navbar navbar-expand-sm container">
@@ -35,7 +35,7 @@
         </div>
 
         <!-- Administrator Dashboard Heading -->
-        <div class = "firstname">
+        <div id = "firstname1">
             <h2 id="sysadmin-title" class="text-center">Welcome back, {{ firstname }}</h2>
         </div>
         <div id="sysadmin-info-outer">
@@ -58,24 +58,48 @@
             <div class="container">
                 <table id="personal-data">
                     <tr>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Birthday</th>
-                      <th>E-mail Address</th>
-                      <th>Clubs Joined</th>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <!--<th>Birthday</th>-->
+                        <th>E-mail Address</th>
+                        <!--<th>Clubs Joined</th>-->
                     </tr>
                     <tr>
                         <!-- contenteditable is temporary, will move to a more permanent solution later-->
-
-                            <td contenteditable="true"><div class = "firstname">{{ firstname }}</div></td>
-                            <td contenteditable="true">1</td>
-                            <td contenteditable="true">9/9/1999</td>
-                            <td contenteditable="true">user1@example.com</td>
+                            <td contenteditable="true"><div id = "username">{{ username }}</div></td>
+                            <td contenteditable="true"><div id = "firstname2">{{ firstname }}</div></td>
+                            <td contenteditable="true"><div id = "lastname">{{ lastname }}</div></td>
+                            <!--<td contenteditable="true">9/9/1999</td>-->
+                            <td contenteditable="true"><div id = "email">{{ email }}</div></td>
                             <!-- Can use JS/VUE to import clubs for each user-->
-                            <td>Club1, Club2, Club3, Club4</td>
+                            <!--<td>Club1, Club2, Club3, Club4</td>-->
                   </tr>
                   </table>
             </div>
+            <div class="container">
+                <table id="personal-data-update">
+                    <tr>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <!--<th>Birthday</th>-->
+                        <th>E-mail Address</th>
+                        <!--<th>Clubs Joined</th>-->
+                    </tr>
+                    <tr>
+                        <!-- contenteditable is temporary, will move to a more permanent solution later-->
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <!--<td contenteditable="true">9/9/1999</td>-->
+                            <td contenteditable="true"></td>
+                            <!-- Can use JS/VUE to import clubs for each user-->
+                            <!--<td>Club1, Club2, Club3, Club4</td>-->
+                  </tr>
+                  </table>
+            </div>
+
         </div>
 
 
