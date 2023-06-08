@@ -63,6 +63,7 @@
                         <th>Last Name</th>
                         <!--<th>Birthday</th>-->
                         <th>E-mail Address</th>
+                        <th>Password</th>
                         <!--<th>Clubs Joined</th>-->
                     </tr>
                     <tr>
@@ -73,32 +74,63 @@
                             <!--<td contenteditable="true">9/9/1999</td>-->
                             <td contenteditable="true"><div id = "email">{{ email }}</div></td>
                             <!-- Can use JS/VUE to import clubs for each user-->
+                            <td contenteditable="true"><div id = "password">***</div></td>
                             <!--<td>Club1, Club2, Club3, Club4</td>-->
                   </tr>
                   </table>
+                  <button type="button" class="user-details-button" onclick="showChangeInfoPopup()">Change Info</button>
+                  <div id="overlay">
+                    <div id="edit-user-info-pop-up">
+                        <h2>Input changes</h2>
+                        <div class="divs-in-popup">
+                              <label for="new_username"><b>Username:</b></label>
+                              <input class = "signup_inputs" type="text" placeholder="Enter new username" id="new_username">
+                              <br>
+                              <label for="firstname"><b>First Name:</b></label>
+                              <input class = "signup_inputs" type="text" placeholder="Enter first name" id="new_firstname">
+                              <br>
+                              <label for="lastname"><b>Last Name:</b></label>
+                              <input class = "signup_inputs" type="text" placeholder="Enter last name" id="new_lastname">
+                              <br>
+                              <label for="email"><b>Email:</b></label>
+                              <input class = "signup_inputs" type="text" placeholder="Enter email" id="new_email">
+                              <br>
+                              <label for="password"><b>Password:</b></label>
+                              <input class = "signup_inputs" type="text" placeholder="Enter password" id="new_password">
+                              <br>
+                              <label for="repeat-password"><b>Repeat Password:</b></label>
+                              <input class = "signup_inputs" type="text" placeholder="Enter password again" id="new_password_repeated">
+                              <br>
+                        </div>
+                        <div class="divs-in-popup">
+                            <button type="button" class="submit-user-details-button" onclick="changeDetails()">Submit Changes</button>
+                            <button type="button" class="submit-user-details-button" onclick="hideChangeInfoPopup()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="container">
+            <!--<div class="container">
                 <table id="personal-data-update">
                     <tr>
                         <th>Username</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <!--<th>Birthday</th>-->
+                        <th>Birthday</th>
                         <th>E-mail Address</th>
-                        <!--<th>Clubs Joined</th>-->
+                        <th>Clubs Joined</th>
                     </tr>
                     <tr>
-                        <!-- contenteditable is temporary, will move to a more permanent solution later-->
+                            contenteditable is temporary, will move to a more permanent solution later
                             <td contenteditable="true"></td>
                             <td contenteditable="true"></td>
                             <td contenteditable="true"></td>
-                            <!--<td contenteditable="true">9/9/1999</td>-->
+                            td contenteditable="true">9/9/1999</td>
                             <td contenteditable="true"></td>
-                            <!-- Can use JS/VUE to import clubs for each user-->
-                            <!--<td>Club1, Club2, Club3, Club4</td>-->
+                            Can use JS/VUE to import clubs for each user
+                            td>Club1, Club2, Club3, Club4</td>
                   </tr>
                   </table>
-            </div>
+            </div>-->
 
         </div>
 

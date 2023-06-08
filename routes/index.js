@@ -276,4 +276,38 @@ router.post('/google_login', async function (req, res, next) {
 
 });
 
+router.post('/changeDetails', function(req, res, next){
+  console.log(req.body);
+  req.pool.getConnection(function(err, connection){
+    if(err){
+      console.log("err");
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    //check if there is a username
+    if('username' in req.body){
+      console.log("current username: " + req.session.username);
+      console.log("new username: " + req.body.username);
+      //query meaning: update the user table to have the inputted username on the row where
+      //we have the current session username
+      let query = `UPDATE users SET user_name = ? WHERE user_name = ?`;
+      connection.query(query, [req.body.username, req.session.username], function(qerr, rows, fields) {
+        //update the session username
+        req.session.username = req.body.username;
+        console.log("After Change, current user: " + req.session.username);
+        connection.release();
+        // if serverside error
+        if(qerr){
+          console.log("qerr:");
+          console.log(qerr);
+          res.sendStatus(500);
+          return;
+         }
+      });
+    }
+  });
+  res.sendStatus(200);
+});
+
 module.exports = router;

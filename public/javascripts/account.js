@@ -93,6 +93,41 @@ function getEmail() {
     req.send();
 }
 
+function changeDetails(){
+    console.log("changeDetails() running");
+    // console.log(document.getElementById("username").value);
+
+    let changeUserData = {
+        username: document.getElementById("new_username").value,
+        firstname: document.getElementById("new_firstname").value,
+        lastname: document.getElementById("new_lastname").value,
+        email: document.getElementById("new_email").value,
+        password: document.getElementById("new_password").value
+    };
+
+    if(document.getElementById('new_password').value !== document.getElementById('new_password_repeated').value){
+        alert("Passwords are not equivelant");
+        return;
+    }
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = function(){
+        if(req.readyState == 4 && req.status == 200){
+            alert('Changes succesful');
+            console.log('your details are: ' + req.responseText); // debug
+            location.reload();
+            // redirect user to webpage
+        } else if(req.readyState == 4 && req.status == 401){
+            alert('Changes unsuccessful');
+        }
+    };
+
+    req.open('POST', '/changeDetails');
+    req.setRequestHeader('Content-Type', 'application/json');
+    console.log(JSON.stringify(changeUserData));
+    req.send(JSON.stringify(changeUserData));
+}
+
 /*function getBirthday() {
     let req = new XMLHttpRequest();
     req.onreadystatechange = function () {
@@ -114,6 +149,16 @@ function displayInfo(){
     getEmail();
 }
 
-function changeInfoBoxAppear(){
-    console.log('this will do stuff');
+function showChangeInfoPopup(){
+    let overlay = document.getElementById("overlay");
+    let changes_popup = document.getElementById("edit-user-info-pop-up");
+    changes_popup.style.display = 'block';
+    overlay.style.display = 'block';
+}
+
+function hideChangeInfoPopup(){
+    let overlay = document.getElementById("overlay");
+    let changes_popup = document.getElementById("edit-user-info-pop-up");
+    changes_popup.style.display = 'none';
+    overlay.style.display = 'none';
 }
