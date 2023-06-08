@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var app = express();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -1030,7 +1031,7 @@ router.get('/getUser', function (req, res, next) {
 // ADITYA FRIDAY MORNING : this removes the user from the database upon the request of the admin
 app.post('/admin/removeUser', (req, res) => {
   const { user_id } = req.body;
-  
+
   connection.query('DELETE FROM users WHERE user_id = ?', [user_id], (error, results) => {
     if (error) {
       console.error('Error:', error);
