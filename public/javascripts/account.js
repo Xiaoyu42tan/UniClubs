@@ -127,6 +127,11 @@ function changeDetails(){
         password: document.getElementById("new_password").value
     };
 
+    if (changeUserData.username === '' || changeUserData.firstname === '' || changeUserData.lastname === '' || changeUserData.email === '' || changeUserData.password === '') {
+        alert('Please fill in all the required fields');
+        return; // Stop further execution
+    }
+
     if(document.getElementById('new_password').value !== document.getElementById('new_password_repeated').value){
         alert("Passwords are not equivelant");
         return;
@@ -134,13 +139,17 @@ function changeDetails(){
     let req = new XMLHttpRequest();
 
     req.onreadystatechange = function(){
-        if(req.readyState == 4 && req.status == 200){
-            alert('Changes succesful: You will now be logged out');
+        if(req.readyState === 4 && req.status === 200){
+            alert('Changes succesful!');
             console.log('your details are: ' + req.responseText); // debug
-            window.location.href = 'login.html';
+            window.location.href = '/user.html';
             // redirect user to webpage
-        } else if(req.readyState == 4 && req.status == 401){
-            alert('Changes unsuccessful');
+        } else if(req.readyState === 4 && req.status === 403){
+            alert('Username already taken!');
+        } else if(req.readyState === 4 && req.status === 401){
+            alert('Not logged in!');
+        } else if(req.readyState === 4 && req.status === 500){
+            alert('Serverside error!');
         }
     };
 

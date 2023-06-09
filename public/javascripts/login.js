@@ -48,7 +48,7 @@ function signUp(){
     let req = new XMLHttpRequest();
 
     req.onreadystatechange = function(){
-        if(req.readyState == 4 && req.status == 200){
+        if(req.readyState === 4 && req.status === 200){
             alert('Successful sign up');
             console.log('your details are: ' + req.responseText); // debug
             console.log("ABOUT TO RUN LOG IN: " + document.getElementById("new-username").value); // debug
@@ -62,8 +62,10 @@ function signUp(){
             req.send(JSON.stringify(newloginData));
             window.location.href = 'user.html';
             // redirect user to webpage
-        } else if(req.readyState == 4 && req.status == 401){
-            alert('Unsuccessful signup');
+        } else if(req.readyState === 4 && req.status === 409){
+            alert('Username already taken!');
+        } else if(req.readyState === 4 && req.status === 500){
+            alert('Serverside Error!');
         }
     };
 

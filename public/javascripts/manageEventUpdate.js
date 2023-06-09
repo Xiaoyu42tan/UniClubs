@@ -486,6 +486,38 @@ var clubMembers = new Vue({
             req.open('POST','/users/removeClubMembers');
             req.setRequestHeader('Content-Type','application/json');
             req.send(JSON.stringify(removemember));
+        },
+
+        promoteToManager() {
+            if (this.userId === null) {
+                alert('Please fill in all the required fields');
+                return; // Stop further execution
+            }
+
+            let promotemember = {
+                user_id: this.userId,
+                club_id: document.getElementById("club-id").value
+            };
+
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function(){
+                if(req.readyState === 4 && req.status === 200){
+                    alert('Promoted successfully');
+                } else if(req.readyState === 4 && req.status === 401){
+                    alert('Not logged in');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not authorised');
+                } else if(req.readyState === 4 && req.status === 500){
+                    alert('serverside error');
+                } else if(req.readyState === 4 && req.status === 409){
+                    alert('User is already a manager!');
+                }
+            };
+
+            req.open('POST','/users/promoteClubMembers');
+            req.setRequestHeader('Content-Type','application/json');
+            req.send(JSON.stringify(promotemember));
         }
     }
 });

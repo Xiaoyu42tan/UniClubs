@@ -195,52 +195,83 @@ router.post('/signup', function(req, res, next){
   // Xiaoyu, Tuesday night, implementing signup
   console.log(req.body);
 
-  req.pool.getConnection(async function(err, connection){
-    if(err){
-      console.log("err");
-      console.log(err);
-      res.sendStatus(500);
-      return;
-    }
-
-    const hash = await argon2.hash(req.body.password);
-
-    let query = `Insert INTO users(
-                      user_type,
-                      user_name,
-                      first_name,
-                      last_name,
-                      email,
-                      password,
-                      phone_number
-                  ) VALUES(
-                      'user',
-                      ?,
-                      ?,
-                      ?,
-                      ?,
-                      ?,
-                      ?
-                  );`;
-    connection.query(query,
-      [req.body.username, req.body.firstname,req.body.lastname,
-        req.body.email,hash,req.body.phonenumber],
-      function(qerr, rows, fields) {
-      connection.release();
-      // if serverside error
-      if(qerr){
-        console.log("qerr:");
-        console.log(qerr);
+  req.pool.getConnection(function (cerrCheck, connectionCheck) {
+    if (cerrCheck) {
         res.sendStatus(500);
         return;
-      }
+    }
+    let queryCheck = `SELECT * FROM users WHERE user_name = ?;`;
+    connectionCheck.query(
+        queryCheck,
+        [req.body.username],
+        function (qerrCheck, rowsCheck, fieldsCheck) {
+            connectionCheck.release();
+            if (qerrCheck) {
+                res.sendStatus(500);
+                return;
+            }
 
-      console.log(JSON.stringify(rows));
+            if (rowsCheck.length === 1) {
+              // user is already manager
+              res.sendStatus(409);
+            } else if (rowsCheck.length !== 0) {
+              // serverside error
+              res.sendStatus(500);
+            } else {
 
-      // should work, and no need to send back anything to the client
-      res.end();
-    });
+              // username not taken
+              req.pool.getConnection(async function(err, connection){
+                if(err){
+                  console.log("err");
+                  console.log(err);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                const hash = await argon2.hash(req.body.password);
+
+                let query = `Insert INTO users(
+                                  user_type,
+                                  user_name,
+                                  first_name,
+                                  last_name,
+                                  email,
+                                  password,
+                                  phone_number
+                              ) VALUES(
+                                  'user',
+                                  ?,
+                                  ?,
+                                  ?,
+                                  ?,
+                                  ?,
+                                  ?
+                              );`;
+                connection.query(query,
+                  [req.body.username, req.body.firstname,req.body.lastname,
+                    req.body.email,hash,req.body.phonenumber],
+                  function(qerr, rows, fields) {
+                  connection.release();
+                  // if serverside error
+                  if(qerr){
+                    console.log("qerr:");
+                    console.log(qerr);
+                    res.sendStatus(500);
+                    return;
+                  }
+
+                  console.log(JSON.stringify(rows));
+
+                  // should work, and no need to send back anything to the client
+                  res.end();
+                });
+              });
+
+            }
+        }
+    );
   });
+
 
 });
 
@@ -362,177 +393,93 @@ router.post('/google_login', async function (req, res, next) {
 });
 
 router.post('/changeDetails', function(req, res, next){
-  console.log(req.body);
-    //check if there is a username
-    let temp_username = req.body.username;
-    temp_username = temp_username.trim();
-    if(temp_username !== ''){
-      console.log("do we get here");
-      //connection for username
-      req.pool.getConnection(function(err, connection){
-        if(err){
-          console.log("err");
-          console.log(err);
-          res.sendStatus(500);
-          return;
-        }
-      console.log("current username: " + req.session.username);
-      console.log("new username: " + req.body.username);
-      //query meaning: update the user table to have the inputted username on the row where
-      //we have the current session username
-      let query = `UPDATE users SET user_name = ? WHERE user_id = ?`;
-      connection.query(query, [req.body.username, req.session.user.user_id], function(qerr, rows, fields) {
-        //update the session username
-        req.session.username = req.body.username;
-        console.log("After Change, current user: " + req.session.username);
-        connection.release();
-        // if serverside error
-        if(qerr){
-          console.log("qerr:");
-          console.log(qerr);
-          res.sendStatus(500);
-          return;
-         }
-      });
-    });
+  // check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
   }
-  //check if there is a firstname
-  let temp_firstname = req.body.firstname;
-  temp_firstname = temp_firstname.trim();
-  if(temp_firstname !== ''){
-       //connection for the firstname
-    req.pool.getConnection(function(err, connection){
-    if(err){
+
+  req.pool.getConnection(function(err3, connection3){
+    if(err3){
       console.log("err");
-      console.log(err);
+      console.log(err3);
       res.sendStatus(500);
       return;
     }
-      console.log("current firstname: " + req.session.user.first_name);
-      console.log("new firstname: " + req.body.firstname);
-      //query meaning: update the user table to have the inputted username on the row where
-      //we have the current session username
-      let query = `UPDATE users SET first_name = ? WHERE user_id = ?`;
-      connection.query(query, [req.body.firstname, req.session.user.user_id], function(qerr, rows, fields) {
-        //update the session username
-        req.session.user.first_name = req.body.firstname;
-        console.log("After Change, current firstname: " + req.session.user.first_name);
-        connection.release();
-        // if serverside error
-        if(qerr){
-          console.log("qerr:");
-          console.log(qerr);
-          res.sendStatus(500);
-          return;
+    let query3 = `SELECT * FROM users WHERE user_name = ?;`;
+    connection3.query(
+      query3,
+      [req.body.username],
+      function(qerr3, rows3, fields3) {
+      connection3.release();
+      // if serverside error
+      if(qerr3){
+        console.log("qerrFIRST:");
+        console.log(qerr3);
+        res.sendStatus(500);
+        return;
+      }
+
+      if (rows3.length === 1) {
+        // username already taken
+        res.sendStatus(403);
+      } else if (rows3.length !== 0) {
+        // serverside error
+        console.log("wtf");
+        res.sendStatus(500);
+      } else {
+        req.pool.getConnection(async function(err, connection){
+          if(err){
+            console.log("err");
+            console.log(err);
+            res.sendStatus(500);
+            return;
           }
-      });
-    });
-  }
 
-  //check if there is a lastname
-  let temp_lastname = req.body.lastname;
-  temp_lastname = temp_lastname.trim();
-  if(temp_lastname !== ''){
-    //connection for lastname
-  req.pool.getConnection(function(err, connection){
-  if(err){
-    console.log("err");
-    console.log(err);
-    res.sendStatus(500);
-    return;
-  }
-    console.log("current lastname: " + req.session.user.lastname);
-    console.log("new lastname: " + req.body.lastname);
-    //query meaning: update the user table to have the inputted username on the row where
-    //we have the current session username
-    let query = `UPDATE users SET last_name = ? WHERE user_id = ?`;
-    connection.query(query, [req.body.lastname, req.session.user.user_id], function(qerr, rows, fields) {
-      //update the session username
-      req.session.user.last_name = req.body.lastname;
-      console.log("After Change, current lastname: " + req.session.user.last_name);
-      connection.release();
-      // if serverside error
-      if(qerr){
-        console.log("qerr:");
-        console.log(qerr);
-        res.sendStatus(500);
-        return;
-        }
-    });
-  });
-}
-  //check if there is an email
-  let temp_email = req.body.email;
-  temp_email = temp_email.trim();
-  console.log(temp_email);
-  if(temp_email !== ''){
-    //console.log('get to here');
-    //connection for email
-  req.pool.getConnection(function(err, connection){
-  if(err){
-    console.log("err");
-    console.log(err);
-    res.sendStatus(500);
-    return;
-  }
-    console.log("current email: " + req.session.user.email);
-    console.log("new email: " + req.body.email);
-    //query meaning: update the user table to have the inputted username on the row where
-    //we have the current session username
-    let query = `UPDATE users SET email = ? WHERE user_id = ?`;
-    connection.query(query, [req.body.email, req.session.user.user_id], function(qerr, rows, fields) {
-      //update the session username
-      req.session.user.email = req.body.email;
-      console.log("After Change, current email: " + req.session.user.email);
-      connection.release();
-      // if serverside error
-      if(qerr){
-        console.log("qerr:");
-        console.log(qerr);
-        res.sendStatus(500);
-        return;
-        }
-    });
-  });
-}
-  //check if there is a password
-  let temp_password = req.body.password;
-  temp_password = temp_password.trim();
-  console.log(temp_password);
-  if(temp_password !== ''){
-    //console.log('get to here');
-    //connection for password
-  req.pool.getConnection(async function(err, connection){
-  if(err){
-    console.log("err");
-    console.log(err);
-    res.sendStatus(500);
-    return;
-  }
+            const hash = await argon2.hash(req.body.password);
+            console.log("current password: " + req.session.user.password);
+            console.log("new password: " + req.body.password);
+            console.log("new hash password: " + hash);
+            // query meaning: update the user table to have the inputted username on the row where
+            // we have the current session username
+            let query = `UPDATE users SET user_name = ?, first_name = ?, last_name = ?, email = ?, password = ? WHERE user_id = ?`;
+            connection.query(
+              query,
+              [req.body.username, req.body.firstname, req.body.lastname,
+                req.body.email, hash, req.session.user.user_id],
+              function(qerr, rows, fields) {
 
-    const hash = await argon2.hash(req.body.password);
-    console.log("current password: " + req.session.user.password);
-    console.log("new password: " + req.body.password);
-    console.log("new hash password: " + hash);
-    //query meaning: update the user table to have the inputted username on the row where
-    //we have the current session username
-    let query = `UPDATE users SET password = ? WHERE user_id = ?`;
-    connection.query(query, [hash, req.session.user.user_id], function(qerr, rows, fields) {
-      //update the session username
-      req.session.user.password = req.body.password;
-      console.log("After Change, current password: " + req.session.user.password);
-      connection.release();
-      // if serverside error
-      if(qerr){
-        console.log("qerr:");
-        console.log(qerr);
-        res.sendStatus(500);
-        return;
-        }
-    });
+
+                // update the session
+                req.session.user.user_name = req.body.username;
+                req.session.user.first_name = req.body.firstname;
+                req.session.user.last_name = req.body.lastname;
+                req.session.user.password = req.body.password;
+                req.session.user.email = req.body.email;
+
+                req.session.username = req.body.username;
+
+                console.log("After Change, current password: " + req.session.user.password);
+                connection.release();
+                // if serverside error
+                if(qerr){
+                  console.log("qerr:");
+                  console.log(qerr);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                res.end();
+
+              }
+              );
+          });
+
+      }
+    }
+    );
   });
-}
-  res.redirect('/logout');
+  // res.redirect('/logout');
 });
 
 router.post('/checkIfManager', function(req, res, next){
