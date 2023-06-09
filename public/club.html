@@ -14,7 +14,7 @@
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
         <script src="/javascripts/webpage.js" defer></script>
     </head>
-    <body onload="checkIfLoggedIn()">
+    <body onload="checkIfLoggedIn(); loadClubsInfo()">
 
         <!-- Header -->
         <div id="outer-header">
@@ -71,7 +71,7 @@
             <div id="filtered-section">
                 <ul class="list-unstyled row justify-content-evenly">
                     <li id="styled-li" class="col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center" v-for="club in filteredClubs">
-                        <a id="styled-a" :href="club.url">{{ club.name }}</a>
+                        <a id="styled-a" :href="club.club_url">{{ club.club_name }}</a>
                     </li>
                 </ul>
             </div>

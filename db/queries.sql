@@ -54,11 +54,28 @@ Insert INTO users(
 
 
 Insert INTO clubs(
+    club_url,
     club_name,
     club_description
 ) VALUES (
-    'CLUB111',
-    'epic club number 1'
+    'club1.html',
+    'Archery Club',
+    'The Archery Club is for all those passionate about the old bow and arrow!
+    We accept those of all skill levels, regardless of culture or background!
+    Register to join our club so you can RSVP to events!'
+);
+
+Insert INTO clubs(
+    club_url,
+    club_name,
+    club_description
+) VALUES (
+    'club2.html',
+    'Computer Science Club',
+    'A club dedicated to Computer Science!
+    We talk all things comp sci, we do workshops, competitive programming, games nights and more!
+    You dont even have to be a comp sci student to join!
+    Press register to club to be able to RSVP for events!'
 );
 
 Insert INTO club_managers(

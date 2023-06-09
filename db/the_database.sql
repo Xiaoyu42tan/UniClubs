@@ -14,6 +14,7 @@ CREATE TABLE users (
 );
 CREATE TABLE clubs (
     club_id INT NOT NULL AUTO_INCREMENT,
+    club_url VARCHAR(30) UNIQUE,
     club_name VARCHAR(30),
     club_description VARCHAR(1000),
     PRIMARY KEY (club_id)

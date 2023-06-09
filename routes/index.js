@@ -13,10 +13,73 @@ router.get('/', function(req, res, next) {
 });
 
 /* store users page. */
-  let users = {
-    user1: {password: 'password'},
-    user2: {password: 'password2'}
-  };
+let users = {
+  user1: {password: 'password'},
+  user2: {password: 'password2'}
+};
+
+// XIAOYU FRIDAY FIRST PUSH
+router.get('/getClubs', function(req,res,next) {
+
+  req.pool.getConnection(function(err, connection){
+    if(err){
+      console.log("err");
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    let query = `SELECT club_name, club_url FROM clubs;`;
+    connection.query(query, function(qerr, rows, fields) {
+      connection.release();
+      // if serverside error
+      if(qerr){
+        console.log("qerr:");
+        console.log(qerr);
+        res.sendStatus(500);
+        return;
+      }
+
+      console.log(JSON.stringify(rows));
+
+      // send back club name, club url
+      res.json(rows);
+    }
+    );
+  });
+
+});
+
+// XIAOYU - FRIDAY FIRST PUSH
+router.get('/getClubPage', function(req, res, next){
+
+  req.pool.getConnection(function(err3, connection3){
+    if(err3){
+      console.log("err");
+      console.log(err3);
+      res.sendStatus(500);
+      return;
+    }
+    let query3 = `SELECT club_name, club_description FROM clubs WHERE club_id = ?;`;
+    connection3.query(
+      query3,
+      [req.query.club_id],
+      function(qerr3, rows3, fields3) {
+      connection3.release();
+      // if serverside error
+      if(qerr3){
+        console.log("qerrFIRST:");
+        console.log(qerr3);
+        res.sendStatus(500);
+        return;
+      }
+
+      console.log(JSON.stringify(rows3));
+      res.json(rows3[0]);
+    }
+    );
+  });
+
+});
 
 // login
 // XIAOYU: may need to change this to a get request idk

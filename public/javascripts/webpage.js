@@ -33,17 +33,68 @@ const search = new Vue ({
     el: "#club-search",
     data: {
         search: "",
-        clubs: [
-            { name: 'Club 1', url: '/club1.html' },
-            { name: 'Club 2', url: '/club2.html' }
-        ]
+        clubs: []
     },
     computed: {
         filteredClubs() {
-            return this.clubs.filter(club => club.name.toLowerCase().includes(this.search.toLowerCase()));
+            return this.clubs.filter(club => club.club_name.toLowerCase().includes(this.search.toLowerCase()));
         }
     }
 });
+
+// XIAOYU - FRIDAY FIRST PUSH
+const clubPageName = new Vue ({
+    el: "#club-title",
+    data: {
+        clubName: ""
+    }
+});
+
+const clubPageDesc = new Vue ({
+    el: "#description",
+    data: {
+        clubDesc: ""
+    }
+});
+
+// XIAOYU - FRIDAY FIRST PUSH
+function loadClubsInfo() {
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            // load clubs into vue
+            search.clubs = JSON.parse(req.responseText);
+        } else if (req.readyState === 4 && req.status === 500) {
+            // serverside error
+            alert("serverside error!");
+        }
+    };
+
+    req.open('GET', '/getClubs');
+    req.send();
+}
+
+// XIAOYU - FRIDAY FIRST PUSH
+function loadClubPageInfo() {
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            // load clubs into vue
+
+            let clubInfo = JSON.parse(req.responseText);
+            clubPageName.clubName = clubInfo.club_name;
+            clubPageDesc.clubDesc = clubInfo.club_description;
+        } else if (req.readyState === 4 && req.status === 500) {
+            // serverside error
+            alert("serverside error!");
+        }
+    };
+
+    req.open('GET', `/getClubPage?club_id=${document.getElementById("club-id").value}`);
+    req.send();
+}
 
 // Application Seach Query
 const appsearch = new Vue ({

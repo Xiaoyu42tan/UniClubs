@@ -15,7 +15,7 @@
         <script src="/javascripts/webpage.js" defer></script>
         <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
-    <body onload="getUpdates(); getEvents(); getClubMembers(); checkIfLoggedIn(); checkIfManager()">
+    <body onload="getUpdates(); getEvents(); getClubMembers(); checkIfLoggedIn(); checkIfManager(); loadClubPageInfo()">
         <input type="hidden" id="club-id" value="1">
         <!-- Header -->
         <div id="outer-header">
@@ -37,13 +37,14 @@
         </div>
 
         <!-- Club Introduction -->
-        <h2 id="club-title" class="text-center">Archery Club</h2>
+
+        <h2 id="club-title" class="text-center">{{ clubName }}</h2>
+
         <div id="outer-register">
             <div id="register" class="container text-center">
                 <div class="row">
                     <div id="description" class="col-sm-12 col-md-6 col-lg-6">
-                        The Archery Club is for all those passionate about the ol' bow and arrow! We accept those of all skill
-                        levels, regardless of culture or background! Register to join our club so you can RSVP to events!
+                        {{ clubDesc }}
                     </div>
                     <!-- In a more developed version, with an implemented database, this register button will
                     serve the function of registering a logged in user into the club -->
