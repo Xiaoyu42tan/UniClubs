@@ -136,8 +136,8 @@ function checkIfLoggedIn() {
             nav.top_menu = [
                 { title: 'Home', url: '/index.html' },
                 { title: 'Clubs', url: '/club.html' },
-                { title: 'Account', url: '/user.html' },
-                { title: 'Log Out', url: '/index.html', onClick: (logout) }
+                { title: 'Account', url: '/user.html' } // ,
+                // { title: 'Log Out', url: '/index.html', onClick: logout }
             ];
 
             // hide the quick login for index.html
@@ -157,7 +157,7 @@ function checkIfLoggedIn() {
             nav.top_menu = [
                 { title: 'Home', url: '/index.html' },
                 { title: 'Clubs', url: '/club.html' },
-                { title: 'Login', url: '/login.html' }
+                { title: 'Login/Signup', url: '/login.html' }
             ];
 
             // show the quick login for index.html

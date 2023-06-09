@@ -1383,6 +1383,199 @@ router.post('/removeClubMembers', function (req, res, next) {
   }
 });
 
+router.post('/promoteClubMembers', function (req, res, next) {
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+
+  if ('user_id' in req.body) {
+
+    // check if manager
+    req.pool.getConnection(function(err3, connection3){
+      if(err3){
+        console.log("err");
+        console.log(err3);
+        res.sendStatus(500);
+        return;
+      }
+      let query3 = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+      connection3.query(
+        query3,
+        [req.session.user.user_id, req.body.club_id],
+        function(qerr3, rows3, fields3) {
+        connection3.release();
+        // if serverside error
+        if(qerr3){
+          console.log("qerrFIRST:");
+          console.log(qerr3);
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows3.length === 0){
+          // user is not manager
+          // check if admin
+          // check if user is admin
+          req.pool.getConnection(function(errAd, connectionAd){
+            if(errAd){
+              console.log("errAd");
+              console.log(errAd);
+              res.sendStatus(500);
+              return;
+            }
+
+            let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+            connectionAd.query(
+              queryAdmin,
+              [req.session.user.user_id],
+              function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+                connectionAd.release();
+                // if serverside error
+                if(qerrAdmin){
+                  console.log("qerrAdmin:");
+                  console.log(qerrAdmin);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                if (rowsAdmin.length === 1){
+
+
+                  // user is admin
+
+                  req.pool.getConnection(function (cerrCheck, connectionCheck) {
+                    if (cerrCheck) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    let queryCheck = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+                    connectionCheck.query(
+                        queryCheck,
+                        [req.body.user_id,req.body.club_id],
+                        function (qerrCheck, rowsCheck, fieldsCheck) {
+                            connectionCheck.release();
+                            if (qerrCheck) {
+                                res.sendStatus(500);
+                                return;
+                            }
+
+                            if (rowsCheck.length === 1) {
+                              // user is already manager
+                              res.sendStatus(409);
+                            } else if (rowsCheck.length !== 0) {
+                              // serverside error
+                              res.sendStatus(500);
+                            } else {
+
+                              // insert
+                              req.pool.getConnection(function (cerr, connection) {
+                                if (cerr) {
+                                    res.sendStatus(500);
+                                    return;
+                                }
+                                let query = `INSERT INTO club_managers (user_id, club_id) VALUES (?,?);`;
+                                connection.query(
+                                    query,
+                                    [req.body.user_id,req.body.club_id],
+                                    function (qerr, rows, fields) {
+                                        connection.release();
+                                        if (qerr) {
+                                            res.sendStatus(500);
+                                            return;
+                                        }
+                                        res.end();
+                                  });
+                              });
+
+                            }
+                          }
+                          );
+                        });
+
+
+
+                } else {
+                  // user is not admin or manager
+                  res.sendStatus(403);
+                }
+              }
+              );
+          });
+        } else if (rows3.length !== 1) {
+          // something went wrong
+          console.log("wtf");
+          res.sendStatus(500);
+        } else {
+
+
+          // user is manager
+          req.pool.getConnection(function (cerrCheck, connectionCheck) {
+            if (cerrCheck) {
+                res.sendStatus(500);
+                return;
+            }
+            let queryCheck = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+            connectionCheck.query(
+                queryCheck,
+                [req.body.user_id,req.body.club_id],
+                function (qerrCheck, rowsCheck, fieldsCheck) {
+                    connectionCheck.release();
+                    if (qerrCheck) {
+                        res.sendStatus(500);
+                        return;
+                    }
+
+                    if (rowsCheck.length === 1) {
+                      // user is already manager
+                      res.sendStatus(409);
+                    } else if (rowsCheck.length !== 0) {
+                      // serverside error
+                      res.sendStatus(500);
+                    } else {
+
+                      // insert
+                      req.pool.getConnection(function (cerr, connection) {
+                        if (cerr) {
+                            res.sendStatus(500);
+                            return;
+                        }
+                        let query = `INSERT INTO club_managers (user_id, club_id) VALUES (?,?);`;
+                        connection.query(
+                            query,
+                            [req.body.user_id,req.body.club_id],
+                            function (qerr, rows, fields) {
+                                connection.release();
+                                if (qerr) {
+                                    res.sendStatus(500);
+                                    return;
+                                }
+                                res.end();
+                          });
+                      });
+                    }
+              });
+          });
+
+
+
+
+
+        }
+      }
+      );
+    });
+
+
+  } else {
+    res.sendStatus(500);
+  }
+
+
+});
+
 router.get('/getUserType', function (req, res, next) {
   if (req.session.user.user_type) {
       console.log(req.session.user);

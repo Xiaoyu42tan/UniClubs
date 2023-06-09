@@ -25,6 +25,7 @@ function postUpdate() {
     req.onreadystatechange = function(){
         if(req.readyState === 4 && req.status === 200){
             alert('Posted successfully');
+            window.location.reload();
         } else if(req.readyState === 4 && req.status === 401){
             alert('Not logged in');
         } else if(req.readyState === 4 && req.status === 403){
@@ -67,6 +68,7 @@ function submitEvent() {
     req.onreadystatechange = function(){
         if(req.readyState === 4 && req.status === 200){
             alert('Posted successfully');
+            window.location.reload();
         } else if(req.readyState === 4 && req.status === 401){
             alert('Not logged in');
         } else if(req.readyState === 4 && req.status === 403){
@@ -94,7 +96,7 @@ var deleteUpdate = new Vue({
     methods: {
         updateSelectedUpdate() {
             if (this.selectedUpdate) {
-                this.updateId = this.selectedUpdate.club_id;
+                this.updateId = this.selectedUpdate.update_id;
                 console.log("Selected Update ID:", this.updateId);
             }
         },
@@ -114,7 +116,8 @@ var deleteUpdate = new Vue({
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Posted successfully');
+                    alert('Deleted successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -203,7 +206,8 @@ var updateEvent= new Vue({
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Posted successfully');
+                    alert('Updated successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -251,7 +255,8 @@ var deleteEvent= new Vue({
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Posted successfully');
+                    alert('Deleted successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -307,6 +312,7 @@ var eventRSVP = new Vue ({
                 // if logged in, then add user to the club
                 if (req.readyState === 4 && req.status === 200) {
                     alert("RSVP Success!");
+                    window.location.reload();
                 } else if (req.readyState === 4 && req.status === 401) {
                     alert("Not logged in!");
                 } else if (req.readyState === 4 && req.status === 403) {
@@ -341,7 +347,8 @@ var eventRSVP = new Vue ({
 
                 // if logged in, then add user to the club
                 if (req.readyState === 4 && req.status === 200) {
-                    alert("RSVP Cancel!");
+                    alert("RSVP Cancelled!");
+                    window.location.reload();
                 } else if (req.readyState === 4 && req.status === 401) {
                     alert("Not logged in!");
                 } else if (req.readyState === 4 && req.status === 403) {
@@ -426,6 +433,7 @@ var membersAttending = new Vue({
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
                     alert('Deleted successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -473,7 +481,8 @@ var clubMembers = new Vue({
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Deleted successfully');
+                    alert('Removed successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -486,6 +495,39 @@ var clubMembers = new Vue({
             req.open('POST','/users/removeClubMembers');
             req.setRequestHeader('Content-Type','application/json');
             req.send(JSON.stringify(removemember));
+        },
+
+        promoteToManager() {
+            if (this.userId === null) {
+                alert('Please fill in all the required fields');
+                return; // Stop further execution
+            }
+
+            let promotemember = {
+                user_id: this.userId,
+                club_id: document.getElementById("club-id").value
+            };
+
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function(){
+                if(req.readyState === 4 && req.status === 200){
+                    alert('Promoted successfully');
+                    window.location.reload();
+                } else if(req.readyState === 4 && req.status === 401){
+                    alert('Not logged in');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not authorised');
+                } else if(req.readyState === 4 && req.status === 500){
+                    alert('serverside error');
+                } else if(req.readyState === 4 && req.status === 409){
+                    alert('User is already a manager!');
+                }
+            };
+
+            req.open('POST','/users/promoteClubMembers');
+            req.setRequestHeader('Content-Type','application/json');
+            req.send(JSON.stringify(promotemember));
         }
     }
 });

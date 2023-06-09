@@ -43,14 +43,14 @@ button {
 
 #sysadmin-info {
     box-sizing: border-box;
-    padding: 20px 10px;
+    padding: 30px;
     background-color:white;
     color: black;
 }
 
 /* Personal Info */
 #personal-info{
-    padding: 0px;
+    padding: 30px;
 }
 
 /* Personal Info */
