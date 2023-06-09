@@ -956,6 +956,15 @@ router.post('/removeClubMembers', function (req, res, next) {
   }
 });
 
+router.get('/getUserType', function (req, res, next) {
+  if (req.session.user.user_type) {
+      console.log(req.session.user);
+      console.log(req.session.user.user_type);
+      res.json(req.session.user.user_type);
+  } else {
+      res.sendStatus(500);
+  }
+});
 
 // Sends the array in JSON format
 // XIAOYU WEDNESDAY NIGHT : simplified session data retrieval

@@ -101,6 +101,7 @@ function google_login(response){
         if(req.readyState == 4 && req.status == 200){
             alert('Successful google log in');
             //redirect user to webpage
+            window.location.href = 'user.html';
         } else if(req.readyState == 4 && req.status == 401){
             alert('Unsuccessful google log in');
         }

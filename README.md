@@ -21,7 +21,7 @@ npm install google-auth-library
 
 npm install express-server
 
- npm install argon2
+npm install argon2
 
 service mysql start
 
