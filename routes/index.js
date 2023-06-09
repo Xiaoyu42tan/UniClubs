@@ -21,9 +21,11 @@ router.get('/', function(req, res, next) {
 // login
 // XIAOYU: may need to change this to a get request idk
 // cos i thought post requests only for changing data in the database
+// Dimos: Log in working nice with argon2 encryption
 router.post('/login', async function(req, res, next){
   req.session.username = req.body.username;
-  if('client_id' in req.body){
+  if('client_id' in req.body && 'credential' in req.body){
+    console.log('-------------google login start--------------');
     const ticket = await client.verifyIdToken({
         idToken: req.body.credential,
         audience: CLIENT_ID// Specify the CLIENT_ID of the app that accesses the backend
@@ -40,6 +42,7 @@ router.post('/login', async function(req, res, next){
         res.sendStatus(500);
         return;
       }
+      console.log('-------------google query--------------');
       let query = "SELECT user_id, user_type, user_name, first_name, last_name, email FROM users WHERE email = ?";
       connection.query(query, payload['email'], function(qerr, rows, fields) {
         connection.release();
@@ -52,10 +55,12 @@ router.post('/login', async function(req, res, next){
         console.log(JSON.stringify(rows));
         if (rows.length > 0){
           // user is present
+          console.log('user present');
           [req.session.user] = rows;
           res.json(req.session.user);
         }else{
           // no user
+          console.log('no user');
           res.sendStatus(401);
         }
       });
