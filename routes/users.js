@@ -1028,20 +1028,197 @@ router.get('/getUser', function (req, res, next) {
     }
 });
 
-// ADITYA FRIDAY MORNING : this removes the user from the database upon the request of the admin
-app.post('/admin/removeUser', (req, res) => {
-  const { user_id } = req.body;
+// Sytem Admin
 
-  connection.query('DELETE FROM users WHERE user_id = ?', [user_id], (error, results) => {
-    if (error) {
-      console.error('Error:', error);
-      res.sendStatus(500);
-      return;
-    }
 
-    res.sendStatus(200);
+router.get('/getSiteUsers', function (req, res, next) {
+  req.pool.getConnection(function (cerr, connection) {
+      if (cerr) {
+          res.sendStatus(500);
+          return;
+      }
+      let query = `SELECT * FROM users;`;
+      connection.query(query, function (qerr, rows, fields) {
+          connection.release();
+          if (qerr) {
+              console.log("qerr");
+              console.log(qerr);
+              res.sendStatus(500);
+              return;
+          }
+          console.log(JSON.stringify(rows));
+          res.json(rows);
+      });
   });
 });
+
+// XIAOYU - edited Thursday night
+router.post('/removeSiteUser', function (req, res, next) {
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+  if ('user_id' in req.body) {
+
+    // check if admin
+    req.pool.getConnection(function(err3, connection3){
+      if(err3){
+        console.log("err");
+        console.log(err3);
+        res.sendStatus(500);
+        return;
+      }
+      let query3 = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+      connection3.query(
+        query3,
+        [req.session.user.user_id],
+        function(qerr3, rows3, fields3) {
+        connection3.release();
+        // if serverside error
+        if(qerr3){
+          console.log("qerrFIRST:");
+          console.log(qerr3);
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows3.length === 0){
+          // user is not authorised
+          res.sendStatus(403);
+        } else if (rows3.length !== 1) {
+          // something went wrong
+          console.log("wtf");
+          res.sendStatus(500);
+        } else {
+
+
+          // user is admin
+          req.pool.getConnection(function (cerr, connection) {
+            if (cerr) {
+                res.sendStatus(500);
+                return;
+            }
+            let query = `DELETE FROM users WHERE user_id = ?;`;
+            connection.query(
+                query,
+                [req.body.user_id],
+                function (qerr, rows, fields) {
+                    connection.release();
+                    if (qerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    res.end();
+              });
+          });
+        }
+      }
+      );
+    });
+
+  } else {
+    res.sendStatus(500);
+  }
+});
+
+router.post('/promoteUser', function (req, res, next) {
+  // XIAOYU - check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+  if ('user_id' in req.body) {
+
+    // check if admin
+    req.pool.getConnection(function(err, connection){
+      if(err){
+        console.log("err");
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      }
+      let query = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+      connection.query(
+        query,
+        [req.session.user.user_id],
+        function(qerr, rows, fields) {
+        connection.release();
+        // if serverside error
+        if(qerr){
+          console.log("qerrFIRST:");
+          console.log(qerr);
+          res.sendStatus(500);
+          return;
+        }
+
+        if (rows.length === 0){
+          // user is not authorised
+          res.sendStatus(403);
+        } else if (rows.length !== 1) {
+          // something went wrong
+          console.log("wtf");
+          res.sendStatus(500);
+        } else {
+
+          // check if selected user is already admin
+          req.pool.getConnection(function (cerr2,connection2) {
+            if (cerr2) {
+              res.sendStatus(500);
+              return;
+            }
+            let query2 = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+            connection2.query(
+              query2,
+              [req.body.user_id],
+              function(qerr2, rows2, fields2) {
+                connection2.release();
+                if (qerr2) {
+                  res.sendStatus(500);
+                  return;
+                }
+
+                if (rows.length === 0) {
+                  res.sendStatus(409);
+                } else if (rows.length !== 1) {
+                  res.sendStatus(500);
+                } else {
+
+                  // update
+                  req.pool.getConnection(function (cerr3, connection3) {
+                    if (cerr3) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    let query3 = `UPDATE users SET user_type = 'admin' WHERE user_id = ?;`;
+                    connection3.query(
+                        query3,
+                        [req.body.user_id],
+                        function (qerr3, rows3, fields3) {
+                            connection3.release();
+                            if (qerr3) {
+                                res.sendStatus(500);
+                                return;
+                            }
+                            res.end();
+                      });
+                  });
+                }
+              }
+            );
+          });
+        }
+      }
+      );
+    });
+
+  } else {
+    res.sendStatus(500);
+  }
+});
+
 
 
 module.exports = router;

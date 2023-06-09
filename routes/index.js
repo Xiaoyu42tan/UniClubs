@@ -513,4 +513,49 @@ router.post('/checkIfManager', function(req, res, next){
 
 });
 
+router.post('/checkIfAdmin', function(req, res, next){
+  // check if logged in
+  if (req.session.user === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+  // check if manager of club
+  req.pool.getConnection(function(err, connection){
+    if(err){
+      res.sendStatus(500);
+      return;
+    }
+    let query = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+    connection.query(
+      query,
+      [req.session.user.user_id],
+      function(qerr, rows, fields) {
+      connection.release();
+      // if serverside error
+      if(qerr){
+        console.log("qerrFIRST:");
+        console.log(qerr);
+        res.sendStatus(500);
+        return;
+      }
+
+      if (rows.length === 1){
+        // user is admin
+        res.end();
+      } else if (rows.length === 0) {
+        // user isnt admin
+        res.sendStatus(403);
+      } else {
+        // serverside error
+        console.log("wtf");
+        res.sendStatus(500);
+      }
+    }
+    );
+  });
+
+});
+
+
 module.exports = router;

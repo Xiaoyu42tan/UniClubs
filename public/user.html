@@ -17,7 +17,7 @@
         <script src="/javascripts/manageEventUpdate.js" defer></script>
     </head>
 
-    <body onload="getFirstName(); checkIfLoggedIn(); displayInfo(); checkifAdmin();">
+    <body onload="getFirstName(); checkIfLoggedIn(); displayInfo(); checkifAdmin(); getSiteUsers()">
 
         <div id="outer-header">
             <nav id="nav" class="navbar navbar-expand-sm container">
@@ -164,7 +164,6 @@
             </div>
         </div>
 
-        <!-- ADITYA - added this section for managing users from the website, only visible for admins (adapted from Kian code) -->
         <div id="siteUsers" class="container divManageUsers">
             <h5 class="formHeading">
                 Manage Site Users
@@ -177,8 +176,9 @@
                     </select>
                 </div>
 
-                <div>
-                    <button type="button" class="btn btn-primary btn-block mb-4" @click="removeSiteUsers">Remove User</button>
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary mx-2" @click="removeSiteUser">Remove User</button>
+                    <button type="button" class="btn btn-primary mx-2" @click="promoteUser">Promote User</button>
                 </div>
             </form>
         </div>

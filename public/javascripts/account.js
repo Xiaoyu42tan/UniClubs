@@ -214,6 +214,96 @@ var clubMembers = new Vue({
       },
     },
   });
+  var siteUsers = new Vue({
+    el: "#siteUsers",
+    data: {
+        users: [],
+        selectedUser: null,
+        userId: null,
+    },
+    methods: {
+        updateSelectedUser() {
+            if (this.selectedUser) {
+                this.userId = this.selectedUser.user_id;
+                console.log("Selected User ID:", this.userId);
+            }
+        },
+
+        removeSiteUser() {
+            if (this.userId === null) {
+                alert('Please fill in all the required fields');
+                return; // Stop further execution
+            }
+
+            let removesiteuser = {
+                user_id: this.userId
+            };
+
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function(){
+                if(req.readyState === 4 && req.status === 200){
+                    alert('Deleted successfully');
+                } else if(req.readyState === 4 && req.status === 401){
+                    alert('Not logged in');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not authorised');
+                } else if(req.readyState === 4 && req.status === 500){
+                    alert('serverside error');
+                }
+            };
+
+            req.open('POST','/users/removeSiteUser');
+            req.setRequestHeader('Content-Type','application/json');
+            req.send(JSON.stringify(removesiteuser));
+        },
+
+        promoteUser() {
+            if (this.userId === null) {
+                alert('Please fill in all the required fields');
+                return; // Stop further execution
+            }
+
+            let promoteuser = {
+                user_id: this.userId
+            };
+
+            let req = new XMLHttpRequest();
+
+            req.onreadystatechange = function(){
+                if(req.readyState === 4 && req.status === 200){
+                    alert('Promoted successfully');
+                } else if(req.readyState === 4 && req.status === 401){
+                    alert('Not logged in');
+                } else if(req.readyState === 4 && req.status === 403){
+                    alert('Not authorised');
+                } else if(req.readyState === 4 && req.status === 409) {
+                    alert('User already admin');
+                } else if(req.readyState === 4 && req.status === 500){
+                    alert('serverside error');
+                }
+            };
+
+            req.open('POST','/users/promoteUser');
+            req.setRequestHeader('Content-Type','application/json');
+            req.send(JSON.stringify(promoteuser));
+        }
+    }
+});
+
+function getSiteUsers() {
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = function(){
+        if(req.readyState === 4 && req.status === 200){
+            let users = JSON.parse(req.responseText);
+            siteUsers.users = users;
+        }
+    };
+
+    req.open('GET',`/users/getSiteUsers`);
+    req.send();
+}
 
   function showClubManagerElements() {
     // Show the desired elements specific to club managers
@@ -243,16 +333,15 @@ var clubMembers = new Vue({
 function showAdminElements() {
     // Hide or disable elements not applicable to club managers
     const siteUsersDiv = document.getElementById('siteUsers');
-    siteUsersDiv.style.display = 'none';
+    siteUsersDiv.style.display = 'block';
 }
 
 function hideAdminElements() {
     // Hide or disable elements not applicable to club managers
     const siteUsersDiv = document.getElementById('siteUsers');
-    siteUsersDiv.style.display = 'block';
+    siteUsersDiv.style.display = 'none';
 }
-
-  function checkifAdmin() {
+function checkifAdmin() {
 
     let req = new XMLHttpRequest();
     req.onreadystatechange = function () {
@@ -265,9 +354,8 @@ function hideAdminElements() {
         }
     };
 
-
     req.open('POST','/checkIfAdmin');
     req.setRequestHeader('Content-Type', 'application/json');
-    req.send(JSON.stringify(clubInfo));
+    req.send();
 }
 // end ADITYA update - please verify this work with the added div on user.html
