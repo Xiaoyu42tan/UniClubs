@@ -503,33 +503,45 @@ router.post('/checkIfManager', function(req, res, next){
 
       if (rows.length === 1){
         // user is manager
-        // Now check if user is an admin
-        let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
-        connection.query(
-          queryAdmin,
-          [req.session.user.user_id],
-          function(qerrAdmin, rowsAdmin, fieldsAdmin) {
-            connection.release();
-            // if serverside error
-            if(qerrAdmin){
-              console.log("qerrAdmin:");
-              console.log(qerrAdmin);
-              res.sendStatus(500);
-              return;
-            }
 
-            if (rowsAdmin.length === 1){
-              // user is admin
-              res.end();
-            } else {
-              // user is manager but not admin
-              res.sendStatus(403);
-            }
-          }
-        );
+        res.end();
+
       } else if (rows.length === 0) {
         // user isnt a manager
-        res.sendStatus(403);
+        // check if user is admin
+        req.pool.getConnection(function(errAd, connectionAd){
+          if(errAd){
+            console.log("errAd");
+            console.log(errAd);
+            res.sendStatus(500);
+            return;
+          }
+
+          let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+          connectionAd.query(
+            queryAdmin,
+            [req.session.user.user_id],
+            function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+              connection.release();
+              // if serverside error
+              if(qerrAdmin){
+                console.log("qerrAdmin:");
+                console.log(qerrAdmin);
+                res.sendStatus(500);
+                return;
+              }
+
+              if (rowsAdmin.length === 1){
+                // user is admin
+                res.end();
+              } else {
+                // user is manager but not admin
+                res.sendStatus(403);
+              }
+            }
+            );
+        });
+
       } else {
         // serverside error
         console.log("wtf");

@@ -1,11 +1,7 @@
 function postUpdate() {
     let title = document.getElementById('form2Example5').value;
     let description = document.getElementById('form2Example6').value;
-    let privateUpdateText = document.getElementById('privateUpdateButton').value;
-    let privateUpdate = false;
-    if (privateUpdateText === 'on') {
-        privateUpdate = true;
-    }
+    let privateUpdate = document.getElementById('privateUpdateButton').checked;
 
     let clubIdInput = document.getElementById("club-id");
     let club_id = clubIdInput.value;
@@ -110,7 +106,8 @@ var deleteUpdate = new Vue({
             }
 
             let deleteupdate = {
-                update_id: this.updateId
+                update_id: this.updateId,
+                club_id: document.getElementById("club-id").value
             };
 
             let req = new XMLHttpRequest();
