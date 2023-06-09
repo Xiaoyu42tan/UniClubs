@@ -5,6 +5,8 @@ const CLIENT_ID = '521244062266-prh5adjbtjmgk7vga4g1t8j515u0kt9l.apps.googleuser
 const {OAuth2Client} = require('google-auth-library');
 const client = new OAuth2Client(CLIENT_ID);
 
+const argon2 = require('argon2');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -71,8 +73,8 @@ router.post('/login', async function(req, res, next){
         return;
       }
 
-      let query = "SELECT user_id, user_type, user_name, first_name, last_name, email FROM users WHERE user_name = ? AND password = ?";
-      connection.query(query, [req.body.username, req.body.password], function(qerr, rows, fields) {
+      let query = "SELECT user_id, user_type, user_name, password, first_name, last_name, email FROM users WHERE user_name = ?" // AND password = ?";
+      connection.query(query, [req.body.username], async function(qerr, rows, fields) {
         connection.release();
         // if serverside error
         if(qerr){
@@ -85,9 +87,21 @@ router.post('/login', async function(req, res, next){
         console.log(JSON.stringify(rows)); // debug
 
         if (rows.length === 1){
-          // user is present
-          [req.session.user] = rows;
-          res.json(rows);
+          console.log("rows.length==1");
+          console.log(rows[0]);
+          if(await argon2.verify(rows[0].password,req.body.password)){
+             //get rid of details which we dont want users to see
+            let [user_deets] = rows;
+            console.log(user_deets.password);
+            delete user_deets.password;
+
+            //when there is a user
+            req.session.user = user_deets;
+            res.json(rows);
+          } else{
+            //wrong pw
+            res.sendStatus(401);
+          }
         } else if (rows.length === 0) {
           // no user
           res.sendStatus(401);
@@ -113,13 +127,16 @@ router.post('/signup', function(req, res, next){
   // Xiaoyu, Tuesday night, implementing signup
   console.log(req.body);
 
-  req.pool.getConnection(function(err, connection){
+  req.pool.getConnection(async function(err, connection){
     if(err){
       console.log("err");
       console.log(err);
       res.sendStatus(500);
       return;
     }
+
+    const hash = await argon2.hash(req.body.password);
+
     let query = `Insert INTO users(
                       user_type,
                       user_name,
@@ -139,7 +156,7 @@ router.post('/signup', function(req, res, next){
                   );`;
     connection.query(query,
       [req.body.username, req.body.firstname,req.body.lastname,
-        req.body.email,req.body.password,req.body.phonenumber],
+        req.body.email,hash,req.body.phonenumber],
       function(qerr, rows, fields) {
       connection.release();
       // if serverside error
@@ -417,19 +434,22 @@ router.post('/changeDetails', function(req, res, next){
   if(temp_password !== ''){
     //console.log('get to here');
     //connection for password
-  req.pool.getConnection(function(err, connection){
+  req.pool.getConnection(async function(err, connection){
   if(err){
     console.log("err");
     console.log(err);
     res.sendStatus(500);
     return;
   }
+
+    const hash = await argon2.hash(req.body.password);
     console.log("current password: " + req.session.user.password);
     console.log("new password: " + req.body.password);
+    console.log("new hash password: " + hash);
     //query meaning: update the user table to have the inputted username on the row where
     //we have the current session username
     let query = `UPDATE users SET password = ? WHERE user_id = ?`;
-    connection.query(query, [req.body.password, req.session.user.user_id], function(qerr, rows, fields) {
+    connection.query(query, [hash, req.session.user.user_id], function(qerr, rows, fields) {
       //update the session username
       req.session.user.password = req.body.password;
       console.log("After Change, current password: " + req.session.user.password);
