@@ -36,17 +36,24 @@ npm start
                                         DETAILS FOR BASE USER
                                     User name: Bob Password: .Foo
 
-There is a user you can log in as with general user permissions with Details: User name: Bob Password: .Foo
+There is a user you can log in as with general user permissions.
 
-                                    DETAILS FOR ARCHERY CLUB (CLUB 1) CLUB MANAGER
-                                        User name: Archer Password: bow&arrow1
+As a user, you can: Register to be apart of clubs, RSVP to events, and modify your user information
 
-There is a club manager for the archery club so you can try out the club manager features, such as creating events for the club they are manager of, creating updates, delete updates, delete events, remove memebers from events they are rsvp'd to, upgrade a member into a club manager for their club and remove members from the club.
+
+                                DETAILS FOR ARCHERY CLUB (CLUB 1) CLUB MANAGER
+                                    User name: Archer Password: bow&arrow1
+
+This is a club manager for the Archery Club so you can try out the club manager features
+
+As a club manager, you can: create events for the club you are manager of, delete events, create updates, delete updates, remove memebers from events they are rsvp'd to, upgrade a member into a club manager for their club and remove members from the club.
+
+
 
                                         DETAILS FOR SYSTEM ADMIN
                                     User name: Sys Password: Admin123
 
-There is a System Admin, to try system admin features such as: manage site users by removing or promoting to admin or club manager (through club page), post and delete updates, create updates and delete events, they can also see member attending events and choose to remove them, and remove members from the clubs.
+There is a System Admin, to try system admin features
 
-EXPLAINING EACH MAIN FEATURE BREIFLY
+These features are: manage site users by removing or promoting to admin or club manager (through club page), and then the same functionality as the club managers too.
 
