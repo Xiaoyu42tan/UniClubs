@@ -25,6 +25,7 @@ function postUpdate() {
     req.onreadystatechange = function(){
         if(req.readyState === 4 && req.status === 200){
             alert('Posted successfully');
+            window.location.reload();
         } else if(req.readyState === 4 && req.status === 401){
             alert('Not logged in');
         } else if(req.readyState === 4 && req.status === 403){
@@ -67,6 +68,7 @@ function submitEvent() {
     req.onreadystatechange = function(){
         if(req.readyState === 4 && req.status === 200){
             alert('Posted successfully');
+            window.location.reload();
         } else if(req.readyState === 4 && req.status === 401){
             alert('Not logged in');
         } else if(req.readyState === 4 && req.status === 403){
@@ -115,6 +117,7 @@ var deleteUpdate = new Vue({
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
                     alert('Deleted successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -204,6 +207,7 @@ var updateEvent= new Vue({
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
                     alert('Updated successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -252,6 +256,7 @@ var deleteEvent= new Vue({
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
                     alert('Deleted successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -307,6 +312,7 @@ var eventRSVP = new Vue ({
                 // if logged in, then add user to the club
                 if (req.readyState === 4 && req.status === 200) {
                     alert("RSVP Success!");
+                    window.location.reload();
                 } else if (req.readyState === 4 && req.status === 401) {
                     alert("Not logged in!");
                 } else if (req.readyState === 4 && req.status === 403) {
@@ -341,7 +347,8 @@ var eventRSVP = new Vue ({
 
                 // if logged in, then add user to the club
                 if (req.readyState === 4 && req.status === 200) {
-                    alert("RSVP Cancel!");
+                    alert("RSVP Cancelled!");
+                    window.location.reload();
                 } else if (req.readyState === 4 && req.status === 401) {
                     alert("Not logged in!");
                 } else if (req.readyState === 4 && req.status === 403) {
@@ -426,6 +433,7 @@ var membersAttending = new Vue({
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
                     alert('Deleted successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -474,6 +482,7 @@ var clubMembers = new Vue({
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
                     alert('Removed successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -504,6 +513,7 @@ var clubMembers = new Vue({
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
                     alert('Promoted successfully');
+                    window.location.reload();
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
