@@ -474,7 +474,7 @@ router.post('/checkIfManager', function(req, res, next){
     return;
   }
 
-  // check if manager of club
+  // check if manager of club (or admin, for event updates)
   req.pool.getConnection(function(err, connection){
     if(err){
       console.log("err");
@@ -482,25 +482,48 @@ router.post('/checkIfManager', function(req, res, next){
       res.sendStatus(500);
       return;
     }
-    let query = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
+    let queryManager = `SELECT * FROM club_managers WHERE user_id = ? AND club_id = ?;`;
     connection.query(
-      query,
+      queryManager,
       [req.session.user.user_id, req.body.club_id],
-      function(qerr, rows, fields) {
+      function(qerrManager, rows, fields) {
       connection.release();
       // if serverside error
-      if(qerr){
+      if(qerrManager){
         console.log("qerrFIRST:");
-        console.log(qerr);
+        console.log(qerrManager);
         res.sendStatus(500);
         return;
       }
 
       if (rows.length === 1){
         // user is manager
-        res.end();
+        // Now check if user is an admin
+        let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+        connection.query(
+          queryAdmin,
+          [req.session.user.user_id],
+          function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+            connection.release();
+            // if serverside error
+            if(qerrAdmin){
+              console.log("qerrAdmin:");
+              console.log(qerrAdmin);
+              res.sendStatus(500);
+              return;
+            }
+
+            if (rowsAdmin.length === 1){
+              // user is admin
+              res.end();
+            } else {
+              // user is manager but not admin
+              res.sendStatus(403);
+            }
+          }
+        );
       } else if (rows.length === 0) {
-        // user isnt manager
+        // user isnt a manager
         res.sendStatus(403);
       } else {
         // serverside error
