@@ -42,8 +42,66 @@ router.post('/postUpdate', function (req, res, next) {
         }
 
         if (rows3.length === 0){
-          // user is not authorised
-          res.sendStatus(403);
+          // user is not manager
+          // check if admin
+          // check if user is admin
+          req.pool.getConnection(function(errAd, connectionAd){
+            if(errAd){
+              console.log("errAd");
+              console.log(errAd);
+              res.sendStatus(500);
+              return;
+            }
+
+            let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+            connectionAd.query(
+              queryAdmin,
+              [req.session.user.user_id],
+              function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+                connectionAd.release();
+                // if serverside error
+                if(qerrAdmin){
+                  console.log("qerrAdmin:");
+                  console.log(qerrAdmin);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                if (rowsAdmin.length === 1){
+                  // user is admin
+                  req.pool.getConnection(function (cerr2, connection2) {
+                    if (cerr2) {
+                      res.sendStatus(500);
+                      return;
+                    }
+                    let query2 = `INSERT INTO updates (club_id, update_title, update_description, private_update)
+                                VALUES (?, ?, ?, ?);`;
+                    connection2.query(
+                      query2,
+                      [req.body.club_id,
+                      req.body.title,
+                      req.body.description,
+                      req.body.private_update],
+                      function (qerr2, rows2, fields2) {
+                        connection2.release();
+                        if (qerr2) {
+                          console.log("qerr2:");
+                          console.log(qerr2);
+                          res.sendStatus(500);
+                          return;
+                        }
+                        res.end();
+                      }
+                      );
+                  });
+                } else {
+                  // user is not admin or manager
+                  res.sendStatus(403);
+                }
+              }
+              );
+          });
+
         } else if (rows3.length !== 1) {
           // something went wrong
           console.log("wtf");
@@ -127,8 +185,64 @@ router.post('/createEvent', function (req, res, next) {
         }
 
         if (rows3.length === 0){
-          // user is not authorised
-          res.sendStatus(403);
+          // user is not manager
+          // check if admin
+          // check if user is admin
+          req.pool.getConnection(function(errAd, connectionAd){
+            if(errAd){
+              console.log("errAd");
+              console.log(errAd);
+              res.sendStatus(500);
+              return;
+            }
+
+            let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+            connectionAd.query(
+              queryAdmin,
+              [req.session.user.user_id],
+              function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+                connectionAd.release();
+                // if serverside error
+                if(qerrAdmin){
+                  console.log("qerrAdmin:");
+                  console.log(qerrAdmin);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                if (rowsAdmin.length === 1){
+                  // user is admin
+                  req.pool.getConnection(function (cerr, connection) {
+                    if (cerr) {
+                      res.sendStatus(500);
+                      return;
+                    }
+                    let query = `INSERT INTO events (event_name, club_id, event_description, event_date, event_time)
+                                VALUES (?, ?, ?, ?, ?);`;
+                    connection.query(
+                      query,
+                      [req.body.name,
+                      req.body.club_id,
+                      req.body.description,
+                      req.body.date,
+                      req.body.time],
+                      function (qerr, rows, fields) {
+                        connection.release();
+                        if (qerr) {
+                          res.sendStatus(500);
+                          return;
+                        }
+                        res.end();
+                      }
+                      );
+                  });
+                } else {
+                  // user is not admin or manager
+                  res.sendStatus(403);
+                }
+              }
+              );
+          });
         } else if (rows3.length !== 1) {
           // something went wrong
           console.log("wtf");
@@ -342,8 +456,70 @@ router.post('/updateEvent', function (req, res, next) {
         }
 
         if (rows3.length === 0){
-          // user is not authorised
-          res.sendStatus(403);
+          // user is not manager
+          // check if admin
+          // check if user is admin
+          req.pool.getConnection(function(errAd, connectionAd){
+            if(errAd){
+              console.log("errAd");
+              console.log(errAd);
+              res.sendStatus(500);
+              return;
+            }
+
+            let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+            connectionAd.query(
+              queryAdmin,
+              [req.session.user.user_id],
+              function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+                connectionAd.release();
+                // if serverside error
+                if(qerrAdmin){
+                  console.log("qerrAdmin:");
+                  console.log(qerrAdmin);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                if (rowsAdmin.length === 1){
+                  // user is admin
+                  req.pool.getConnection(function (cerr, connection) {
+                    if (cerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    let query = `UPDATE events
+                                SET event_name = ?,
+                                    club_id = ?,
+                                    event_description = ?,
+                                    event_date = ?,
+                                    event_time = ?
+                                WHERE event_id = ?`;
+                    connection.query(
+                        query,
+                        [req.body.name,
+                        req.body.club_id,
+                        req.body.description,
+                        req.body.date,
+                        req.body.time,
+                        req.body.event_id],
+                        function (qerr, rows, fields) {
+                            connection.release();
+                            if (qerr) {
+                                res.sendStatus(500);
+                                return;
+                            }
+                            res.end();
+                      }
+                      );
+                  });
+                } else {
+                  // user is not admin or manager
+                  res.sendStatus(403);
+                }
+              }
+              );
+          });
         } else if (rows3.length !== 1) {
           // something went wrong
           console.log("wtf");
@@ -431,8 +607,58 @@ router.post('/deleteEvent', function (req, res, next) {
         }
 
         if (rows3.length === 0){
-          // user is not authorised
-          res.sendStatus(403);
+          // user is not manager
+          // check if admin
+          // check if user is admin
+          req.pool.getConnection(function(errAd, connectionAd){
+            if(errAd){
+              console.log("errAd");
+              console.log(errAd);
+              res.sendStatus(500);
+              return;
+            }
+
+            let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+            connectionAd.query(
+              queryAdmin,
+              [req.session.user.user_id],
+              function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+                connectionAd.release();
+                // if serverside error
+                if(qerrAdmin){
+                  console.log("qerrAdmin:");
+                  console.log(qerrAdmin);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                if (rowsAdmin.length === 1){
+                  // user is admin
+                  req.pool.getConnection(function (cerr, connection) {
+                    if (cerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    let query = `DELETE FROM events WHERE event_id = ?`;
+                    connection.query(
+                        query,
+                        [req.body.event_id],
+                        function (qerr, rows, fields) {
+                            connection.release();
+                            if (qerr) {
+                                res.sendStatus(500);
+                                return;
+                            }
+                            res.end();
+                      });
+                  });
+                } else {
+                  // user is not admin or manager
+                  res.sendStatus(403);
+                }
+              }
+              );
+          });
         } else if (rows3.length !== 1) {
           // something went wrong
           console.log("wtf");
@@ -510,8 +736,58 @@ router.post('/deleteUpdate', function (req, res, next) {
         }
 
         if (rows3.length === 0){
-          // user is not authorised
-          res.sendStatus(403);
+          // user is not manager
+          // check if admin
+          // check if user is admin
+          req.pool.getConnection(function(errAd, connectionAd){
+            if(errAd){
+              console.log("errAd");
+              console.log(errAd);
+              res.sendStatus(500);
+              return;
+            }
+
+            let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+            connectionAd.query(
+              queryAdmin,
+              [req.session.user.user_id],
+              function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+                connectionAd.release();
+                // if serverside error
+                if(qerrAdmin){
+                  console.log("qerrAdmin:");
+                  console.log(qerrAdmin);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                if (rowsAdmin.length === 1){
+                  // user is admin
+                  req.pool.getConnection(function (cerr, connection) {
+                    if (cerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    let query = `DELETE FROM updates WHERE update_id = ?`;
+                    connection.query(
+                        query,
+                        [req.body.update_id],
+                        function (qerr, rows, fields) {
+                            connection.release();
+                            if (qerr) {
+                                res.sendStatus(500);
+                                return;
+                            }
+                            res.end();
+                      });
+                  });
+                } else {
+                  // user is not admin or manager
+                  res.sendStatus(403);
+                }
+              }
+              );
+          });
         } else if (rows3.length !== 1) {
           // something went wrong
           console.log("wtf");
@@ -743,8 +1019,58 @@ router.get('/getEventUsers', function (req, res, next) {
       }
 
       if (rows3.length === 0){
-        // user is not authorised
-        res.sendStatus(403);
+        // user is not manager
+          // check if admin
+          // check if user is admin
+          req.pool.getConnection(function(errAd, connectionAd){
+            if(errAd){
+              console.log("errAd");
+              console.log(errAd);
+              res.sendStatus(500);
+              return;
+            }
+
+            let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+            connectionAd.query(
+              queryAdmin,
+              [req.session.user.user_id],
+              function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+                connectionAd.release();
+                // if serverside error
+                if(qerrAdmin){
+                  console.log("qerrAdmin:");
+                  console.log(qerrAdmin);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                if (rowsAdmin.length === 1){
+                  // user is admin
+                  req.pool.getConnection(function (cerr, connection) {
+                    if (cerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    let query = `SELECT event_enrolments.user_id, users.user_name, users.first_name, users.last_name FROM event_enrolments INNER JOIN users
+                    WHERE users.user_id = event_enrolments.user_id
+                    AND event_id = ?;`;
+                    connection.query(query, [req.query.event_id], function (qerr, rows, fields) {
+                        connection.release();
+                        if (qerr) {
+                            res.sendStatus(500);
+                            return;
+                        }
+                        console.log(JSON.stringify(rows));
+                        res.json(rows);
+                    });
+                  });
+                } else {
+                  // user is not admin or manager
+                  res.sendStatus(403);
+                }
+              }
+              );
+          });
       } else if (rows3.length !== 1) {
         // something went wrong
         console.log("wtf");
@@ -815,8 +1141,59 @@ router.post('/removeEventUsers', function (req, res, next) {
         }
 
         if (rows3.length === 0){
-          // user is not authorised
-          res.sendStatus(403);
+          // user is not manager
+          // check if admin
+          // check if user is admin
+          req.pool.getConnection(function(errAd, connectionAd){
+            if(errAd){
+              console.log("errAd");
+              console.log(errAd);
+              res.sendStatus(500);
+              return;
+            }
+
+            let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+            connectionAd.query(
+              queryAdmin,
+              [req.session.user.user_id],
+              function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+                connectionAd.release();
+                // if serverside error
+                if(qerrAdmin){
+                  console.log("qerrAdmin:");
+                  console.log(qerrAdmin);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                if (rowsAdmin.length === 1){
+                  // user is admin
+                  req.pool.getConnection(function (cerr, connection) {
+                    if (cerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    let query = `DELETE FROM event_enrolments WHERE user_id = ? AND event_id = ?;`;
+                    connection.query(
+                        query,
+                        [req.body.user_id,
+                        req.body.event_id],
+                        function (qerr, rows, fields) {
+                            connection.release();
+                            if (qerr) {
+                                res.sendStatus(500);
+                                return;
+                            }
+                            res.end();
+                      });
+                  });
+                } else {
+                  // user is not admin or manager
+                  res.sendStatus(403);
+                }
+              }
+              );
+          });
         } else if (rows3.length !== 1) {
           // something went wrong
           console.log("wtf");
@@ -913,8 +1290,58 @@ router.post('/removeClubMembers', function (req, res, next) {
         }
 
         if (rows3.length === 0){
-          // user is not authorised
-          res.sendStatus(403);
+          // user is not manager
+          // check if admin
+          // check if user is admin
+          req.pool.getConnection(function(errAd, connectionAd){
+            if(errAd){
+              console.log("errAd");
+              console.log(errAd);
+              res.sendStatus(500);
+              return;
+            }
+
+            let queryAdmin = `SELECT * FROM users WHERE user_id = ? AND user_type = 'admin';`;
+            connectionAd.query(
+              queryAdmin,
+              [req.session.user.user_id],
+              function(qerrAdmin, rowsAdmin, fieldsAdmin) {
+                connectionAd.release();
+                // if serverside error
+                if(qerrAdmin){
+                  console.log("qerrAdmin:");
+                  console.log(qerrAdmin);
+                  res.sendStatus(500);
+                  return;
+                }
+
+                if (rowsAdmin.length === 1){
+                  // user is admin
+                  req.pool.getConnection(function (cerr, connection) {
+                    if (cerr) {
+                        res.sendStatus(500);
+                        return;
+                    }
+                    let query = `DELETE FROM club_enrolments WHERE user_id = ? AND club_id = ?;`;
+                    connection.query(
+                        query,
+                        [req.body.user_id,req.body.club_id],
+                        function (qerr, rows, fields) {
+                            connection.release();
+                            if (qerr) {
+                                res.sendStatus(500);
+                                return;
+                            }
+                            res.end();
+                      });
+                  });
+                } else {
+                  // user is not admin or manager
+                  res.sendStatus(403);
+                }
+              }
+              );
+          });
         } else if (rows3.length !== 1) {
           // something went wrong
           console.log("wtf");

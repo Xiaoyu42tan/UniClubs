@@ -598,7 +598,7 @@ router.post('/checkIfManager', function(req, res, next){
                 // user is admin
                 res.end();
               } else {
-                // user is manager but not admin
+                // user is not admin or manager
                 res.sendStatus(403);
               }
             }
