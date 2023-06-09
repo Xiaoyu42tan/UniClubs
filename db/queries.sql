@@ -1,3 +1,4 @@
+-- Password: .Foo
 Insert INTO users(
     user_type,
     user_name,
@@ -8,14 +9,15 @@ Insert INTO users(
     phone_number
 ) VALUES(
     'user',
-    'user1',
-    'Didier',
-    'Drogba',
-    'thegoat@gmail.com',
-    'user1',
-    '01230somethingidk'
+    'Bob',
+    'Bob',
+    'Foo',
+    'bobby@outlook.com',
+    '$argon2id$v=19$m=65536,t=3,p=4$dY3Pr3MWtlGAOfvUPrIKlQ$ACLQNf66uQm0eG4YJrBKTHcqdfKSQrLQ+GaywIhN2is',
+    '04123456789'
 );
 
+-- Password: bow&arrow1
 Insert INTO users(
     user_type,
     user_name,
@@ -26,14 +28,15 @@ Insert INTO users(
     phone_number
 ) VALUES(
     'user',
-    'user2',
-    'Christian',
-    'Ronaldo',
-    'christian@gmail.com',
-    'user2',
-    '01230somethingidk'
+    'Archer',
+    'Archie',
+    'Bowie',
+    'archer@gmail.com',
+    '$argon2id$v=19$m=65536,t=3,p=4$pf192aTpW41fiLyWnrqGzg$2aCwH9JRvEbPHtGcJxc4/r41qJ2/cMPCCV5WloiT1ps',
+    '04987654321'
 );
 
+-- Password: Admin123
 Insert INTO users(
     user_type,
     user_name,
@@ -43,15 +46,14 @@ Insert INTO users(
     password,
     phone_number
 ) VALUES(
-    'club_manager',
-    'manager1',
-    'the',
-    'manager',
-    'clubmanager@gmail.com',
-    '1234',
-    '01230somethingidk'
+    'admin',
+    'Sys',
+    'Sysi',
+    'admino',
+    'systemad@hotmail.com',
+    '$argon2id$v=19$m=65536,t=3,p=4$D5yog416Q0ij0sh9DWgeCA$3G+yjrZChWNvDCJbzUP1+C3MfX3djDoyI9yxDLIHPSw',
+    '04987654321'
 );
-
 
 Insert INTO clubs(
     club_url,
@@ -78,6 +80,86 @@ Insert INTO clubs(
     Press register to club to be able to RSVP for events!'
 );
 
+Insert INTO clubs(
+    club_url,
+    club_name,
+    club_description
+) VALUES (
+    'club3.html',
+    'Tech Innovators Club',
+    'Explore technologys frontiers and collaborate on coding, robotics, AI, and VR projects. Unleash your inner innovator and shape the future of tech!'
+);
+
+Insert INTO clubs(
+    club_url,
+    club_name,
+    club_description
+) VALUES (
+    'club4.html',
+    'Outdoor Adventure Society',
+    'Embrace natures beauty with hiking, camping, and rock climbing. Join fellow adventurers for thrilling outdoor experiences and unforgettable memories!'
+);
+
+Insert INTO clubs(
+    club_url,
+    club_name,
+    club_description
+) VALUES (
+    'club5.html',
+    'Artistic Expressions Society',
+    'Celebrate art in all its forms! Join artists of all levels for workshops, exhibitions, open mic nights, and collaborative projects. Unleash your imagination!'
+);
+
+Insert INTO clubs(
+    club_url,
+    club_name,
+    club_description
+) VALUES (
+    'club6.html',
+    'Sustainable Living Coalition',
+    'Promote eco-consciousness through educational initiatives, workshops, and projects. Be a steward of the planet and contribute to a greener future!'
+);
+
+Insert INTO clubs(
+    club_url,
+    club_name,
+    club_description
+) VALUES (
+    'club7.html',
+    'Language Club',
+    'Embrace diversity, learn languages, and immerse in different cultures. Join us for language workshops, cultural events, and international film screenings.'
+);
+
+Insert INTO clubs(
+    club_url,
+    club_name,
+    club_description
+) VALUES (
+    'club8.html',
+    'Health and Wellness Society',
+    'Prioritize holistic well-being through fitness challenges, mindfulness sessions, nutrition workshops, and mental health awareness campaigns.'
+);
+
+Insert INTO clubs(
+    club_url,
+    club_name,
+    club_description
+) VALUES (
+    'club9.html',
+    'Music Appreciation Club',
+    'Celebrate the power of music! Jam sessions, open mics, and music trivia nights. Join us to discover new sounds and connect through melodies!'
+);
+
+Insert INTO clubs(
+    club_url,
+    club_name,
+    club_description
+) VALUES (
+    'club10.html',
+    'Social Impact Collective',
+    'Drive positive change! Volunteer, fundraise, and advocate for social issues. Empower marginalized communities and make a lasting impact.'
+);
+
 Insert INTO club_managers(
     user_id,
     club_id
@@ -85,9 +167,3 @@ Insert INTO club_managers(
     2,
     1
 );
-
-/*
-SELECT event_enrolments.user_id, users.user_name, users.first_name, users.last_name FROM event_enrolments INNER JOIN users
-WHERE users.user_id = event_enrolments.user_id
-AND event_id = ?;
-*/
