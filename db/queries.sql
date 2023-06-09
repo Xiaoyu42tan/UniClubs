@@ -8,30 +8,12 @@ Insert INTO users(
     phone_number
 ) VALUES(
     'user',
-    'user1',
-    'Didier',
-    'Drogba',
-    'thegoat@gmail.com',
-    'user1',
-    '01230somethingidk'
-);
-
-Insert INTO users(
-    user_type,
-    user_name,
-    first_name,
-    last_name,
-    email,
-    password,
-    phone_number
-) VALUES(
-    'user',
-    'user2',
-    'Christian',
-    'Ronaldo',
-    'christian@gmail.com',
-    'user2',
-    '01230somethingidk'
+    'Bob',
+    'Bob',
+    'Foo',
+    'bobby@outlook.com',
+    '$argon2id$v=19$m=65536,t=3,p=4$dY3Pr3MWtlGAOfvUPrIKlQ$ACLQNf66uQm0eG4YJrBKTHcqdfKSQrLQ+GaywIhN2is',
+    '04123456789'
 );
 
 Insert INTO users(
@@ -44,14 +26,31 @@ Insert INTO users(
     phone_number
 ) VALUES(
     'club_manager',
-    'manager1',
-    'the',
-    'manager',
-    'clubmanager@gmail.com',
-    '1234',
-    '01230somethingidk'
+    'Archer',
+    'Archie',
+    'Bowie',
+    'archer@gmail.com',
+    '$argon2id$v=19$m=65536,t=3,p=4$pf192aTpW41fiLyWnrqGzg$2aCwH9JRvEbPHtGcJxc4/r41qJ2/cMPCCV5WloiT1ps',
+    '04987654321'
 );
 
+Insert INTO users(
+    user_type,
+    user_name,
+    first_name,
+    last_name,
+    email,
+    password,
+    phone_number
+) VALUES(
+    'admin',
+    'Sys',
+    'Sysi',
+    'admino',
+    'systemad@hotmail.com',
+    '$argon2id$v=19$m=65536,t=3,p=4$D5yog416Q0ij0sh9DWgeCA$3G+yjrZChWNvDCJbzUP1+C3MfX3djDoyI9yxDLIHPSw',
+    '04987654321'
+);
 
 Insert INTO clubs(
     club_url,
