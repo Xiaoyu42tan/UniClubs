@@ -112,6 +112,20 @@ const appsearch = new Vue ({
     }
 });
 
+// XIAOYU THURSDAY MORNING
+function logout() {
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 401) {
+            alert("Not logged in!");
+        }
+    };
+
+    req.open('GET', '/logout');
+    req.send();
+}
+
 // XIAOYU - THURSDAY MORNING
 function checkIfLoggedIn() {
     let req = new XMLHttpRequest();
@@ -123,7 +137,7 @@ function checkIfLoggedIn() {
                 { title: 'Home', url: '/index.html' },
                 { title: 'Clubs', url: '/club.html' },
                 { title: 'Account', url: '/user.html' },
-                { title: 'Log Out', url: '/index.html', onClick: logout }
+                { title: 'Log Out', url: '/index.html', onClick: logout() }
             ];
 
             // hide the quick login for index.html
@@ -161,20 +175,6 @@ function checkIfLoggedIn() {
     };
 
     req.open('GET', '/users/getUser');
-    req.send();
-}
-
-// XIAOYU THURSDAY MORNING
-function logout() {
-    let req = new XMLHttpRequest();
-
-    req.onreadystatechange = function () {
-        if (req.readyState === 4 && req.status === 401) {
-            alert("Not logged in!");
-        }
-    };
-
-    req.open('GET', '/logout');
     req.send();
 }
 
