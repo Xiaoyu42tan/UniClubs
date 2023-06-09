@@ -94,7 +94,7 @@ var deleteUpdate = new Vue({
     methods: {
         updateSelectedUpdate() {
             if (this.selectedUpdate) {
-                this.updateId = this.selectedUpdate.club_id;
+                this.updateId = this.selectedUpdate.update_id;
                 console.log("Selected Update ID:", this.updateId);
             }
         },
@@ -114,7 +114,7 @@ var deleteUpdate = new Vue({
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Posted successfully');
+                    alert('Deleted successfully');
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -203,7 +203,7 @@ var updateEvent= new Vue({
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Posted successfully');
+                    alert('Updated successfully');
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -251,7 +251,7 @@ var deleteEvent= new Vue({
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Posted successfully');
+                    alert('Deleted successfully');
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
@@ -473,7 +473,7 @@ var clubMembers = new Vue({
 
             req.onreadystatechange = function(){
                 if(req.readyState === 4 && req.status === 200){
-                    alert('Deleted successfully');
+                    alert('Removed successfully');
                 } else if(req.readyState === 4 && req.status === 401){
                     alert('Not logged in');
                 } else if(req.readyState === 4 && req.status === 403){
