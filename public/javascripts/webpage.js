@@ -137,7 +137,7 @@ function checkIfLoggedIn() {
                 { title: 'Home', url: '/index.html' },
                 { title: 'Clubs', url: '/club.html' },
                 { title: 'Account', url: '/user.html' },
-                { title: 'Log Out', url: '/index.html', onClick: logout() }
+                { title: 'Log Out', url: '/index.html', onClick: (logout) }
             ];
 
             // hide the quick login for index.html
