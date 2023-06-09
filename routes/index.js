@@ -587,7 +587,7 @@ router.post('/checkIfManager', function(req, res, next){
             function(qerrAdmin, rowsAdmin, fieldsAdmin) {
               connectionAd.release();
               // if serverside error
-              if(qerrAdmin){git 
+              if(qerrAdmin){
                 console.log("qerrAdmin:");
                 console.log(qerrAdmin);
                 res.sendStatus(500);
