@@ -21,10 +21,13 @@ npm install google-auth-library
 
 npm install express-server
 
-serive mysql sstart
+service mysql start
 
 mysql < db/the_database.sql
 
 mysql --database the_database < db/queries.sql
 
 npm start
+
+EXPLAINING EACH MAIN FEATURE BREIFLY
+

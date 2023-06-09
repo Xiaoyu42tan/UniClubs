@@ -60,7 +60,7 @@ router.post('/login', async function(req, res, next){
     });
   }else if('username' in req.body && 'password' in req.body){
     console.log("username and password are in the body");
-
+    console.log("------------------------IMPORTANT-----------------------");
     req.pool.getConnection(function(err, connection){
       // if serverside error
       if(err){

@@ -34,6 +34,24 @@ Insert INTO users(
     '01230somethingidk'
 );
 
+Insert INTO users(
+    user_type,
+    user_name,
+    first_name,
+    last_name,
+    email,
+    password,
+    phone_number
+) VALUES(
+    'club_manager',
+    'manager1',
+    'the',
+    'manager',
+    'clubmanager@gmail.com',
+    '1234',
+    '01230somethingidk'
+);
+
 
 Insert INTO clubs(
     club_name,
