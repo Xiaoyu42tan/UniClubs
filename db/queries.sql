@@ -15,7 +15,6 @@ Insert INTO users(
     'bobby@outlook.com',
     '$argon2id$v=19$m=65536,t=3,p=4$dY3Pr3MWtlGAOfvUPrIKlQ$ACLQNf66uQm0eG4YJrBKTHcqdfKSQrLQ+GaywIhN2is',
     '04123456789'
-<<<<<<< HEAD
 );
 
 -- Password: bow&arrow1
@@ -35,8 +34,6 @@ Insert INTO users(
     'archer@gmail.com',
     '$argon2id$v=19$m=65536,t=3,p=4$pf192aTpW41fiLyWnrqGzg$2aCwH9JRvEbPHtGcJxc4/r41qJ2/cMPCCV5WloiT1ps',
     '04987654321'
-=======
->>>>>>> 3904f959cbfd476f34f51bb8bf9237a60183c576
 );
 
 -- Password: Admin123
@@ -49,7 +46,6 @@ Insert INTO users(
     password,
     phone_number
 ) VALUES(
-<<<<<<< HEAD
     'admin',
     'Sys',
     'Sysi',
@@ -59,35 +55,6 @@ Insert INTO users(
     '04987654321'
 );
 
-=======
-    'club_manager',
-    'Archer',
-    'Archie',
-    'Bowie',
-    'archer@gmail.com',
-    '$argon2id$v=19$m=65536,t=3,p=4$pf192aTpW41fiLyWnrqGzg$2aCwH9JRvEbPHtGcJxc4/r41qJ2/cMPCCV5WloiT1ps',
-    '04987654321'
-);
-
-Insert INTO users(
-    user_type,
-    user_name,
-    first_name,
-    last_name,
-    email,
-    password,
-    phone_number
-) VALUES(
-    'admin',
-    'Sys',
-    'Sysi',
-    'admino',
-    'systemad@hotmail.com',
-    '$argon2id$v=19$m=65536,t=3,p=4$D5yog416Q0ij0sh9DWgeCA$3G+yjrZChWNvDCJbzUP1+C3MfX3djDoyI9yxDLIHPSw',
-    '04987654321'
-);
-
->>>>>>> 3904f959cbfd476f34f51bb8bf9237a60183c576
 Insert INTO clubs(
     club_url,
     club_name,
