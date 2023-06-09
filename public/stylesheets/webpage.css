@@ -35,11 +35,24 @@ body {
     border-bottom: 0.1px solid white;
 }
 
+#outer-advertisement2 {
+    background-color:white(17, 17, 17);
+    border-bottom: 0.1px solid black;
+}
+
 #information-advertisement {
     box-sizing: border-box;
     padding: 20px 10px;
     background-color:rgb(17, 17, 17);
     color: white;
+    display: flex;
+}
+
+#information-advertisement2 {
+    box-sizing: border-box;
+    padding: 20px 10px;
+    background-color:white;
+    color: black;
     display: flex;
 }
 
@@ -128,3 +141,11 @@ body {
     color: white;
     font-size: small;
 }
+
+.centered {
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    height: 200px;
+    padding: 20px;
+  }

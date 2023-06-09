@@ -37,15 +37,15 @@ button {
 }
 
 #sysadmin-info-outer {
-    background-color:rgb(17, 17, 17);
+    background-color:white;
     border-bottom: 0.1px solid white;
 }
 
 #sysadmin-info {
     box-sizing: border-box;
     padding: 20px 10px;
-    background-color:rgb(17, 17, 17);
-    color: white;
+    background-color:white;
+    color: black;
 }
 
 /* Personal Info */
