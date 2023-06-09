@@ -157,7 +157,7 @@ function checkIfLoggedIn() {
             nav.top_menu = [
                 { title: 'Home', url: '/index.html' },
                 { title: 'Clubs', url: '/club.html' },
-                { title: 'Login', url: '/login.html' }
+                { title: 'Login/Signup', url: '/login.html' }
             ];
 
             // show the quick login for index.html
