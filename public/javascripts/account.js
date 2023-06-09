@@ -1,4 +1,26 @@
+// Dimos - GET user type
+var usertypeShow = new Vue({
+    el: "#usertype",
+    data: {
+        usertype: ""
+    }
+});
 
+function getUserType() {
+    let req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            console.log("we back");
+            console.log(JSON.parse(req.responseText));
+            let usertype = JSON.parse(req.responseText);
+            usertypeShow.usertype = usertype;
+            console.log(usertype);
+            console.log(usertypeShow.usertype);
+        }
+    };
+    req.open('GET', '/users/getUserType');
+    req.send();
+}
 // Dimos - GET first name
 var firstnameShow1 = new Vue({
     el: "#firstname1",
@@ -143,6 +165,7 @@ function changeDetails(){
 }*/
 
 function displayInfo(){
+    getUserType();
     getUserName();
     getFirstName();
     getLastName();
