@@ -2,7 +2,7 @@
 
 -------------------------------------------------------HOW TO USE----------------------------------------------
 
-When running our webapp, there are a few steps you must take in the terminal to enusre that it works as desired:
+When running our webapp, there are a few steps you must take in the terminal to ensure that it works as desired:
 
 npm install
 
